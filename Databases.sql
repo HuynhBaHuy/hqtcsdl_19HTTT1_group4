@@ -1,0 +1,214 @@
+-- CREATE DATABASE
+CREATE DATABASE OnlineOrderingSystem
+GO
+USE OnlineOrderingSystem
+GO
+-- CREATE TABLE
+CREATE TABLE DOI_TAC(
+	MaDT varchar(20),
+	TenDT nvarchar(50),
+	NguoiDaiDien nvarchar(50),
+	MaKV varchar(20),
+	SoChiNhanh int,
+	SLDH int,
+	MaLoai varchar(20),
+	DiaChiKD nvarchar(50),
+	SoDT varchar(15),
+	Email varchar(50),
+	MaSoThue varchar(20) NOT NULL,
+
+	PRIMARY KEY(MaDT),
+	CONSTRAINT CHK_SoChiNhanh CHECK (SoChiNhanh > 0),
+	CONSTRAINT CHK_SLDH CHECK (SLDH >= 0),
+	CONSTRAINT CHK_SoDT CHECK (SoDT not like '%[^0-9]%')
+	
+)
+
+CREATE TABLE CHI_NHANH(
+	MaCN varchar(20),
+	MaDT varchar(20),
+	MaKV varchar(20),
+	DiaChiCuThe nvarchar(50)
+
+	PRIMARY KEY (MaCN)
+)
+
+
+CREATE TABLE LOAI_HANG(
+	MaLoai varchar(20),
+	TenLoai nvarchar(50),
+
+	PRIMARY KEY(MaLoai)
+)
+
+
+CREATE TABLE HOP_DONG(
+	MaHD varchar(20),
+	MaDT varchar(20),
+	SoCNDangKy varchar(15),
+	TG_HieuLucHD nvarchar(10),
+	PhanTramHoaHong float
+
+	PRIMARY KEY(MaHD),
+
+	CONSTRAINT CHK_PhanTramHoaHong CHECK (PhanTramHoaHong > 0),
+	CONSTRAINT CHK_SoCNDangKy CHECK (SoCNDangKy > 0)
+)
+
+
+CREATE TABLE CT_HOPDONG(
+	MaHD varchar(20),
+	MaCN varchar(20)
+
+	PRIMARY KEY(MaHD,MaCN)
+)
+
+CREATE TABLE DON_HANG (
+	MaDH varchar(20),
+	MaDT varchar(20),
+	MaKH varchar(20),
+	HinhThuc_ThanhToan nvarchar(50) NOT NULL,
+	TenDuong nvarchar(50) NOT NULL,
+	MaKV varchar(20),
+	TongPhiSP float,
+	PhiVanChuyen float,
+	TinhTrangDH nvarchar(50)
+
+	PRIMARY KEY (MADH)
+)
+
+
+CREATE TABLE CT_DONHANG(
+	MaDH varchar(20),
+	MaSP varchar(20),
+	SoLuong int
+
+	PRIMARY KEY (MADH, MASP)
+	CONSTRAINT CHK_SoLuong CHECK (SoLuong > 0)
+)
+
+
+
+CREATE TABLE KHACH_HANG (
+	MaKH varchar(20),
+	TenKH nvarchar(50),
+	SoDT varchar(15)
+
+	PRIMARY KEY(MaKH)
+)
+
+
+CREATE TABLE KHU_VUC (
+	MaKV varchar(20),
+	Quan nvarchar(50) NOT NULL,
+	Tinh nvarchar(50) NOT NULL
+
+	PRIMARY KEY(MAKV)
+)
+
+CREATE TABLE SAN_PHAM (
+	MaSP varchar(20),
+	MaCN varchar(20),
+	TenSanPham nvarchar(50),
+	Loai varchar(20),
+	Gia float
+
+	PRIMARY KEY(MaSP)
+
+	CONSTRAINT CHK_Gia CHECK (Gia > 0)
+)
+
+
+CREATE TABLE TAI_XE(
+	MaTX varchar(20),
+	HoTen nvarchar(50),
+	Cmnd varchar(15),
+	SoDT varchar(15),
+	DiaChi nvarchar(100),
+	BienSo varchar(15),
+	MaKV varchar(20) NOT NULL,
+	Email varchar(50),
+	TaiKhoanNH nvarchar(100),
+
+	PRIMARY KEY(MaTX),
+	CONSTRAINT CHK_TaiXe_SoDT CHECK (SoDT not like '%[^0-9]%'),
+	CONSTRAINT CHK_TaiXe_Cmnd CHECK (Cmnd not like '%[^0-9]%')
+)
+
+CREATE TABLE GIAO_HANG(
+	MaTX varchar(20),
+	MaDH varchar(20),
+	HoaHong MONEY,
+	
+	PRIMARY KEY(MaTX,MaDH)
+)
+
+-- FK CONSTRAINT
+ALTER TABLE CHI_NHANH
+ADD CONSTRAINT FK_ChiNhanh_DoiTac
+FOREIGN KEY (MaDT) REFERENCES DOI_TAC(MaDT)
+
+ALTER TABLE CHI_NHANH
+ADD CONSTRAINT FK_ChiNhanh_KhuVuc
+FOREIGN KEY (MaKV) REFERENCES KHU_VUC(MaKV)
+
+ALTER TABLE DOI_TAC
+ADD CONSTRAINT FK_DoiTac_LoaiHang
+FOREIGN KEY (MaLoai) REFERENCES LOAI_HANG(MaLoai)
+
+ALTER TABLE DOI_TAC 
+ADD CONSTRAINT FK_DoiTac_KhuVuc
+FOREIGN KEY (MaKV) REFERENCES KHU_VUC(MaKV)
+
+ALTER TABLE HOP_DONG
+ADD CONSTRAINT FK_HopDong_DoiTac
+FOREIGN KEY (MaDT) REFERENCES DOI_TAC(MaDT)
+
+ALTER TABLE CT_HOPDONG
+ADD CONSTRAINT FK_CTHD_ChiNhanh
+FOREIGN KEY (MaCN) REFERENCES CHI_NHANH(MaCN)
+
+ALTER TABLE CT_HOPDONG
+ADD CONSTRAINT FK_CTHD_HopDong
+FOREIGN KEY (MaHD) REFERENCES HOP_DONG(MaHD)
+
+ALTER TABLE DON_HANG
+ADD CONSTRAINT FK_DonHang_DoiTac
+FOREIGN KEY (MaDT) REFERENCES DOI_TAC(MaDT)
+
+ALTER TABLE DON_HANG
+ADD CONSTRAINT FK_DonHang_KhachHang
+FOREIGN KEY (MaKH) REFERENCES KHACH_HANG(MaKH)
+
+ALTER TABLE DON_HANG
+ADD CONSTRAINT FK_DonHang_KhuVuc
+FOREIGN KEY (MaKV) REFERENCES KHU_VUC(MaKV)
+
+ALTER TABLE CT_DONHANG
+ADD CONSTRAINT FK_CTDH_DonHang
+FOREIGN KEY (MaDH) REFERENCES DON_HANG(MaDH)
+
+ALTER TABLE CT_DONHANG
+ADD CONSTRAINT FK_CTDH_SanPham
+FOREIGN KEY (MaSP) REFERENCES SAN_PHAM(MaSP)
+
+ALTER TABLE SAN_PHAM
+ADD CONSTRAINT FK_SanPham_LoaiHang
+FOREIGN KEY (Loai) REFERENCES LOAI_HANG(MaLoai)
+
+ALTER TABLE SAN_PHAM
+ADD CONSTRAINT FK_SanPham_ChiNhanh
+FOREIGN KEY (MaCN) REFERENCES CHI_NHANH(MaCN)
+
+ALTER TABLE TAI_XE
+ADD CONSTRAINT FK_TaiXe_KhuVuc
+FOREIGN KEY (MaKV) REFERENCES KHU_VUC(MaKV)
+
+ALTER TABLE GIAO_HANG
+ADD CONSTRAINT FK_GiaoHang_TaiXe
+FOREIGN KEY (MaTX) REFERENCES TAI_XE(MaTX)
+
+ALTER TABLE GIAO_HANG
+ADD CONSTRAINT FK_GiaoHang_DonHang
+FOREIGN KEY (MaDH) REFERENCES DON_HANG(MaDH)
+
