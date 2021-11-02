@@ -57,7 +57,7 @@ EXEC sp_addrolemember 'khach_hang',user_khachhang
 
 --	select TenDT, NguoiDaiDien, MaKV, MaLoai, DiaChiKD, SoDT, Email on DOI_TAC
 GRANT SELECT
-ON OBJECT::DON_HANG(TenDT, NguoiDaiDien, MaKV, MaLoai, DiaChiKD, SoDT, Email)
+ON OBJECT::DOI_TAC(TenDT, NguoiDaiDien, MaKV, MaLoai, DiaChiKD, SoDT, Email)
 TO khach_hang
 
 -- SELECT ON DON HANG
@@ -120,8 +120,9 @@ TO tai_xe
 -- Dưới đây là các quyền của nhân viên:
 -- Nhân viên permission:
 --		select [ALL COLUMN] on Hop dong
---		update [TG_HieuLucHD] on DOI TAC
+--		update [TG_HieuLucHD,%hoahong] on DOI TAC
 --		select [ALL COLUMN] on DOI TAC
+--		insert on Hop dong
 
 -- add login_nhanvien account
 EXEC sp_addLogin 'login_nhanvien','login_nhanvien'
@@ -141,7 +142,7 @@ TO nhan_vien
 
 --update [THOIGIAN HOP DONG] on HopDong
 GRANT UPDATE 
-ON OBJECT::HOP_DONG(TG_HieuLucHD)
+ON OBJECT::HOP_DONG(TG_HieuLucHD,PhanTramHoaHong)
 TO nhan_vien
 
 --select [ALL COLUMN] on DOI TAC
@@ -149,6 +150,10 @@ GRANT SELECT
 ON OBJECT::DOI_TAC
 TO nhan_vien
 
+--insert on Hop dong
+GRANT INSERT
+ON OBJECT::HOP_DONG
+TO nhan_vien
 
 
 
