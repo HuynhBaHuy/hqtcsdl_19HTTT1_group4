@@ -1,5 +1,8 @@
 ﻿-- Các quyền của đối tác:
 --		select, insert, update, delete on table SAN_PHAM, CHI_NHANH
+--		select on table KHU_VUC
+--		select on table LOAI_HANG
+--		select on table DOI_TAC (MaDT, TenDT)
 --		select on table DON_HANG
 --		update TTDH on table DON_HANG
 
@@ -27,6 +30,21 @@ GRANT SELECT, INSERT, DELETE, UPDATE
 ON OBJECT::CHI_NHANH 
 TO doi_tac
 
+-- SELECT ON KHU_VUC
+GRANT SELECT
+ON OBJECT::KHU_VUC
+TO doi_tac
+
+-- SELECT ON LOAI_HANG
+GRANT SELECT
+ON OBJECT::LOAI_HANG
+TO doi_tac
+
+-- SELECT ON DOI_TAC (MaDT, TenDT)
+GRANT SELECT
+ON OBJECT::DOI_TAC(MaDT, TenDT)
+TO doi_tac
+
 -- SELECT ON DON_HANG
 GRANT SELECT
 ON OBJECT::DON_HANG
@@ -39,9 +57,10 @@ TO doi_tac
 
 
 -- Các quyền của khách hàng:
---		select TenDT, NguoiDaiDien, MaKV, MaLoai, DiaChiKD, SoDT, Email on DOI_TAC
+--		select MaDT, TenDT, NguoiDaiDien, MaKV, MaLoai, DiaChiKD, SoDT, Email on DOI_TAC
 --		select on DON_HANG
-
+--		select on KHU_VUC
+--		select on KHACH_HANG(MaKH, TenKH)
 -- add login_khachhang account
 USE OnlineOrderingSystem
 GO
@@ -55,9 +74,9 @@ EXEC sp_addrole 'khach_hang'
 
 EXEC sp_addrolemember 'khach_hang',user_khachhang 
 
---	select TenDT, NguoiDaiDien, MaKV, MaLoai, DiaChiKD, SoDT, Email on DOI_TAC
+--	select MaDT, TenDT, NguoiDaiDien, MaKV, MaLoai, DiaChiKD, SoDT, Email on DOI_TAC
 GRANT SELECT
-ON OBJECT::DOI_TAC(TenDT, NguoiDaiDien, MaKV, MaLoai, DiaChiKD, SoDT, Email)
+ON OBJECT::DOI_TAC(MaDT, TenDT, NguoiDaiDien, MaKV, MaLoai, DiaChiKD, SoDT, Email)
 TO khach_hang
 
 -- SELECT ON DON HANG
@@ -65,7 +84,15 @@ GRANT SELECT
 ON OBJECT::DON_HANG
 to khach_hang
 
+-- SELECT ON KHU_VUC
+GRANT SELECT
+ON OBJECT::KHU_VUC
+TO khach_hang
 
+-- SELECT ON KHACH_HANG(MaKH, TenKH)
+GRANT SELECT
+ON OBJECT::KHACH_HANG(MaKH, TenKH)
+TO khach_hang
 
 
 
@@ -76,6 +103,8 @@ to khach_hang
 --		select on KhuVuc
 --		select, insert, update on GIAO_HANG
 --		update TTDH on DON_HANG
+--		select on DOI_TAC (MaDT, TenDT)
+--		select on KHACH_HANG (MaKH, TenKH)
 
 
 
@@ -117,12 +146,24 @@ GRANT UPDATE
 ON OBJECT::DON_HANG(TinhTrangDH)
 TO tai_xe
 
+-- SELECT ON DOI_TAC (MaDT, TenDT)
+GRANT SELECT
+ON OBJECT::DOI_TAC(MaDT, TenDT)
+TO tai_xe
+
+-- SELECT ON KHACH_HANG (MaKH, TenKH)
+GRANT SELECT
+ON OBJECT::KHACH_HANG(MaKH, TenKH)
+TO tai_xe
+
 -- Dưới đây là các quyền của nhân viên:
 -- Nhân viên permission:
---		select [ALL COLUMN] on Hop dong
---		update [TG_HieuLucHD,%hoahong] on DOI TAC
---		select [ALL COLUMN] on DOI TAC
---		insert on Hop dong
+--		select [ALL COLUMN] on HOP_DONG
+--		update [TG_HieuLucHD,%hoahong] on HOP_DONG
+--		select [ALL COLUMN] on DOI_TAC
+--		insert on HOP_DONG
+--		select on CHI_NHANH
+--		select on KHU_VUC
 
 -- add login_nhanvien account
 EXEC sp_addLogin 'login_nhanvien','login_nhanvien'
@@ -135,30 +176,36 @@ EXEC sp_addrole 'nhan_vien'
 
 EXEC sp_addrolemember 'nhan_vien',user_nhanvien 
 
---select [ALL COLUMN] on Hop dong
+--select [ALL COLUMN] on HOP_DONG
 GRANT SELECT 
 ON OBJECT::HOP_DONG
 TO nhan_vien
 
---update [THOIGIAN HOP DONG] on HopDong
+--update [TG_HieuLucHD,%hoahong] on HOP_DONG
 GRANT UPDATE 
 ON OBJECT::HOP_DONG(TG_HieuLucHD,PhanTramHoaHong)
 TO nhan_vien
 
---select [ALL COLUMN] on DOI TAC
+--select [ALL COLUMN] on DOI_TAC
 GRANT SELECT 
 ON OBJECT::DOI_TAC
 TO nhan_vien
 
---insert on Hop dong
+--insert on HOP_DONG
 GRANT INSERT
 ON OBJECT::HOP_DONG
 TO nhan_vien
 
+-- SELECT ON CHI_NHANH
+GRANT SELECT
+ON OBJECT::CHI_NHANH 
+TO nhan_vien
 
-
-
-
+-- SELECT ON KHU_VUC
+GRANT SELECT
+ON OBJECT::KHU_VUC
+TO nhan_vien
+----------------------ADMIN ROLE---------------------------
 -----System Admin will have the permission to alter login/user accounts and to lock/unlock login/user accounts-----
 -- Create a login account for System Admin (Assume that there is only one system admin)
 USE master
