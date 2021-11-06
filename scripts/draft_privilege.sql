@@ -5,8 +5,8 @@
 --		select on table DOI_TAC (MaDT, TenDT)
 --		select on table DON_HANG
 --		update TTDH on table DON_HANG
-
-
+--		select on CT_HOPDONG
+--		select on HOP_DONG
 
 -- add login_doitac account
 USE OnlineOrderingSystem
@@ -55,12 +55,24 @@ GRANT UPDATE
 ON OBJECT::DON_HANG(TinhTrangDH)
 TO doi_tac
 
+-- SELECT ON HOP_DONG
+GRANT SELECT
+ON OBJECT::HOP_DONG
+TO doi_tac
+
+-- SELECT ON CT_HOPDONG
+GRANT SELECT
+ON OBJECT::CT_HOPDONG
+TO doi_tac
 
 -- Các quyền của khách hàng:
 --		select MaDT, TenDT, NguoiDaiDien, MaKV, MaLoai, DiaChiKD, SoDT, Email on DOI_TAC
 --		select on DON_HANG
+--		select on CT_DONHANG
 --		select on KHU_VUC
 --		select on KHACH_HANG(MaKH, TenKH)
+--		select on SAN_PHAM(MaSP, TenSanPham, Gia,Loai)
+--		select on LOAI_HANG
 -- add login_khachhang account
 USE OnlineOrderingSystem
 GO
@@ -84,6 +96,11 @@ GRANT SELECT
 ON OBJECT::DON_HANG
 to khach_hang
 
+-- SELECT ON CT_DONHANG
+GRANT SELECT 
+ON OBJECT::CT_DONHANG
+to khach_hang
+
 -- SELECT ON KHU_VUC
 GRANT SELECT
 ON OBJECT::KHU_VUC
@@ -94,16 +111,23 @@ GRANT SELECT
 ON OBJECT::KHACH_HANG(MaKH, TenKH)
 TO khach_hang
 
+--SELECT ON SAN_PHAM(MaSP, TenSanPham, Gia,Loai)
+GRANT SELECT 
+ON OBJECT::SAN_PHAM(MaSP,TenSanPham,Loai,Gia)
+TO khach_hang
 
+--SELECT ON LOAI_HANG
+GRANT SELECT 
+ON OBJECT::LOAI_HANG
+TO khach_hang
 
 -- Dưới đây là các quyền của tài xế:
 -- Driver permission: 
---		select,insert,update on table TAI_XE
+--		select on  TAI_XE
 --		select on DON_HANG
 --		select on KhuVuc
---		select, insert, update on GIAO_HANG
+--		select, insert on GIAO_HANG
 --		update TTDH on DON_HANG
---		select on DOI_TAC (MaDT, TenDT)
 --		select on KHACH_HANG (MaKH, TenKH)
 
 
@@ -121,8 +145,8 @@ EXEC sp_addrole 'tai_xe'
 
 EXEC sp_addrolemember 'tai_xe',user_taixe
 
--- select,insert,update on table TAI_XE
-GRANT SELECT, INSERT, UPDATE 
+-- select on table TAI_XE
+GRANT SELECT 
 ON OBJECT::TAI_XE 
 TO tai_xe
 
@@ -131,8 +155,8 @@ GRANT SELECT
 ON OBJECT::KHU_VUC
 TO tai_xe
 
--- select, insert, update on GIAO_HANG
-GRANT SELECT, INSERT, UPDATE
+-- select, insert on GIAO_HANG
+GRANT SELECT,INSERT
 ON OBJECT::GIAO_HANG
 TO tai_xe
 
@@ -146,14 +170,10 @@ GRANT UPDATE
 ON OBJECT::DON_HANG(TinhTrangDH)
 TO tai_xe
 
--- SELECT ON DOI_TAC (MaDT, TenDT)
-GRANT SELECT
-ON OBJECT::DOI_TAC(MaDT, TenDT)
-TO tai_xe
 
--- SELECT ON KHACH_HANG (MaKH, TenKH)
+-- SELECT ON KHACH_HANG (MaKH, TenKH, SoDT)
 GRANT SELECT
-ON OBJECT::KHACH_HANG(MaKH, TenKH)
+ON OBJECT::KHACH_HANG(MaKH, TenKH,SoDT)
 TO tai_xe
 
 -- Dưới đây là các quyền của nhân viên:
@@ -161,7 +181,9 @@ TO tai_xe
 --		select [ALL COLUMN] on HOP_DONG
 --		update [TG_HieuLucHD,%hoahong] on HOP_DONG
 --		select [ALL COLUMN] on DOI_TAC
+--		select on LOAI_HANG
 --		insert on HOP_DONG
+--		select, insert, update on CT_HOPDONG
 --		select on CHI_NHANH
 --		select on KHU_VUC
 
@@ -176,24 +198,34 @@ EXEC sp_addrole 'nhan_vien'
 
 EXEC sp_addrolemember 'nhan_vien',user_nhanvien 
 
---select [ALL COLUMN] on HOP_DONG
+--SELECT [ALL COLUMN] ON HOP_DONG
 GRANT SELECT 
 ON OBJECT::HOP_DONG
 TO nhan_vien
 
---update [TG_HieuLucHD,%hoahong] on HOP_DONG
+--UPDATE [TG_HieuLucHD,%hoahong] ON HOP_DONG
 GRANT UPDATE 
 ON OBJECT::HOP_DONG(TG_HieuLucHD,PhanTramHoaHong)
 TO nhan_vien
 
---select [ALL COLUMN] on DOI_TAC
+--SELECT [ALL COLUMN] ON DOI_TAC
 GRANT SELECT 
 ON OBJECT::DOI_TAC
 TO nhan_vien
 
---insert on HOP_DONG
+--SELECT [ALL COLUMN] ON LOAI_HANG
+GRANT SELECT
+ON OBJECT::LOAI_HANG
+TO nhan_vien
+
+--INSERT ON HOP_DONG
 GRANT INSERT
 ON OBJECT::HOP_DONG
+TO nhan_vien
+
+-- SELECT [ALL COLUMN] ON CT_HOPDONG
+GRANT SELECT,INSERT, UPDATE
+ON OBJECT::CT_HOPDONG
 TO nhan_vien
 
 -- SELECT ON CHI_NHANH
