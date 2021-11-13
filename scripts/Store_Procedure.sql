@@ -202,9 +202,69 @@ AS
 				EXECUTE sp_executesql @SQLQuery
 
 				-- Add role for employee
-				SET @SQLQuery = 'USE OnlineOrderingSystem ALTER ROLE db_owner ADD MEMBER ' + @userName
+				SET @SQLQuery = 'USE OnlineOrderingSystem ALTER ROLE nhan_vien ADD MEMBER ' + @userName
 				EXECUTE sp_executesql @SQLQuery
 				COMMIT TRAN ADDUSERFOREMPLOYEE
+			END
+GO
+
+-- Delete user account of admin/employee
+USE master
+GO
+CREATE PROCEDURE sp_deleteUserAccount @userName nvarchar(30)
+AS
+	BEGIN TRAN DELETEUSERACCOUNT
+		-- Check if current user is system admin
+		DECLARE @currentUser AS NVARCHAR(100)
+		SET @currentUser = (SELECT SYSTEM_USER)
+		IF @currentUser != 'login_sysadmin'
+			BEGIN
+				PRINT('You do not have permission to do this. Transaction rollback...')
+				ROLLBACK TRAN DELETEUSERACCOUNT
+			END
+		ELSE
+			BEGIN
+				-- Check invalid parameters
+				IF LEN(@userName) = 0
+					BEGIN
+						ROLLBACK TRAN DELETEUSERACCOUNT
+						PRINT('Invalid parameter(s). Transaction rollback...')
+					END
+				-- Delete user account
+				DECLARE @SQLQuery nvarchar(500)
+				SET @SQLQuery = 'DROP USER ' + @userName
+				EXECUTE sp_executesql @SQLQuery
+				COMMIT TRAN DELETEUSERACCOUNT
+			END
+GO
+
+-- Lock user account of admin/employee
+USE master
+GO
+CREATE PROCEDURE sp_lockUserAccount @userName nvarchar(30)
+AS
+	BEGIN TRAN LOCKUSERACCOUNT
+		-- Check if current user is system admin
+		DECLARE @currentUser AS NVARCHAR(100)
+		SET @currentUser = (SELECT SYSTEM_USER)
+		IF @currentUser != 'login_sysadmin'
+			BEGIN
+				PRINT('You do not have permission to do this. Transaction rollback...')
+				ROLLBACK TRAN LOCKUSERACCOUNT
+			END
+		ELSE
+			BEGIN
+				-- Check invalid parameters
+				IF LEN(@userName) = 0
+					BEGIN
+						ROLLBACK TRAN LOCKUSERACCOUNT
+						PRINT('Invalid parameter(s). Transaction rollback...')
+					END
+				-- Delete user account
+				DECLARE @SQLQuery nvarchar(500)
+				SET @SQLQuery = 'DROP USER ' + @userName
+				EXECUTE sp_executesql @SQLQuery
+				COMMIT TRAN LOCKUSERACCOUNT
 			END
 GO
 
