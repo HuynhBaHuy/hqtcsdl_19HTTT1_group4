@@ -243,6 +243,9 @@ TO nhan_vien
 USE master
 exec sp_addLogin 'login_sysadmin','login_sysadmin'
 GRANT ALTER ANY LOGIN TO login_sysadmin
+---- Create a user account for System Admin in master database
+CREATE USER user_sysadmin FOR LOGIN login_sysadmin
+GRANT EXECUTE to user_sysadmin
 GO
 ---- Create a user account for System Admin in database, this account will have a db owner permission
 USE OnlineOrderingSystem
