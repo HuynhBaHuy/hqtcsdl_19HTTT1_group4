@@ -1,13 +1,4 @@
-﻿--unrepeatable read, phantom
-
---Cập nhật thông tin tài khoản
---Thêm – xóa –sửa tài khoản admin, nhân viên
---Khóa và kích hoạt tài khoản
-
--- view all procedure in db
-SELECT * 
-FROM OnlineOrderingSystem.INFORMATION_SCHEMA.ROUTINES
-WHERE ROUTINE_TYPE = 'PROCEDURE'
+﻿------------------STORED PROCEDURE FOR ADMIN--------------------
 
 SELECT SYSTEM_USER
 
@@ -107,7 +98,7 @@ AS
 			END
 GO
 
----------ADD/DELETE/UPDATE ACCOUNT OF ADMINS AND EMPLOYEES
+---------ADD/DELETE ACCOUNT OF ADMINS AND EMPLOYEES
 -- Add login account for admin/employee
 USE master
 GO
@@ -238,6 +229,66 @@ AS
 			END
 GO
 
+-- Lock login account of admin/employee
+USE master
+GO
+CREATE PROCEDURE sp_lockLoginAccount @loginName nvarchar(30)
+AS
+	BEGIN TRAN LOCKLOGINACCOUNT
+		-- Check if current user is system admin
+		DECLARE @currentUser AS NVARCHAR(100)
+		SET @currentUser = (SELECT SYSTEM_USER)
+		IF @currentUser != 'login_sysadmin'
+			BEGIN
+				PRINT('You do not have permission to do this. Transaction rollback...')
+				ROLLBACK TRAN LOCKLOGINACCOUNT
+			END
+		ELSE
+			BEGIN
+				-- Check invalid parameters
+				IF LEN(@loginName) = 0
+					BEGIN
+						ROLLBACK TRAN LOCKLOGINACCOUNT
+						PRINT('Invalid parameter(s). Transaction rollback...')
+					END
+				-- Delete user account
+				DECLARE @SQLQuery nvarchar(500)
+				SET @SQLQuery = 'USE master ALTER LOGIN ' + QUOTENAME(@loginName) + ' DISABLE'
+				EXECUTE sp_executesql @SQLQuery
+				COMMIT TRAN LOCKLOGINACCOUNT
+			END
+GO
+
+-- Unlock login account of admin/employee
+USE master
+GO
+CREATE PROCEDURE sp_unlockLoginAccount @loginName nvarchar(30)
+AS
+	BEGIN TRAN UNLOCKLOGINACCOUNT
+		-- Check if current user is system admin
+		DECLARE @currentUser AS NVARCHAR(100)
+		SET @currentUser = (SELECT SYSTEM_USER)
+		IF @currentUser != 'login_sysadmin'
+			BEGIN
+				PRINT('You do not have permission to do this. Transaction rollback...')
+				ROLLBACK TRAN UNLOCKLOGINACCOUNT
+			END
+		ELSE
+			BEGIN
+				-- Check invalid parameters
+				IF LEN(@loginName) = 0
+					BEGIN
+						ROLLBACK TRAN UNLOCKLOGINACCOUNT
+						PRINT('Invalid parameter(s). Transaction rollback...')
+					END
+				-- Delete user account
+				DECLARE @SQLQuery nvarchar(500)
+				SET @SQLQuery = 'USE master ALTER LOGIN ' + QUOTENAME(@loginName) + ' ENABLE'
+				EXECUTE sp_executesql @SQLQuery
+				COMMIT TRAN UNLOCKLOGINACCOUNT
+			END
+GO
+
 -- Lock user account of admin/employee
 USE master
 GO
@@ -262,10 +313,38 @@ AS
 					END
 				-- Delete user account
 				DECLARE @SQLQuery nvarchar(500)
-				SET @SQLQuery = 'DROP USER ' + @userName
+				SET @SQLQuery = 'USE OnlineOrderingSystem DENY CONNECT ON DATABASE::OnlineOrderingSystem TO ' + @userName
 				EXECUTE sp_executesql @SQLQuery
 				COMMIT TRAN LOCKUSERACCOUNT
 			END
 GO
 
-drop procedure sp_addUserForEmployee
+-- Unlock user account of admin/employee
+USE master
+GO
+CREATE PROCEDURE sp_unlockUserAccount @userName nvarchar(30)
+AS
+	BEGIN TRAN UNLOCKUSERACCOUNT
+		-- Check if current user is system admin
+		DECLARE @currentUser AS NVARCHAR(100)
+		SET @currentUser = (SELECT SYSTEM_USER)
+		IF @currentUser != 'login_sysadmin'
+			BEGIN
+				PRINT('You do not have permission to do this. Transaction rollback...')
+				ROLLBACK TRAN UNLOCKUSERACCOUNT
+			END
+		ELSE
+			BEGIN
+				-- Check invalid parameters
+				IF LEN(@userName) = 0
+					BEGIN
+						ROLLBACK TRAN UNLOCKUSERACCOUNT
+						PRINT('Invalid parameter(s). Transaction rollback...')
+					END
+				-- Delete user account
+				DECLARE @SQLQuery nvarchar(500)
+				SET @SQLQuery = 'USE OnlineOrderingSystem GRANT CONNECT ON DATABASE::OnlineOrderingSystem TO ' + @userName
+				EXECUTE sp_executesql @SQLQuery
+				COMMIT TRAN UNLOCKUSERACCOUNT
+			END
+GO
