@@ -46,7 +46,7 @@ CREATE TABLE HOP_DONG(
 	MaHD varchar(20),
 	MaDT varchar(20),
 	SoCNDangKy varchar(15),
-	TG_HieuLucHD nvarchar(10),
+	TG_HieuLucHD date,
 	PhanTramHoaHong float
 
 	PRIMARY KEY(MaHD),
