@@ -258,7 +258,7 @@ EXEC spViewProductListOfPartner N'210'
 --DROP PROC spSelectOrderInformation
 -- chon san pham, so luong tuong ung, hinh thuc thanh toan va dia chi giao hang
 GO
-CREATE PROCEDURE spSelectOrderInformation @makh varchar(20), @masp varchar(20), @soluong int, @ht_tt nvarchar(50), @tenduong nvarchar(50)
+CREATE PROCEDURE spCreateOrder @madt varchar(20), @makh varchar(20), @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv varchar(20), @tt_dh nvarchar(50)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -268,20 +268,52 @@ BEGIN TRAN
 		END 
 	ELSE
 		BEGIN
-			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE MaKH = @makh)
+			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE Makh = @makh)
 				BEGIN
 					ROLLBACK TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
 				END
 			ELSE 
 				BEGIN
-					SELECT dh.MaKH, ct.MaSP, ct.SoLuong, dh.HinhThuc_ThanhToan, dh.TenDuong, kv.Quan, kv.Tinh 
-					FROM CT_DONHANG ct, DON_HANG dh, KHU_VUC kv 
-					where ct.MaDH = dh.MaDH and dh.MaKV = kv.MaKV and dh.MaKH = @makh
+					INSERT DON_HANG
+					VALUES (null, @madt, @makh, @ht_tt, @tenduong, @makv, 0, 0, @tt_dh)
 				END 
 			COMMIT TRAN
 		END
-
+GO
+CREATE PROCEDURE spSelectOrderInformation @madh varchar(20), @masp varchar(20), @soluong int
+AS
+BEGIN TRAN 
+	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+		BEGIN
+			ROLLBACK TRAN
+			PRINT('TRANSACTION IS ROLLBACKED')
+		END 
+	ELSE
+		BEGIN
+			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE Madh = @madh)
+				BEGIN
+					ROLLBACK TRAN
+					PRINT('TRANSACTION IS ROLLBACKED')
+				END
+			ELSE 
+				BEGIN
+					IF NOT EXISTS (SELECT * FROM CT_DONHANG WHERE MaDH = @madh and MaSP = @masp)
+						BEGIN
+							UPDATE CT_DONHANG
+							SET SoLuong = @soluong
+							where MaSP = @masp and MaDH = @madh
+						END
+					ELSE
+						BEGIN
+						INSERT CT_DONHANG
+						VALUES (@madh, @masp, @soluong)
+						END
+					UPDATE DON_HANG
+					SET TongPhiSP = (SELECT SUM(ct.SoLuong*sp.Gia) FROM SAN_PHAM sp JOIN CT_DONHANG ct ON sp.MaSP = ct.MaSP where ct.MaDH = @madh)  
+				END 
+			COMMIT TRAN
+		END
 GO 
 USE OnlineOrderingSystem
 GRANT EXEC ON spSelectOrderInformation
@@ -289,7 +321,7 @@ TO khach_hang
 --EXEC spSelectOrderInformation N'718', 
 -- xac nhan dong y, don hang se duoc chuyen den doi tac va tai xe
 GO
-CREATE PROCEDURE spShipOrderStatus @madh varchar(20), @ttdh nvarchar(50), @makh varchar(20)
+CREATE PROCEDURE spShipOrderStatus @matx varchar(20), @madh varchar(20), @ttdh nvarchar(50), @makh varchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -309,6 +341,8 @@ BEGIN TRAN
 					UPDATE DON_HANG
 					SET TinhTrangDH = @ttdh
 					WHERE MaKH = @makh
+					INSERT GIAO_HANG (MaTX,MaDH)
+					VALUES (@maTX,@madh)
 				END 
 			COMMIT TRAN
 		END
@@ -317,6 +351,7 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spShipOrderStatus
 TO khach_hang
+EXEC spShipOrderStatus N'977', N'468', N'Tai Xe Dang Giao Hang', N'844'
 
 -- theo doi qua trinh van chuyen
 GO
@@ -349,3 +384,4 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spViewShippingProcess
 TO khach_hang
+EXEC spViewShippingProcess N'468'
