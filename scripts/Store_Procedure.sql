@@ -1,11 +1,13 @@
 ﻿------------------STORED PROCEDURE FOR ADMIN--------------------
 
-SELECT SYSTEM_USER
-
+---- Create a user account for System Admin in master database
+---- to execute server-level stored procedure
+USE master
+CREATE USER user_sysadmin FOR LOGIN login_sysadmin
+GRANT EXECUTE to user_sysadmin
+GO
 ---------UPDATE INFORMATION OF LOGIN/USER ACCOUNT
 -- Change login name
-USE master
-GO
 CREATE PROCEDURE sp_changeLoginName @oldName nvarchar(30), @newName nvarchar(30)
 AS
 	BEGIN TRAN CHANGELOGINNAME
@@ -36,8 +38,6 @@ EXEC sp_ms_marksystemobject 'sp_changeLoginName'
 GO
 
 -- Change login password
-USE master
-GO
 CREATE PROCEDURE sp_changeLoginPassword @loginName nvarchar(30), @newPassword nvarchar(30)
 AS
 	BEGIN TRAN CHANGELOGINPASSWORD
@@ -132,8 +132,6 @@ EXEC sp_ms_marksystemobject 'sp_addLoginAccount'
 GO
 
 -- Add user account for admin
-USE master
-GO
 CREATE PROCEDURE sp_addUserForAdmin @userName nvarchar(30), @loginName nvarchar(30)
 AS
 	BEGIN TRAN ADDUSERFORADMIN
@@ -166,8 +164,6 @@ AS
 GO
 
 -- Add user account for employee
-USE master
-GO
 CREATE PROCEDURE sp_addUserForEmployee @userName nvarchar(30), @loginName nvarchar(30)
 AS
 	BEGIN TRAN ADDUSERFOREMPLOYEE
@@ -200,8 +196,6 @@ AS
 GO
 
 -- Delete user account of admin/employee
-USE master
-GO
 CREATE PROCEDURE sp_deleteUserAccount @userName nvarchar(30)
 AS
 	BEGIN TRAN DELETEUSERACCOUNT
@@ -230,8 +224,6 @@ AS
 GO
 
 -- Lock login account of admin/employee
-USE master
-GO
 CREATE PROCEDURE sp_lockLoginAccount @loginName nvarchar(30)
 AS
 	BEGIN TRAN LOCKLOGINACCOUNT
@@ -260,8 +252,6 @@ AS
 GO
 
 -- Unlock login account of admin/employee
-USE master
-GO
 CREATE PROCEDURE sp_unlockLoginAccount @loginName nvarchar(30)
 AS
 	BEGIN TRAN UNLOCKLOGINACCOUNT
@@ -290,8 +280,6 @@ AS
 GO
 
 -- Lock user account of admin/employee
-USE master
-GO
 CREATE PROCEDURE sp_lockUserAccount @userName nvarchar(30)
 AS
 	BEGIN TRAN LOCKUSERACCOUNT
@@ -320,8 +308,6 @@ AS
 GO
 
 -- Unlock user account of admin/employee
-USE master
-GO
 CREATE PROCEDURE sp_unlockUserAccount @userName nvarchar(30)
 AS
 	BEGIN TRAN UNLOCKUSERACCOUNT
@@ -348,3 +334,7 @@ AS
 				COMMIT TRAN UNLOCKUSERACCOUNT
 			END
 GO
+
+SELECT * 
+FROM master.INFORMATION_SCHEMA.ROUTINES
+WHERE ROUTINE_TYPE = 'PROCEDURE'
