@@ -41,7 +41,12 @@ GO
 CREATE PROCEDURE spAddProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
 AS
 BEGIN TRAN 
-	IF IS_ROLEMEMBER('doi_tac') = 0 OR IS_ROLEMEMBER('db_owner') = 0
+	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+		BEGIN 
+			ROLLBACK TRAN
+			PRINT('TRANSACTION IS ROLLBACKED')
+		END
+	ELSE 
 		BEGIN
 			IF EXISTS(SELECT * FROM SAN_PHAM WHERE MaSP = @maSP and MaCN = @maCN)  
 				BEGIN
@@ -55,11 +60,6 @@ BEGIN TRAN
 				END
 			COMMIT TRAN
 		END
-	ELSE
-		BEGIN
-			ROLLBACK TRAN
-			PRINT('TRANSACTION IS ROLLBACKED')
-		END
 -- grant exec cho doi_tac
 GO 
 USE OnlineOrderingSystem
@@ -71,7 +71,12 @@ GO
 CREATE PROCEDURE spUpdateProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
 AS
 BEGIN TRAN 
-	IF IS_ROLEMEMBER('tai_xe') = 0 OR IS_ROLEMEMBER('db_owner') = 0
+	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+		BEGIN 
+			ROLLBACK TRAN
+			PRINT('TRANSACTION IS ROLLBACKED')
+		END
+	ELSE
 		BEGIN
 			IF NOT EXISTS(SELECT * FROM SAN_PHAM WHERE MaSP = @maSP)  
 				BEGIN
@@ -86,11 +91,7 @@ BEGIN TRAN
 				END
 			COMMIT TRAN
 		END
-	ELSE
-		BEGIN
-			ROLLBACK TRAN
-			PRINT('TRANSACTION IS ROLLBACKED')
-		END
+	
 -- grant exec cho doi_tac
 GO 
 USE OnlineOrderingSystem
@@ -102,7 +103,12 @@ GO
 CREATE PROCEDURE spDeleteProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
 AS
 BEGIN TRAN 
-	IF IS_ROLEMEMBER('tai_xe') = 0 OR IS_ROLEMEMBER('db_owner') = 0
+	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+		BEGIN 
+			ROLLBACK TRAN
+			PRINT('TRANSACTION IS ROLLBACKED')
+		END
+	ELSE
 		BEGIN
 			IF NOT EXISTS(SELECT * FROM SAN_PHAM WHERE MaSP = @maSP)  
 				BEGIN
@@ -116,11 +122,7 @@ BEGIN TRAN
 				END
 			COMMIT TRAN
 		END
-	ELSE
-		BEGIN
-			ROLLBACK TRAN
-			PRINT('TRANSACTION IS ROLLBACKED')
-		END
+	
 -- grant exec cho doi_tac
 GO 
 USE OnlineOrderingSystem
