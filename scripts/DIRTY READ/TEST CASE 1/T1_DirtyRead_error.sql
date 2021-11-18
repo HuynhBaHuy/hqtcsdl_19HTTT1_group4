@@ -1,0 +1,13 @@
+--T1 cap nhat tinh trang don hang 
+--T2 xem tinh trang don hang
+go
+use OnlineOrderingSystem
+BEGIN TRANSACTION
+  DECLARE @ttdh nvarchar(50)
+  SELECT @ttdh = TinhTrangDH FROM DON_HANG WHERE MaDH = N'005'	
+  SET @ttdh = N'Dang giao hang'
+  UPDATE DON_HANG SET TinhTrangDH = @ttdh WHERE MaDH = N'005'
+  -- Waiting for shipper
+  Waitfor Delay '00:00:10'
+  -- Cancel shipping due to shipper. Rollback transaction
+ROLLBACK TRANSACTION
