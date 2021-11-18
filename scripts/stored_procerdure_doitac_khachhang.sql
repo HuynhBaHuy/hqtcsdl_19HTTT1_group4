@@ -34,7 +34,7 @@ use OnlineOrderingSystem
 GRANT EXEC ON spUpdateTimeContractTerm 
 TO doi_tac
 
-EXEC spUpdateTimeContractTerm '085', '2025-02-12', '35'  
+--EXEC spUpdateTimeContractTerm '085', '2025-02-12', '35'  
 
 -- them thong tin san pham va chi nhanh cung cap san pham nay
 GO
@@ -65,7 +65,7 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spAddProduct 
 TO doi_tac
-EXEC spAddProduct N'103', N'136', N'Dầu', N'222', 20000
+--EXEC spAddProduct N'103', N'136', N'Dầu', N'222', 20000
 -- sua thong tin san pham va chi nhanh cung cap san pham nay
 GO
 CREATE PROCEDURE spUpdateProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
@@ -97,7 +97,7 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spUpdateProduct 
 TO doi_tac
-EXEC spUpdateProduct N'103', N'136', N'Tương ớt', N'222', 20000
+--EXEC spUpdateProduct N'103', N'136', N'Tương ớt', N'222', 20000
 -- xoa thong tin san pham va chi nhanh cung cap san pham nay
 GO
 CREATE PROCEDURE spDeleteProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
@@ -129,7 +129,7 @@ USE OnlineOrderingSystem
 GRANT EXEC ON spDeleteProduct 
 TO doi_tac
 
-EXEC spDeleteProduct N'103', N'136', N'Tương ớt', N'222', 20000
+--EXEC spDeleteProduct N'103', N'136', N'Tương ớt', N'222', 20000
 -- xem thong tin don hang 
 GO 
 CREATE PROCEDURE spViewOrderInformation @madh varchar(20)
@@ -158,7 +158,7 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spViewOrderInformation 
 to doi_tac
-EXEC spViewOrderInformation N'175'
+--EXEC spViewOrderInformation N'175'
 -- cap nhat tinh trang don hang 
 GO 
 CREATE PROCEDURE spUpdateOrderStatus @madh varchar(20), @ttdh nvarchar(50)
@@ -191,7 +191,7 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spUpdateOrderStatus 
 to doi_tac
-EXEC spUpdateOrderStatus N'175', N'Dang Giao Hang'
+--EXEC spUpdateOrderStatus N'175', N'Dang Giao Hang'
 
 -- STORE PROCEDURE FOR KHACH HANG 
 -- xem danh sach doi tac
@@ -224,7 +224,7 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spViewPartnerList
 TO khach_hang
-EXEC spViewPartnerList
+--EXEC spViewPartnerList
 
 -- xem danh sach san pham cua doi tac
 GO
@@ -256,7 +256,7 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spViewProductListOfPartner
 TO khach_hang
-EXEC spViewProductListOfPartner N'210'
+--EXEC spViewProductListOfPartner N'210'
 --DROP PROC spSelectOrderInformation
 -- chon san pham, so luong tuong ung, hinh thuc thanh toan va dia chi giao hang
 GO
@@ -353,7 +353,7 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spShipOrderStatus
 TO khach_hang
-EXEC spShipOrderStatus N'977', N'468', N'Tai Xe Dang Giao Hang', N'844'
+--EXEC spShipOrderStatus N'977', N'468', N'Tai Xe Dang Giao Hang', N'844'
 
 -- theo doi qua trinh van chuyen
 GO
@@ -386,4 +386,4 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spViewShippingProcess
 TO khach_hang
-EXEC spViewShippingProcess N'468'
+--EXEC spViewShippingProcess N'468'
