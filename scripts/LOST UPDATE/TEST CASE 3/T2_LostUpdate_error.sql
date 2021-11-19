@@ -1,10 +1,37 @@
---T1 cap nhat tinh trang don hang
---T2 cap nhat tinh trang don hang
+--T1 doi tac cap nhat tinh trang don hang
+--T2 tai xe cap nhat tinh trang don hang
 go
 use OnlineOrderingSystem
-BEGIN TRANSACTION
-  DECLARE @ttdh nvarchar(50)
-  SELECT @ttdh = TinhTrangDH FROM DON_HANG WHERE MaDH = N'005'
-  SET @ttdh = N'Da nhan hang va dang giao hang'
-  UPDATE DON_HANG SET TinhTrangDH = @ttdh WHERE MaDH = N'005'
-COMMIT TRANSACTION
+
+GO
+CREATE PROCEDURE sp_lostupdate_tc3_T2 @madh nvarchar(20), @ttdh nvarchar(50)
+AS
+BEGIN TRAN 
+	IF IS_ROLEMEMBER('tai_xe') = 0 AND IS_ROLEMEMBER('dbowner') = 0
+		BEGIN
+			ROLLBACK TRAN
+		END
+	ELSE
+		BEGIN
+			IF EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh)
+				BEGIN
+					SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh
+					UPDATE DON_HANG 
+					SET TinhTrangDH = @ttdh 
+					WHERE MaDH = @madh
+					COMMIT TRAN;
+				END
+			ELSE
+				BEGIN
+					ROLLBACK TRAN
+				END
+		END
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_lostupdate_tc3_T2
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+EXEC sp_lostupdate_tc3_T2 N'100', N'Da nhan hang'
