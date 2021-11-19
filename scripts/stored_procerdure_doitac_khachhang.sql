@@ -177,7 +177,7 @@ to doi_tac
 --EXEC spViewOrderInformation N'000'
 -- cap nhat tinh trang don hang 
 GO 
-CREATE PROCEDURE spUpdateOrderStatus @madh varchar(20), @ttdh nvarchar(50)
+CREATE PROCEDURE spUpdateOrderStatus @madt nvarchar(20),  @madh nvarchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('tai_xe') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -187,25 +187,38 @@ BEGIN TRAN
 		END
 	ELSE
 		BEGIN
-		IF NOT EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh)
-			BEGIN
-				ROLLBACK TRAN
-				PRINT('TRANSACTION IS ROLLBACKED')
-			END
-		ELSE
-			BEGIN
-				UPDATE DON_HANG
-				SET TinhTrangDH = @ttdh
-				WHERE MaDH = @madh
-			END
-		COMMIT TRAN
+			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh and MaDT = @madt)
+				BEGIN
+					ROLLBACK TRAN
+					PRINT('TRANSACTION IS ROLLBACKED')
+				END
+			ELSE
+				IF (SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Hoàn trả hàng'
+					-- Not allow to update order status when the order is refunded
+					BEGIN
+						ROLLBACK TRAN
+						PRINT('TRANSACTION IS ROLLBACKED')
+					END
+				ELSE IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Đã giao hàng' AND @ttdh != 'Hoàn trả hàng')
+					-- Not allow to update order status when the order is marked at delivered, except refund
+					BEGIN
+						ROLLBACK TRAN
+						PRINT('TRANSACTION IS ROLLBACKED')
+					END
+				ELSE
+					BEGIN
+						UPDATE DON_HANG
+						SET TinhTrangDH = @ttdh
+						WHERE MaDH = @madh
+						COMMIT TRAN
+					END
 		END
 -- grant
 GO 
 USE OnlineOrderingSystem
 GRANT EXEC ON spUpdateOrderStatus 
 to doi_tac
---EXEC spUpdateOrderStatus N'000', N'Dang Giao Hang'
+--EXEC spUpdateOrderStatus N'000', N'000', N'Dang Giao Hang'
 
 -- STORE PROCEDURE FOR KHACH HANG 
 -- xem danh sach doi tac
