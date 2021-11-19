@@ -4,7 +4,7 @@
 -- STORE PROCEDURE FOR DOI_TAC
 -- cap nhat thoi gian hieu luc va phan tram hoa hong 
 GO 
-CREATE PROCEDURE spUpdateTimeContractTerm @mahd varchar(20), @tg_hlhd nvarchar(10), @pthh float
+CREATE PROCEDURE spUpdateTimeContractTerm @masothue varchar(20), @tg_hlhd date, @pthh float
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -13,20 +13,37 @@ BEGIN TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
 		END
 	ELSE 
-	BEGIN
-		IF NOT EXISTS(SELECT MAHD FROM HOP_DONG WHERE  MaHD = @mahd)
-			BEGIN
-				ROLLBACK TRAN
-				PRINT('TRANSACTION IS ROLLBACKED')
-			END 
-		ELSE 
-			BEGIN
-				UPDATE HOP_DONG
-				SET TG_HieuLucHD = @tg_hlhd, PhanTramHoaHong = @pthh
-				where MaHD = @mahd
-			END
-		COMMIT TRAN
-	END
+		BEGIN
+			IF NOT EXISTS(SELECT h.MaDT FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaHD) WHERE d.MaSoThue = @masothue)
+				BEGIN
+					ROLLBACK TRAN
+					PRINT('TRANSACTION IS ROLLBACKED')
+				END 
+			ELSE
+				BEGIN
+					DECLARE @madt varchar(20)
+					DECLARE @doanhsoban float
+
+					SET @madt = (SELECT h.MaDT FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaHD) WHERE d.MaSoThue = @masothue)
+				
+					-- Check if the input effective time is valid
+					IF(@tg_hlhd < (SELECT h.TG_HieuLucHD FROM HOP_DONG h WHERE h.MaDT = @madt))
+						BEGIN
+							ROLLBACK TRAN
+							PRINT('TRANSACTION IS ROLLBACKED')
+						END
+					ELSE
+						BEGIN
+							SET @doanhsoban = (SELECT SUM(d.TongPhiSP) FROM DON_HANG d WHERE d.MaDT = @madt)
+				
+							UPDATE HOP_DONG
+							SET TG_HieuLucHD = @tg_hlhd, PhanTramHoaHong = (@pthh * @doanhsoban) / 100
+							where MaDT = @madt
+
+							COMMIT TRAN
+						END
+				END
+		END
 
 -- grant exec cho doi_tac
 GO 
