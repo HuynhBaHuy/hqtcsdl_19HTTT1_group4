@@ -20,7 +20,7 @@ BEGIN TRAN
 				-- Waiting for updating
 				Waitfor Delay '00:00:10'
 			END
-		-- Cancel due to data's mistake. Rollback transaction
+		-- Cancel update due to lost network. Rollback transaction
 		ROLLBACK TRANSACTION
 
 GO 
@@ -28,6 +28,6 @@ USE OnlineOrderingSystem
 GRANT EXEC ON sp_dirtyread_tc2_T2
 TO doi_tac
 
-GO 
-USE OnlineOrderingSystem
-EXEC sp_dirtyread_tc2_T2 N'085', N'057', '2026-05-06'
+--GO 
+--USE OnlineOrderingSystem
+--EXEC sp_dirtyread_tc2_T2 N'085', N'057', '2026-05-06'

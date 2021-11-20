@@ -30,7 +30,7 @@ USE OnlineOrderingSystem
 GRANT EXEC ON sp_dirtyread_tc2_T1
 TO nhan_vien
 
-GO 
-USE OnlineOrderingSystem
-EXEC sp_dirtyread_tc2_T1 N'057'
+--GO 
+--USE OnlineOrderingSystem
+--EXEC sp_dirtyread_tc2_T1 N'057'
 

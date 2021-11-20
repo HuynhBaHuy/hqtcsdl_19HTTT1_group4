@@ -17,10 +17,10 @@ BEGIN TRAN
 			BEGIN
 				SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh
 				UPDATE DON_HANG SET TinhTrangDH = @ttdh WHERE MaDH = @madh
-				-- Waiting for shipper
+				-- Waiting for system's update
 				Waitfor Delay '00:00:10'
 			END
-		-- Cancel shipping due to shipper. Rollback transaction
+		-- Cancel update due to lost network. Rollback transaction
 		ROLLBACK TRANSACTION
 
 GO 
@@ -28,6 +28,6 @@ USE OnlineOrderingSystem
 GRANT EXEC ON sp_dirtyread_tc1_T1
 TO doi_tac
 
-GO 
-USE OnlineOrderingSystem
-EXEC sp_dirtyread_tc1_T1 N'100', N'Da nhan hang'
+--GO 
+--USE OnlineOrderingSystem
+--EXEC sp_dirtyread_tc1_T1 N'100', N'Da nhan hang'
