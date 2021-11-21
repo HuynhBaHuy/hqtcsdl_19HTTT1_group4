@@ -335,6 +335,113 @@ AS
 			END
 GO
 
-SELECT * 
-FROM master.INFORMATION_SCHEMA.ROUTINES
-WHERE ROUTINE_TYPE = 'PROCEDURE'
+
+-- Insert partner
+CREATE TYPE branchList AS TABLE (
+	maCN varchar(20),
+	maDT varchar(20),
+	maKV varchar(20),
+	diaChiCuThe nvarchar(50)
+)
+GO
+
+CREATE PROCEDURE sp_insertPartner 
+@maDT varchar(20),
+@tenDT nvarchar(50),
+@nguoiDaiDien nvarchar(50),
+@maKV varchar(20),
+@soChiNhanh int,
+@soLuongDH int,
+@maLoai varchar(20),
+@diaChiKD nvarchar(50),
+@soDT varchar(15),
+@email varchar(50),
+@maSoThue varchar(20),
+@danhSachChiNhanh branchList READONLY
+AS
+	BEGIN TRAN INSERTPARTNER
+		-- Check if current user has db_owner role
+		IF IS_ROLEMEMBER('db_owner') = 0
+			BEGIN
+				PRINT('You do not have permission to do this. Transaction rollback...')
+				ROLLBACK TRAN INSERTPARTNER
+			END
+		ELSE
+			BEGIN
+				-- Check if partner exist
+				IF EXISTS (SELECT * FROM DOI_TAC WHERE MaDT = @maDT)
+					BEGIN
+						ROLLBACK TRAN INSERTPARTNER
+						PRINT('Partner already exists. Transaction rollback...')
+					END
+				-- Insert partner
+				INSERT INTO DOI_TAC VALUES(@maDT, @tenDT, @nguoiDaiDien, @maKV, @soChiNhanh, @soLuongDH, @maLoai, @diaChiKD, @soDT, @email, @maSoThue)
+				
+				-- Insert list of branches
+				INSERT INTO CHI_NHANH SELECT * FROM @danhSachChiNhanh
+				
+				COMMIT TRAN INSERTPARTNER
+			END
+GO
+
+-- Insert customer
+CREATE PROCEDURE sp_insertCustomer
+@maKH varchar(20),
+@tenKH nvarchar(50),
+@soDT varchar(15)
+AS
+	BEGIN TRAN INSERTCUSTOMER
+		-- Check if current user has db_owner role
+		IF IS_ROLEMEMBER('db_owner') = 0
+			BEGIN
+				PRINT('You do not have permission to do this. Transaction rollback...')
+				ROLLBACK TRAN INSERTPARTNER
+			END
+		ELSE
+			BEGIN
+				-- Check if customer exist
+				IF EXISTS (SELECT * FROM KHACH_HANG WHERE MaKH = @maKH)
+					BEGIN
+						ROLLBACK TRAN INSERTCUSTOMER
+						PRINT('Customer already exists. Transaction rollback...')
+					END
+				-- Insert customer
+				INSERT INTO KHACH_HANG VALUES(@maKH, @tenKH, @soDT)
+				
+				COMMIT TRAN INSERTCUSTOMER
+			END
+GO
+
+-- Insert driver
+CREATE PROCEDURE sp_insertDriver
+@maTX varchar(20),
+@tenTX nvarchar(50),
+@cmnd varchar(15),
+@soDT varchar(15),
+@diaChi nvarchar(100),
+@bienSo varchar(15),
+@maKV varchar(20),
+@email varchar(50),
+@taiKhoanNH nvarchar(100)
+AS
+	BEGIN TRAN INSERTDRIVER
+		-- Check if current user has db_owner role
+		IF IS_ROLEMEMBER('db_owner') = 0
+			BEGIN
+				PRINT('You do not have permission to do this. Transaction rollback...')
+				ROLLBACK TRAN INSERTDRIVER
+			END
+		ELSE
+			BEGIN
+				-- Check if driver exist
+				IF EXISTS (SELECT * FROM TAI_XE WHERE MaTX = @maTX)
+					BEGIN
+						ROLLBACK TRAN INSERTDRIVER
+						PRINT('Customer already exists. Transaction rollback...')
+					END
+				-- Insert driver
+				INSERT INTO TAI_XE VALUES(@maTX, @tenTX, @cmnd, @soDT, @diaChi, @bienSo, @maKV, @email, @taiKhoanNH)
+				
+				COMMIT TRAN INSERTDRIVER
+			END
+GO
