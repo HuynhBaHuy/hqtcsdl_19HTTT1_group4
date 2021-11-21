@@ -4,7 +4,7 @@
 -- STORE PROCEDURE FOR DOI_TAC
 -- cap nhat thoi gian hieu luc va phan tram hoa hong 
 GO 
-CREATE PROCEDURE spUpdateContractTerm @masothue varchar(20), @tg_hlhd date, @pthh float
+CREATE PROCEDURE spUpdateContract @masothue varchar(20), @tg_hlhd date, @pthh float
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -48,10 +48,10 @@ BEGIN TRAN
 -- grant exec cho doi_tac
 GO 
 use OnlineOrderingSystem
-GRANT EXEC ON spUpdateContractTerm 
+GRANT EXEC ON spUpdateContract 
 TO doi_tac
 
---EXEC spUpdateContractTerm '022', '2025-02-12', '35'  
+--EXEC spUpdateContract '022', '2025-02-12', '35'  
 
 -- them thong tin san pham va chi nhanh cung cap san pham nay
 GO
