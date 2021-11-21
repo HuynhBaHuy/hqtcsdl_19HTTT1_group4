@@ -1,9 +1,15 @@
 ﻿USE OnlineOrderingSystem
 
--- STORE PROCEDURE FOR DOI_TAC
--- cap nhat thoi gian hieu luc va phan tram hoa hong 
+-- NOTE: e t doi thoi gian hieu luc cua hop dongf sang kieu du lieu date, 
+--       va so chi nhanh sang kieu du lieu small int vay thi phai sua file database lai
+-- search may tu khoa DONE, ERROR: 
+-- DONE la t kiem tra r 
+-- ERROR la con thieu hoac t thac mac do 
+
 GO 
-CREATE PROCEDURE spUpdateContract @mahd varchar(20), @tg_hlhd nvarchar(10), @pthh float
+-- STORE PROCEDURE FOR DOI_TAC
+-- cap nhat thoi gian hieu luc va phan tram hoa hong  ==> DONE
+CREATE PROCEDURE spUpdateContract @mahd varchar(20), @tg_hlhd date, @pthh float
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -14,6 +20,7 @@ BEGIN TRAN
 	ELSE 
 	BEGIN
 		IF NOT EXISTS(SELECT MAHD FROM HOP_DONG WHERE  MaHD = @mahd)
+			OR @pthh < 0
 			BEGIN
 				ROLLBACK TRAN
 				PRINT('TRANSACTION IS ROLLBACKED')
@@ -23,26 +30,18 @@ BEGIN TRAN
 				UPDATE HOP_DONG
 				SET TG_HieuLucHD = @tg_hlhd, PhanTramHoaHong = @pthh
 				where MaHD = @mahd
+				COMMIT TRAN
 			END
-		COMMIT TRAN
 	END
 
--- grant exec cho doi_tac
-GO 
-use OnlineOrderingSystem
-GRANT EXEC ON spUpdateContract 
-TO doi_tac
-
-EXEC spUpdateContract '085', '2025-02-12', '35'  
-
--- them thong tin san pham va chi nhanh cung cap san pham nay
+-- them thong tin san pham ==>DONE
 GO
 CREATE PROCEDURE spAddProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 OR IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
-			IF EXISTS(SELECT * FROM SAN_PHAM WHERE MaSP = @maSP and MaCN = @maCN)  
+			IF EXISTS(SELECT * FROM SAN_PHAM WHERE MaSP = @maSP) OR NOT EXISTS (SELECT * FROM CHI_NHANH WHERE MaCN = @maCN) OR NOT EXISTS(SELECT * FROM LOAI_HANG WHERE MaLoai = @loai)
 				BEGIN
 					ROLLBACK TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
@@ -51,28 +50,24 @@ BEGIN TRAN
 				BEGIN
 					INSERT SAN_PHAM(MaSP, MaCN, TenSanPham, Loai, Gia)
 					VALUES (@maSP, @maCN, @tensanpham, @loai, @gia)
+					COMMIT TRAN
 				END
-			COMMIT TRAN
 		END
 	ELSE
 		BEGIN
 			ROLLBACK TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
 		END
--- grant exec cho doi_tac
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spAddProduct 
-TO doi_tac
-EXEC spAddProduct N'103', N'136', N'Dầu', N'222', 20000
--- sua thong tin san pham va chi nhanh cung cap san pham nay
+
+
+-- sua thong tin san pham ==>DONE
 GO
 CREATE PROCEDURE spUpdateProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
 AS
 BEGIN TRAN 
-	IF IS_ROLEMEMBER('tai_xe') = 0 OR IS_ROLEMEMBER('db_owner') = 0
+	IF IS_ROLEMEMBER('doi_tac') = 0 OR IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
-			IF NOT EXISTS(SELECT * FROM SAN_PHAM WHERE MaSP = @maSP)  
+			IF NOT EXISTS(SELECT * FROM SAN_PHAM WHERE MaSP = @maSP) OR NOT EXISTS (SELECT * FROM CHI_NHANH WHERE MaCN = @maCN) OR NOT EXISTS(SELECT * FROM LOAI_HANG WHERE MaLoai = @loai) 
 				BEGIN
 					ROLLBACK TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
@@ -82,26 +77,27 @@ BEGIN TRAN
 					UPDATE SAN_PHAM
 					SET MaCN = @maCN, TenSanPham = @tensanpham, Loai = @loai, Gia = @gia
 					where MaSP = @maSP
+					COMMIT TRAN
 				END
-			COMMIT TRAN
 		END
 	ELSE
 		BEGIN
 			ROLLBACK TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
 		END
--- grant exec cho doi_tac
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spUpdateProduct 
-TO doi_tac
-EXEC spUpdateProduct N'103', N'136', N'Tương ớt', N'222', 20000
--- xoa thong tin san pham va chi nhanh cung cap san pham nay
+
+
+-- xoa thong tin san pham ==> DONE
 GO
-CREATE PROCEDURE spDeleteProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
+CREATE PROCEDURE spDeleteProduct @maSP varchar(20)
 AS
 BEGIN TRAN 
-	IF IS_ROLEMEMBER('tai_xe') = 0 OR IS_ROLEMEMBER('db_owner') = 0
+	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+		BEGIN 
+			ROLLBACK TRAN
+			PRINT('TRANSACTION IS ROLLBACKED')
+		END
+	ELSE
 		BEGIN
 			IF NOT EXISTS(SELECT * FROM SAN_PHAM WHERE MaSP = @maSP)  
 				BEGIN
@@ -112,56 +108,20 @@ BEGIN TRAN
 				BEGIN 
 					DELETE FROM SAN_PHAM
 					WHERE MaSP = @maSP
+					COMMIT TRAN
 				END
-			COMMIT TRAN
+			
 		END
-	ELSE
-		BEGIN
-			ROLLBACK TRAN
-			PRINT('TRANSACTION IS ROLLBACKED')
-		END
--- grant exec cho doi_tac
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spDeleteProduct 
-TO doi_tac
 
-EXEC spDeleteProduct N'103', N'136', N'Tương ớt', N'222', 20000
--- xem thong tin don hang 
+
+-- ==> ERROR: Thao thieu them xoa sua chi nhanh cung cap san pham nay? ma neu cho nay mot san pham co the co 2 chi nhanh cung cap thi hoi vo ly ?
+
+-- xem thong tin don hang ==>DONE
 GO 
 CREATE PROCEDURE spViewOrderInformation @madh varchar(20)
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
-		BEGIN
-			ROLLBACK TRAN
-			PRINT('TRANSACTION IS ROLLBACKED')
-		END
-	ELSE
-		BEGIN
-		IF NOT EXISTS (SELECT * FROM GIAO_HANG WHERE MaDH = @madh)
-		OR NOT EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh)
-			BEGIN
-				ROLLBACK TRAN
-				PRINT('TRANSACTION IS ROLLBACKED')
-			END
-		ELSE
-			BEGIN
-				SELECT * FROM DON_HANG WHERE MaDH = @madh
-			END
-		COMMIT TRAN
-		END
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spViewOrderInformation 
-to doi_tac
-EXEC spViewOrderInformation N'175'
--- cap nhat tinh trang don hang 
-GO 
-CREATE PROCEDURE spUpdateOrderStatus @madh varchar(20), @ttdh nvarchar(50)
-AS
-BEGIN TRAN
-	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('tai_xe') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
 			ROLLBACK TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
@@ -175,23 +135,53 @@ BEGIN TRAN
 			END
 		ELSE
 			BEGIN
-				UPDATE DON_HANG
-				SET TinhTrangDH = @ttdh
-				WHERE MaDH = @madh
+				SELECT * FROM DON_HANG WHERE MaDH = @madh
+				COMMIT TRAN
 			END
-		COMMIT TRAN
+		END
+
+-- cap nhat tinh trang don hang ==>DONE
+GO 
+CREATE PROCEDURE spUpdateOrderStatusForPartner @madt varchar(20),  @madh varchar(20), @ttdh nvarchar(50)
+AS
+BEGIN TRAN
+	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+		BEGIN
+			ROLLBACK TRAN
+			PRINT('TRANSACTION IS ROLLBACKED')
+		END
+	ELSE
+		BEGIN
+			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh and MaDT = @madt)
+				BEGIN
+					ROLLBACK TRAN
+					PRINT('TRANSACTION IS ROLLBACKED')
+				END
+			ELSE
+				IF (SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Hoàn trả hàng'
+					-- Not allow to update order status when the order is refunded
+					BEGIN
+						ROLLBACK TRAN
+						PRINT('TRANSACTION IS ROLLBACKED')
+					END
+				ELSE IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Đã giao hàng' AND @ttdh != 'Hoàn trả hàng')
+					-- Not allow to update order status when the order is marked at delivered, except refund
+					BEGIN
+						ROLLBACK TRAN
+						PRINT('TRANSACTION IS ROLLBACKED')
+					END
+				ELSE
+					BEGIN
+						UPDATE DON_HANG
+						SET TinhTrangDH = @ttdh
+						WHERE MaDH = @madh
+						COMMIT TRAN
+					END
 		END
 
 
--- grant
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spUpdateOrderStatus 
-to doi_tac
-EXEC spUpdateOrderStatus N'175', N'Dang Giao Hang'
-
 -- STORE PROCEDURE FOR KHACH HANG 
--- xem danh sach doi tac
+-- xem danh sach doi tac ==>DONE
 GO 
 CREATE PROCEDURE spViewPartnerList
 AS
@@ -212,18 +202,12 @@ BEGIN TRAN
 		BEGIN
 			SELECT MaDT, TenDT, NguoiDaiDien, MaKV, MaLoai, DiaChiKD, SoDT, Email
 			FROM DOI_TAC 
+			COMMIT TRAN
 		END 
-		COMMIT TRAN
+		
 	END
---DROP PROC spViewPartnerList
--- GRANT 
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spViewPartnerList
-TO khach_hang
-EXEC spViewPartnerList
 
--- xem danh sach san pham cua doi tac
+-- xem danh sach san pham cua doi tac ==>DONE
 GO
 CREATE PROCEDURE spViewProductListOfPartner @madt varchar(20)
 AS
@@ -245,19 +229,14 @@ BEGIN TRAN
 			SELECT sp.MaSP, sp.TenSanPham, sp.Gia, sp.Loai 
 			FROM SAN_PHAM sp
 			WHERE sp.MaCN in (SELECT cn.MACN FROM CHI_NHANH cn JOIN DOI_TAC dt ON cn.MADT = dt.MADT and dt.MaDT = @madt)
+			COMMIT TRAN
 		END 
-		COMMIT TRAN
 	END
 
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spViewProductListOfPartner
-TO khach_hang
-EXEC spViewProductListOfPartner N'210'
---DROP PROC spSelectOrderInformation
+--==>ERROR: co that su can sp chon san pham so luong tuong ung ko??, cai nay tren UI ma t
+GO
 -- chon san pham, so luong tuong ung, hinh thuc thanh toan va dia chi giao hang
-GO
-CREATE PROCEDURE spCreateOrder @madt varchar(20), @makh varchar(20), @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv varchar(20), @tt_dh nvarchar(50)
+CREATE PROCEDURE spSelectOrderInformation @masp varchar(20), @soluong int, @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv varchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -266,61 +245,30 @@ BEGIN TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
 		END 
 	ELSE
-		BEGIN
-			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE Makh = @makh)
-				BEGIN
-					ROLLBACK TRAN
-					PRINT('TRANSACTION IS ROLLBACKED')
-				END
-			ELSE 
-				BEGIN
-					INSERT DON_HANG
-					VALUES (null, @madt, @makh, @ht_tt, @tenduong, @makv, 0, 0, @tt_dh)
-				END 
-			COMMIT TRAN
-		END
-GO
-CREATE PROCEDURE spSelectOrderInformation @madh varchar(20), @masp varchar(20), @soluong int
-AS
-BEGIN TRAN 
-	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
-		BEGIN
+		IF NOT EXISTS (SELECT * FROM SAN_PHAM WHERE MaSP = @masp)
+			BEGIN
 			ROLLBACK TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
-		END 
-	ELSE
-		BEGIN
-			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE Madh = @madh)
-				BEGIN
-					ROLLBACK TRAN
-					PRINT('TRANSACTION IS ROLLBACKED')
-				END
-			ELSE 
-				BEGIN
-					IF NOT EXISTS (SELECT * FROM CT_DONHANG WHERE MaDH = @madh and MaSP = @masp)
-						BEGIN
-							UPDATE CT_DONHANG
-							SET SoLuong = @soluong
-							where MaSP = @masp and MaDH = @madh
-						END
-					ELSE
-						BEGIN
-						INSERT CT_DONHANG
-						VALUES (@madh, @masp, @soluong)
-						END
-					UPDATE DON_HANG
-					SET TongPhiSP = (SELECT SUM(ct.SoLuong*sp.Gia) FROM SAN_PHAM sp JOIN CT_DONHANG ct ON sp.MaSP = ct.MaSP where ct.MaDH = @madh)  
-				END 
-			COMMIT TRAN
 		END
+		ELSE
+			BEGIN
+				SELECT @masp AS MaSP, @soluong AS SoLuong, @ht_tt AS HinhThucThanhToan, @tenduong AS TenDuong, @makv AS MaKhuVuc
+				FROM SAN_PHAM
+				COMMIT TRAN
+			END
+	
 GO 
 USE OnlineOrderingSystem
 GRANT EXEC ON spSelectOrderInformation
 TO khach_hang
---EXEC spSelectOrderInformation N'718', 
--- xac nhan dong y, don hang se duoc chuyen den doi tac va tai xe
+--EXEC spSelectOrderInformation '000', 5, N'PayPal', N'Nguyễn Chí Thanh', '586'
+
+
+
+
+-- xac nhan dong y, don hang se duoc chuyen den doi tac va tai xe (tao don hang) ==>DONE
 GO
-CREATE PROCEDURE spShipOrderStatus @matx varchar(20), @madh varchar(20), @ttdh nvarchar(50), @makh varchar(20)
+CREATE PROCEDURE spCreateOrder @madh varchar(20), @madt varchar(20), @makh varchar(20), @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv varchar(20), @masp varchar(20), @soluong int
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -330,42 +278,85 @@ BEGIN TRAN
 		END 
 	ELSE
 		BEGIN
-			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh)
+			IF EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh) 
+				OR NOT EXISTS (SELECT * FROM DOI_TAC WHERE MaDT = @madt)
+				OR NOT EXISTS (SELECT * FROM KHU_VUC WHERE MaKV = @makv)
+				OR NOT EXISTS (SELECT * FROM SAN_PHAM WHERE MaSP = @masp)
 				BEGIN
 					ROLLBACK TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
 				END
-			ELSE 
+			ELSE
 				BEGIN
+					INSERT DON_HANG
+					VALUES (@madh, @madt, @makh, @ht_tt, @tenduong, @makv, 0, 0, null)
+					INSERT CT_DONHANG
+					VALUES (@madh, @masp, @soluong)
 					UPDATE DON_HANG
-					SET TinhTrangDH = @ttdh
-					WHERE MaKH = @makh
-					INSERT GIAO_HANG (MaTX,MaDH)
-					VALUES (@maTX,@madh)
-				END 
-			COMMIT TRAN
+					SET TongPhiSP = (SELECT SUM(ct.SoLuong*sp.Gia) FROM SAN_PHAM sp JOIN CT_DONHANG ct ON ct.MaDH = @madh and sp.MaSP = ct.MaSP group by ct.MaDH) where MaDH = @madh
+					COMMIT TRAN
+				END
+			
 		END
 
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spShipOrderStatus
-TO khach_hang
-EXEC spShipOrderStatus N'977', N'468', N'Tai Xe Dang Giao Hang', N'844'
-
--- theo doi qua trinh van chuyen
+-- cap nhap don hang ==>DONE
 GO
-CREATE PROCEDURE spViewShippingProcess @madh varchar(20)
+CREATE PROCEDURE spUpdateOrder @madh varchar(20), @madt varchar(20), @makh varchar(20), @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv varchar(20), @masp varchar(20), @soluong int
 AS
 BEGIN TRAN 
-	IF IS_ROLEMEMBER('khach_hang') = 0 
-	AND IS_ROLEMEMBER('db_owner') = 0
+	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
 			ROLLBACK TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
 		END 
 	ELSE
 		BEGIN
-			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh)
+			IF NOT EXISTS (SELECT * FROM DON_HANG where MaDH = @madh)
+				OR NOT EXISTS (SELECT * FROM DOI_TAC WHERE MaDT = @madt)
+				OR NOT EXISTS (SELECT * FROM KHU_VUC WHERE MaKV = @makv)
+				OR NOT EXISTS (SELECT * FROM SAN_PHAM WHERE MaSP = @masp)
+				BEGIN
+					ROLLBACK TRAN
+					PRINT('TRANSACTION IS ROLLBACKED')
+				END
+			ELSE 
+				BEGIN
+					IF EXISTS (SELECT * FROM CT_DONHANG WHERE Madh = @madh AND MaSP = @masp)
+						BEGIN
+							UPDATE CT_DONHANG
+							SET SoLuong = @soluong
+							WHERE MaDH = @madh And MaSP = @masp
+							UPDATE DON_HANG
+							SET  HinhThuc_ThanhToan = @ht_tt, TenDuong = @tenduong, MaKV = @makv
+							WHERE MaDH = @madh
+							UPDATE DON_HANG
+							SET TongPhiSP = (SELECT SUM(ct.SoLuong*sp.Gia) FROM SAN_PHAM sp JOIN CT_DONHANG ct ON ct.MaDH = @madh and sp.MaSP = ct.MaSP group by ct.MaDH) where MaDH = @madh
+						END
+					IF NOT EXISTS (SELECT * FROM CT_DONHANG WHERE Madh = @madh AND MaSP = @masp)
+						BEGIN
+							INSERT CT_DONHANG
+							VALUES (@madh, @masp, @soluong)
+							UPDATE DON_HANG
+							SET TongPhiSP = (SELECT SUM(ct.SoLuong*sp.Gia) FROM SAN_PHAM sp JOIN CT_DONHANG ct ON ct.MaDH = @madh and sp.MaSP = ct.MaSP group by ct.MaDH) where MaDH = @madh
+						END
+					COMMIT TRAN
+				END
+		END
+
+
+-- theo doi qua trinh van chuyen ==>DONE
+GO
+CREATE PROCEDURE spViewShippingProcess @madh varchar(20),@makh varchar(20)
+AS
+BEGIN TRAN 
+	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+		BEGIN
+			ROLLBACK TRAN
+			PRINT('TRANSACTION IS ROLLBACKED')
+		END 
+	ELSE
+		BEGIN
+			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh AND MaKH = @makh)
 				BEGIN
 					ROLLBACK TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
@@ -375,20 +366,13 @@ BEGIN TRAN
 					SELECT TinhTrangDH
 					FROM DON_HANG
 					WHERE Madh = @madh 
+					COMMIT TRAN	
 				END 
-			COMMIT TRAN
 		END
-
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spViewShippingProcess
-TO khach_hang
-EXEC spViewShippingProcess N'468'
-
 
 
 -- STORE PROCEDURE FOR TAI_XE
--- hien thi danh sach don hang theo khu vuc 
+-- hien thi danh sach don hang theo khu vuc ==>DONE
 GO 
 CREATE PROCEDURE spViewOrderList @matx varchar(20)
 AS
@@ -412,21 +396,12 @@ BEGIN TRAN
 				SELECT DH.*
 				FROM DON_HANG DH
 				WHERE DH.MaKV = @makv AND DH.MaDH NOT IN (SELECT MADH FROM GIAO_HANG) 
+				COMMIT TRAN
 			END
-		COMMIT TRAN
 	END
 
-
-
--- grant exec cho tai_xe
-GO 
-use OnlineOrderingSystem
-GRANT EXEC ON spViewOrderList 
-TO tai_xe
-
-
-
--- chon don hang phuc vu
+-- chon don hang phuc vu ==>DONE
+--==>ERROR: cho hoi la vi du 1 don hang co the duoc 2 tai xe giao k ta?
 GO
 CREATE PROCEDURE spSelectOrder @maTX varchar(20), @madh varchar(20)
 AS
@@ -445,8 +420,9 @@ BEGIN TRAN
 				BEGIN 
 					INSERT GIAO_HANG (MaTX,MaDH)
 					VALUES (@maTX,@madh)
+					COMMIT TRAN
 				END
-			COMMIT TRAN
+
 		END
 	ELSE
 		BEGIN
@@ -454,15 +430,11 @@ BEGIN TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
 		END
 
--- grant exec cho tai_xe
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spSelectOrder 
-TO tai_xe
+
 
 -- cap nhat tinh trang don hang 
 GO 
-CREATE PROCEDURE spUpdateOrderStatus @matx varchar(20), @madh varchar(20), @ttdh nvarchar(50)
+CREATE PROCEDURE spUpdateOrderStatusForDriver @matx varchar(20), @madh varchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('tai_xe') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -479,24 +451,33 @@ BEGIN TRAN
 			END
 		ELSE
 			BEGIN
-				UPDATE DON_HANG
-				SET TinhTrangDH = @ttdh
-				WHERE MaDH = @madh
+				IF (SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Hoàn trả hàng'
+					-- Not allow to update order status when the order is refunded
+					BEGIN
+						ROLLBACK TRAN
+						PRINT('TRANSACTION IS ROLLBACKED')
+					END
+				ELSE IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Đã giao hàng' AND @ttdh != 'Hoàn trả hàng')
+					-- Not allow to update order status when the order is marked at delivered, except refund
+					BEGIN
+						ROLLBACK TRAN
+						PRINT('TRANSACTION IS ROLLBACKED')
+					END
+				ELSE
+					BEGIN
+						UPDATE DON_HANG
+						SET TinhTrangDH = @ttdh
+						WHERE MaDH = @madh
+						COMMIT TRAN
+					END
 			END
-		COMMIT TRAN
+		
 		END
 
 
--- grant
+-- hien thi danh sach don hang ma tai xe da nhan  va phi van chuyen cua tung don hang ==>DONE
 GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spUpdateOrderStatus 
-to tai_xe
-
-
--- hien thi danh sach don hang ma tai xe da nhan  va phi van chuyen cua tung don hang
-GO 
-CREATE PROCEDURE spViewMyOrders @matx varchar(20)
+CREATE PROCEDURE spViewOrdersOfDriver @matx varchar(20)
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('tai_xe') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -509,25 +490,14 @@ BEGIN TRAN
 			IF NOT EXISTS(SELECT * FROM TAI_XE WHERE MaTX = @matx)
 				BEGIN 
 					ROLLBACK TRAN
+					PRINT('TRANSACTION IS ROLLBACKED')
 				END
 			ELSE 
 				BEGIN
 					SELECT * FROM DON_HANG WHERE MADH IN (SELECT MADH FROM GIAO_HANG WHERE MaTX = @matx)
+					COMMIT TRAN
 				END
-			COMMIT TRAN
 		END
-
--- GRANT 
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spViewMyOrders
-TO tai_xe
-
-GO
-USE OnlineOrderingSystem
-EXEC spViewMyOrders '004'
-
-
 
 
 -- STORE PROCEDURE FOR nhan vien 
@@ -556,17 +526,11 @@ BEGIN TRAN
 			SELECT hd.*
 			FROM HOP_DONG hd
 			WHERE hd.MaDT = @madt AND CAST( GETDATE() AS Date ) < hd.TG_HieuLucHD
+			COMMIT TRAN
 		END 
-		COMMIT TRAN
 	END
 
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spGetExpiredContract
-TO nhan_vien
-
-
--- xem danh sach hop dong da lap cua doi tac
+-- xem danh sach hop dong da lap cua doi tac 
 GO
 CREATE PROCEDURE spGetAllConstractList @madt varchar(20)
 AS
@@ -590,19 +554,45 @@ BEGIN TRAN
 					SELECT hd.*
 					FROM HOP_DONG hd
 					WHERE hd.MaDT = @madt 
+					COMMIT TRAN
 				END 
-			COMMIT TRAN
 		END
 
+-- duyet hop dong ==>DONE
 GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spGetAllConstractList
-TO nhan_vien
+CREATE PROCEDURE spConfirmContract @mahd varchar(20),@madt varchar(20),@soCN smallint,@thoigianhieuluc date,@phantramhh float
+AS
+BEGIN TRAN
+	IF IS_ROLEMEMBER('nhan_vien') = 0 
+	AND IS_ROLEMEMBER('db_owner') = 0
+	BEGIN
+		ROLLBACK TRAN
+		PRINT('TRANSACTION IS ROLLBACKED')
+	END 
+	ELSE
+	BEGIN
+		IF NOT EXISTS (SELECT * FROM DOI_TAC WHERE MaDT = @madt)
+			OR EXISTS (SELECT * FROM HOP_DONG WHERE MaHD = @mahd)
+			OR @thoigianhieuluc <= CAST( GETDATE() AS Date )
+			OR @phantramhh < 0
+		BEGIN
+			ROLLBACK TRAN
+			PRINT('TRANSACTION IS ROLLBACKED')
+		END
+		ELSE 
+		BEGIN
+			INSERT INTO HOP_DONG
+			VALUES (@mahd,@madt,@soCN,@thoigianhieuluc,@phantramhh)
+			COMMIT TRAN
+		END 
+	END
+
 
 -----------------STORED PROCEDURE FOR ADMIN--------------------
 
 ---- Create a user account for System Admin in master database
 ---- to execute server-level stored procedure
+GO
 USE master
 CREATE USER user_sysadmin FOR LOGIN login_sysadmin
 GRANT EXECUTE to user_sysadmin
@@ -634,9 +624,7 @@ AS
 				EXECUTE sp_executesql @SQLQuery
 				COMMIT TRAN CHANGELOGINNAME
 			END
-GO
-EXEC sp_ms_marksystemobject 'sp_changeLoginName'
-GO
+
 
 -- Change login password
 CREATE PROCEDURE sp_changeLoginPassword @loginName nvarchar(30), @newPassword nvarchar(30)
@@ -664,9 +652,7 @@ AS
 				EXECUTE sp_executesql @SQLQuery
 				COMMIT TRAN CHANGELOGINPASSWORD
 			END
-GO
-EXEC sp_ms_marksystemobject 'sp_changeLoginPassword'
-GO
+
 
 
 -- Change user name in database
@@ -728,9 +714,7 @@ AS
 				EXECUTE sp_executesql @SQLQuery
 				COMMIT TRAN ADDLOGINACCOUNT
 			END
-GO
-EXEC sp_ms_marksystemobject 'sp_addLoginAccount'
-GO
+
 
 -- Add user account for admin
 CREATE PROCEDURE sp_addUserForAdmin @userName nvarchar(30), @loginName nvarchar(30)

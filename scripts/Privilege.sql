@@ -266,5 +266,120 @@ CREATE USER user_dbadmin3 FOR LOGIN login_dbadmin3
 exec sp_addrolemember 'db_owner','user_dbadmin1'
 exec sp_addrolemember 'db_owner','user_dbadmin2'
 exec sp_addrolemember 'db_owner','user_dbadmin3'
-GO
 
+---------------------GRANT - EXEC - TO - ROLE--------------------
+-- GRANT EXEC TO DOI TAC
+-- cho phep doi tac cap nhat thoi gian hieu luc va phan tram hoa hong cua hop dong
+GO 
+use OnlineOrderingSystem
+GRANT EXEC ON spUpdateContract 
+TO doi_tac
+
+
+-- cho phep doi tac them mot san pham moi
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spAddProduct 
+TO doi_tac
+
+-- cho phep doi tac sua doi san pham
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spUpdateProduct 
+TO doi_tac
+
+-- cho phep doi tac xoa san pham
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spDeleteProduct 
+TO doi_tac
+
+-- cho phem doi tac xem thoi tin cua don hang cua minh
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spViewOrderInformation 
+to doi_tac
+
+-- cho phep doi tac cap nhat tinh trang don hang 
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spUpdateOrderStatusForPartner 
+to doi_tac
+
+
+--- GRANT EXEC TO KHACH HANG
+-- cho phep khach hang xem danh sach doi tac
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spViewPartnerList
+TO khach_hang
+
+-- cho phep khach hang xem danh sach san pham cua doi tac
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spViewProductListOfPartner
+TO khach_hang
+
+-- cho phep khach hang tao mot don hang
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spCreateOrder
+TO khach_hang
+
+-- cho phep khach hang cap nhat mot don hang sau khi tao
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spUpdateOrder
+TO khach_hang
+
+-- cho phep khach hang xem duoc qua trinh van chuyen 
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spViewShippingProcess
+TO khach_hang
+
+
+-- GRANT EXEC TO TAI XE
+-- cho phep tai xe xem duoc danh sach don hang theo khu vuc
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spViewOrderList 
+TO tai_xe
+
+-- cho phep tai xe chon don hang theo khu vuc
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spSelectOrder 
+TO tai_xe
+
+-- cho phep tai xe cap nhat tinh trang don hang cua minh
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spUpdateOrderStatusForDriver 
+to tai_xe
+
+-- cho phep tai xe xem cac don hang cua minh
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spViewOrdersOfDriver
+TO tai_xe
+
+
+-- GRANT EXEC TO NHAN VIEN
+-- cho phep nhan vien xem cac hop dong con han
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spGetExpiredContract
+TO nhan_vien
+
+-- cho phep nhan vien xem tat ca cac hop dong (bao gom da qua han)
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spGetAllConstractList
+TO nhan_vien
+
+-- cho phep nhan vien duyet mot hop dong do doi tac dua ra
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spConfirmContract
+TO nhan_vien
