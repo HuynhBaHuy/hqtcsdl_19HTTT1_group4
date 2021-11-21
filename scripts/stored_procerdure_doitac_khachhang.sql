@@ -82,7 +82,7 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spAddProduct 
 TO doi_tac
---EXEC spAddProduct N'104', N'136', N'Dầu', N'222', 20000
+--EXEC spAddProduct '104', '136', N'Dầu', '222', 20000
 -- sua thong tin san pham va chi nhanh cung cap san pham nay
 GO
 CREATE PROCEDURE spUpdateProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
@@ -114,7 +114,7 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spUpdateProduct 
 TO doi_tac
---EXEC spUpdateProduct N'000', N'136', N'Tương ớt', N'222', 20000
+--EXEC spUpdateProduct '000', '136', N'Tương ớt', '222', 20000
 -- xoa thong tin san pham va chi nhanh cung cap san pham nay
 GO
 CREATE PROCEDURE spDeleteProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
@@ -146,7 +146,7 @@ USE OnlineOrderingSystem
 GRANT EXEC ON spDeleteProduct 
 TO doi_tac
 
---EXEC spDeleteProduct N'000', N'136', N'Tương ớt', N'222', 20000
+--EXEC spDeleteProduct '000', '136', N'Tương ớt', '222', 20000
 -- xem thong tin don hang 
 GO 
 CREATE PROCEDURE spViewOrderInformation @madh varchar(20)
@@ -174,10 +174,10 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spViewOrderInformation 
 to doi_tac
---EXEC spViewOrderInformation N'000'
+--EXEC spViewOrderInformation '000'
 -- cap nhat tinh trang don hang 
 GO 
-CREATE PROCEDURE spUpdateOrderStatus @madt nvarchar(20),  @madh nvarchar(20), @ttdh nvarchar(50)
+CREATE PROCEDURE spUpdateOrderStatus @madt varchar(20),  @madh varchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('tai_xe') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -218,7 +218,7 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spUpdateOrderStatus 
 to doi_tac
---EXEC spUpdateOrderStatus N'000', N'000', N'Dang Giao Hang'
+--EXEC spUpdateOrderStatus '000', '000', N'Dang Giao Hang'
 
 -- STORE PROCEDURE FOR KHACH HANG 
 -- xem danh sach doi tac
@@ -283,10 +283,10 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spViewProductListOfPartner
 TO khach_hang
---EXEC spViewProductListOfPartner N'000'
+--EXEC spViewProductListOfPartner '000'
 --DROP PROC spSelectOrderInformation spSelectOrderInformation
 -- chon san pham, so luong tuong ung, hinh thuc thanh toan va dia chi giao hang
-CREATE PROCEDURE spSelectOrderInformation @masp nvarchar(20), @soluong int, @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv nvarchar(20)
+CREATE PROCEDURE spSelectOrderInformation @masp varchar(20), @soluong int, @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv varchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -309,10 +309,10 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spSelectOrderInformation
 TO khach_hang
---EXEC spSelectOrderInformation N'000', 5, N'PayPal', N'Nguyễn Chí Thanh', N'586'
+--EXEC spSelectOrderInformation '000', 5, N'PayPal', N'Nguyễn Chí Thanh', '586'
 -- xac nhan dong y, don hang se duoc chuyen den doi tac va tai xe (tao don hang)
 GO
-CREATE PROCEDURE spCreateOrder @madh nvarchar(20), @madt nvarchar(20), @makh nvarchar(20), @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv nvarchar(20), @masp nvarchar(20), @soluong int
+CREATE PROCEDURE spCreateOrder @madh varchar(20), @madt varchar(20), @makh varchar(20), @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv varchar(20), @masp varchar(20), @soluong int
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -343,10 +343,10 @@ USE OnlineOrderingSystem
 GRANT EXEC ON spCreateOrder
 TO khach_hang
 DROP PROC spCreateOrder
-EXEC spCreateOrder N'100', N'007', N'001', N'PayPal', N'Nguyễn Chí Thanh', N'586', N'026', 1
+EXEC spCreateOrder '100', '007', '001', N'PayPal', N'Nguyễn Chí Thanh', '586', '026', 1
 -- cap nhap don hang
 GO
-CREATE PROCEDURE spUpdateOrder @madh nvarchar(20), @madt nvarchar(20), @makh nvarchar(20), @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv nvarchar(20), @masp nvarchar(20), @soluong int
+CREATE PROCEDURE spUpdateOrder @madh varchar(20), @madt varchar(20), @makh varchar(20), @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv varchar(20), @masp varchar(20), @soluong int
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -387,7 +387,7 @@ USE OnlineOrderingSystem
 GRANT EXEC ON spUpdateOrder
 TO khach_hang
 DROP PROC spUpdateOrder
-EXEC spUpdateOrder N'100', N'007', N'001', N'PayPal', N'Nguyễn Chí Thanh', N'586', N'146', 1
+EXEC spUpdateOrder '100', '007', '001', N'PayPal', N'Nguyễn Chí Thanh', '586', '146', 1
 
 -- theo doi qua trinh van chuyen
 GO
@@ -419,4 +419,4 @@ GO
 USE OnlineOrderingSystem
 GRANT EXEC ON spViewShippingProcess
 TO khach_hang
---EXEC spViewShippingProcess N'000'
+--EXEC spViewShippingProcess '000'
