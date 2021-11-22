@@ -1,4 +1,4 @@
---T1 khach hang xem danh sach hop dong
+--T1 doi tac xem danh sach hop dong cua minh
 --T2 nhan vien cap nhat hop dong 
 
 go
@@ -7,7 +7,7 @@ GO
 CREATE PROCEDURE sp_dirtyread_tc2_T1 @madt nvarchar(20)
 AS
 BEGIN TRAN 
-	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('dbowner') = 0
+	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
 		BEGIN
 			ROLLBACK TRAN
 		END
@@ -28,7 +28,7 @@ BEGIN TRAN
 GO 
 USE OnlineOrderingSystem
 GRANT EXEC ON sp_dirtyread_tc2_T1
-TO khach_hang
+TO doi_tac
 
 --GO 
 --USE OnlineOrderingSystem
