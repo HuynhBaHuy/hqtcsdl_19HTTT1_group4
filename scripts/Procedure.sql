@@ -51,11 +51,6 @@ BEGIN TRAN
 				END
 		END
 
--- grant exec cho doi_tac
-GO 
-use OnlineOrderingSystem
-GRANT EXEC ON spUpdateContract 
-TO doi_tac
 
 -- them thong tin san pham ==>DONE
 GO
@@ -81,11 +76,7 @@ BEGIN TRAN
 			ROLLBACK TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
 		END
---grant
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spAddProduct 
-TO doi_tac
+
 -- sua thong tin san pham ==>DONE
 GO
 CREATE PROCEDURE spUpdateProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
@@ -112,11 +103,7 @@ BEGIN TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
 		END
 
--- grant exec cho doi_tac
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spUpdateProduct 
-TO doi_tac
+
 -- xoa thong tin san pham ==> DONE
 GO
 CREATE PROCEDURE spDeleteProduct @maSP varchar(20)
@@ -143,11 +130,7 @@ BEGIN TRAN
 			
 		END
 
--- grant exec cho doi_tac
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spDeleteProduct 
-TO doi_tac
+
 -- ==> ERROR: Thao thieu them xoa sua chi nhanh cung cap san pham nay? ma neu cho nay mot san pham co the co 2 chi nhanh cung cap thi hoi vo ly ?
 
 -- xem thong tin don hang ==>DONE
@@ -216,11 +199,6 @@ BEGIN TRAN
 					END
 		END
 
--- grant
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spUpdateOrderStatusForPartner 
-to doi_tac
 
 -- STORE PROCEDURE FOR KHACH HANG 
 -- xem danh sach doi tac ==>DONE
@@ -248,11 +226,7 @@ BEGIN TRAN
 		END 
 		
 	END
--- grant
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spViewPartnerList 
-to khach_hang
+
 -- xem danh sach san pham cua doi tac ==>DONE
 GO
 CREATE PROCEDURE spViewProductListOfPartner @madt varchar(20)
@@ -278,11 +252,7 @@ BEGIN TRAN
 			COMMIT TRAN
 		END 
 	END
--- grant
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spViewProductListOfPartner 
-to khach_hang
+
 --==>ERROR: co that su can sp chon san pham so luong tuong ung ko??, cai nay tren UI ma t
 GO
 -- chon san pham, so luong tuong ung, hinh thuc thanh toan va dia chi giao hang
@@ -306,11 +276,6 @@ BEGIN TRAN
 				FROM SAN_PHAM
 				COMMIT TRAN
 			END
--- grant	
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spSelectOrderInformation
-TO khach_hang
 --EXEC spSelectOrderInformation '000', 5, N'PayPal', N'Nguyễn Chí Thanh', '586'
 
 
@@ -348,11 +313,6 @@ BEGIN TRAN
 				END
 			
 		END
--- grant	
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spCreateOrder
-TO khach_hang
 -- cap nhap don hang ==>DONE
 GO
 CREATE PROCEDURE spUpdateOrder @madh varchar(20), @madt varchar(20), @makh varchar(20), @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv varchar(20), @masp varchar(20), @soluong int
@@ -397,11 +357,6 @@ BEGIN TRAN
 				END
 		END
 
--- grant	
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spUpdateOrder
-TO khach_hang
 -- theo doi qua trinh van chuyen ==>DONE
 GO
 CREATE PROCEDURE spViewShippingProcess @madh varchar(20),@makh varchar(20)
@@ -428,11 +383,6 @@ BEGIN TRAN
 				END 
 		END
 
--- grant	
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spViewShippingProcess
-TO khach_hang
 -- STORE PROCEDURE FOR TAI_XE
 -- hien thi danh sach don hang theo khu vuc ==>DONE
 GO 
@@ -461,11 +411,7 @@ BEGIN TRAN
 				COMMIT TRAN
 			END
 	END
--- grant	
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spViewOrderList
-TO tai_xe
+
 -- chon don hang phuc vu ==>DONE
 --==>ERROR: cho hoi la vi du 1 don hang co the duoc 2 tai xe giao k ta?
 GO
@@ -496,11 +442,6 @@ BEGIN TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
 		END
 
--- grant	
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spSelectOrder
-TO tai_xe
 
 -- cap nhat tinh trang don hang 
 GO 
@@ -543,11 +484,6 @@ BEGIN TRAN
 			END
 		
 		END
--- grant	
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spUpdateOrderStatusForDriver
-TO tai_xe
 
 -- hien thi danh sach don hang ma tai xe da nhan  va phi van chuyen cua tung don hang ==>DONE
 GO 
@@ -573,11 +509,6 @@ BEGIN TRAN
 				END
 		END
 
--- grant	
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spViewOrdersOfDriver
-TO tai_xe
 -- STORE PROCEDURE FOR nhan vien 
 
 -- xem danh sach hop dong da lap cua doi tac
@@ -607,11 +538,6 @@ BEGIN TRAN
 			COMMIT TRAN
 		END 
 	END
--- grant	
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spGetExpiredContract
-TO nhan_vien
 -- xem danh sach hop dong da lap cua doi tac 
 GO
 CREATE PROCEDURE spGetAllConstractList @madt varchar(20)
@@ -639,11 +565,6 @@ BEGIN TRAN
 					COMMIT TRAN
 				END 
 		END
--- grant	
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spGetAllConstractList
-TO nhan_vien
 -- duyet hop dong ==>DONE
 GO 
 CREATE PROCEDURE spConfirmContract @mahd varchar(20),@madt varchar(20),@soCN smallint,@thoigianhieuluc date,@phantramhh float
@@ -672,11 +593,6 @@ BEGIN TRAN
 			COMMIT TRAN
 		END 
 	END
--- grant	
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spConfirmContract
-TO nhan_vien
 
 -----------------STORED PROCEDURE FOR ADMIN--------------------
 
