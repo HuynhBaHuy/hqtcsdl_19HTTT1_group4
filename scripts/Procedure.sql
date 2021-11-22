@@ -625,7 +625,7 @@ BEGIN TRAN
 		END
 -----------------STORED PROCEDURE FOR ADMIN--------------------
 
-
+GO
 ---------UPDATE INFORMATION OF LOGIN/USER ACCOUNT
 USE master
 GO
