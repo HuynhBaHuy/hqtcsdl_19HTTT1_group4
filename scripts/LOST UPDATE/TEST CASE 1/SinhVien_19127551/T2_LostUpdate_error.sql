@@ -32,6 +32,6 @@ USE OnlineOrderingSystem
 GRANT EXEC ON sp_lostupdate_tc1_T2
 TO doi_tac
 
-GO 
-USE OnlineOrderingSystem
-EXEC sp_lostupdate_tc1_T2 N'085','2027-01-05'
+--GO 
+--USE OnlineOrderingSystem
+--EXEC sp_lostupdate_tc1_T2 N'085','2027-01-05'
