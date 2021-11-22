@@ -269,12 +269,6 @@ exec sp_addrolemember 'db_owner','user_dbadmin3'
 
 ---------------------GRANT - EXEC - TO - ROLE--------------------
 -- GRANT EXEC TO DOI TAC
--- cho phep doi tac cap nhat thoi gian hieu luc va phan tram hoa hong cua hop dong
-GO 
-use OnlineOrderingSystem
-GRANT EXEC ON spUpdateContract 
-TO doi_tac
-
 
 -- cho phep doi tac them mot san pham moi
 GO 
@@ -292,6 +286,12 @@ TO doi_tac
 GO 
 USE OnlineOrderingSystem
 GRANT EXEC ON spDeleteProduct 
+TO doi_tac
+
+-- cho phep doi tac cap nhat thong tin chi nhanh
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spUpdateBranch 
 TO doi_tac
 
 -- cho phem doi tac xem thoi tin cua don hang cua minh
@@ -382,4 +382,10 @@ TO nhan_vien
 GO 
 USE OnlineOrderingSystem
 GRANT EXEC ON spConfirmContract
+TO nhan_vien
+
+-- cho phep nhan vien cap nhat thoi gian hieu luc va phan tram hoa hong cua hop dong
+GO 
+use OnlineOrderingSystem
+GRANT EXEC ON spUpdateContract 
 TO nhan_vien

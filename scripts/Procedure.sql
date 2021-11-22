@@ -3,48 +3,7 @@
 
 GO 
 -- STORE PROCEDURE FOR DOI_TAC
--- cap nhat thoi gian hieu luc va phan tram hoa hong  ==> DONE
-GO 
-CREATE PROCEDURE spUpdateContract @masothue varchar(20), @tg_hlhd date, @pthh float
-AS
-BEGIN TRAN
-	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
-		BEGIN 
-			ROLLBACK TRAN
-			PRINT('TRANSACTION IS ROLLBACKED')
-		END
-	ELSE 
-		BEGIN
-			IF NOT EXISTS(SELECT h.MaDT FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaHD) WHERE d.MaSoThue = @masothue)
-				BEGIN
-					ROLLBACK TRAN
-					PRINT('TRANSACTION IS ROLLBACKED')
-				END 
-			ELSE
-				BEGIN
-					DECLARE @madt varchar(20)
-					DECLARE @doanhsoban float
 
-					SET @madt = (SELECT h.MaDT FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue)
-				
-					-- Check if the input effective time is valid
-					IF(@tg_hlhd < (SELECT h.TG_HieuLucHD FROM HOP_DONG h WHERE h.MaDT = @madt))
-						BEGIN
-							ROLLBACK TRAN
-							PRINT('TRANSACTION IS ROLLBACKED')
-						END
-					ELSE
-						BEGIN
-							SET @doanhsoban = (SELECT SUM(d.TongPhiSP) FROM DON_HANG d WHERE d.MaDT = @madt)
-				
-							UPDATE HOP_DONG
-							SET TG_HieuLucHD = @tg_hlhd, PhanTramHoaHong = (@pthh * @doanhsoban) / 100
-							where MaDT = @madt
-
-							COMMIT TRAN
-						END
-				END
-		END
 
 -- them san pham ==>DONE
 GO
@@ -125,7 +84,38 @@ BEGIN TRAN
 				END
 			
 		END
-
+-- sua thong tin chi nhanh
+GO
+CREATE PROCEDURE spUpdateBranch @madt varchar(20), @masp varchar(20), @maCN varchar(20), @makv varchar(20), @diachict nvarchar(50)
+AS
+BEGIN TRAN 
+	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+		BEGIN 
+			ROLLBACK TRAN
+			PRINT('TRANSACTION IS ROLLBACKED')
+		END
+	ELSE
+		BEGIN
+			IF NOT EXISTS(SELECT * FROM CHI_NHANH cn JOIN SAN_PHAM sp on cn.MaCN = @macn AND sp.MaSP = @masp AND cn.MaCN = sp.MaCN) 
+			OR NOT EXISTS(SELECT * FROM KHU_VUC where MaKV = @makv)  
+				BEGIN
+					ROLLBACK TRAN
+					PRINT('TRANSACTION IS ROLLBACKED')
+				END 
+			ELSE
+				IF (SELECT SoChiNhanh FROM DOI_TAC where MaDT = @madt) = (SELECT SoCNDangKy FROM HOP_DONG where MaDT = @madt)
+					BEGIN   
+						UPDATE CHI_NHANH
+						SET MaKV = @makv, DiaChiCuThe = @diachict
+						where MaDT = @madt and MaCN = @macn
+					END
+				ELSE
+					BEGIN
+						ROLLBACK TRAN
+						PRINT('TRANSACTION IS ROLLBACKED')
+						COMMIT TRAN
+					END 
+		END
 -- xem thong tin don hang ==>DONE
 GO 
 CREATE PROCEDURE spViewOrderInformation @madh varchar(20)
@@ -532,7 +522,7 @@ BEGIN TRAN
 		END
 -- duyet hop dong ==>DONE
 GO 
-CREATE PROCEDURE spConfirmContract @mahd varchar(20),@madt varchar(20),@soCN smallint,@thoigianhieuluc date,@phantramhh float
+CREATE PROCEDURE spConfirmContract @mahd varchar(20),@madt varchar(20),@soCN int,@thoigianhieuluc date,@phantramhh float
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('nhan_vien') = 0 
@@ -559,6 +549,51 @@ BEGIN TRAN
 		END 
 	END
 GO
+
+-- cap nhat thoi gian hieu luc va phan tram hoa hong  ==> DONE
+GO 
+CREATE PROCEDURE spUpdateContract @masothue varchar(20), @tg_hlhd date, @pthh float
+AS
+BEGIN TRAN
+	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+		BEGIN 
+			ROLLBACK TRAN
+			PRINT('TRANSACTION IS ROLLBACKED')
+		END
+	ELSE 
+		BEGIN
+			IF NOT EXISTS(SELECT h.MaDT FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaHD) WHERE d.MaSoThue = @masothue)
+				BEGIN
+					ROLLBACK TRAN
+					PRINT('TRANSACTION IS ROLLBACKED')
+				END 
+			ELSE
+				BEGIN
+					DECLARE @madt varchar(20)
+					DECLARE @doanhsoban float
+
+					SET @madt = (SELECT h.MaDT FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue)
+				
+					-- Check if the input effective time is valid
+					IF(@tg_hlhd < (SELECT h.TG_HieuLucHD FROM HOP_DONG h WHERE h.MaDT = @madt))
+						BEGIN
+							ROLLBACK TRAN
+							PRINT('TRANSACTION IS ROLLBACKED')
+						END
+					ELSE
+						BEGIN
+							SET @doanhsoban = (SELECT SUM(d.TongPhiSP) FROM DON_HANG d WHERE d.MaDT = @madt)
+				
+							UPDATE HOP_DONG
+							SET TG_HieuLucHD = @tg_hlhd, PhanTramHoaHong = (@pthh * @doanhsoban) / 100
+							where MaDT = @madt
+
+							COMMIT TRAN
+						END
+				END
+		END
+
+
 -----------------STORED PROCEDURE FOR ADMIN--------------------
 
 
