@@ -68,17 +68,16 @@ GO
 --
 -- Inserting data into table dbo.DON_HANG
 --
-INSERT dbo.DON_HANG(MaDH, MaDT, MaKH, HinhThuc_ThanhToan, TenDuong, MaKV, TongPhiSP, PhiVanChuyen, TinhTrangDH) VALUES (N'9', N'7', N'8', N'Check', N'Nguyễn Hữu Cầu	', N'8', 6695.69, 10630, N'"Đang nhận hàng"')
-INSERT dbo.DON_HANG(MaDH, MaDT, MaKH, HinhThuc_ThanhToan, TenDuong, MaKV, TongPhiSP, PhiVanChuyen, TinhTrangDH) VALUES (N'4', N'8', N'8', N'WebMoney', N'Nguyễn Cửu Vân	', N'8', 1340.34, 4234.23, N'"Đang giao hàng"')
-INSERT dbo.DON_HANG(MaDH, MaDT, MaKH, HinhThuc_ThanhToan, TenDuong, MaKV, TongPhiSP, PhiVanChuyen, TinhTrangDH) VALUES (N'2', N'6', N'8', N'Credit Card', N'Phan Kế Bính', N'2', 2794.79, 5140.14, N'"Đang xử lý hàng"')
-INSERT dbo.DON_HANG(MaDH, MaDT, MaKH, HinhThuc_ThanhToan, TenDuong, MaKV, TongPhiSP, PhiVanChuyen, TinhTrangDH) VALUES (N'6', N'4', N'3', N'WebMoney', N'Nguyễn Siêu	', N'2', 3465.46, 10670, N'"Đang nhận hàng"')
-INSERT dbo.DON_HANG(MaDH, MaDT, MaKH, HinhThuc_ThanhToan, TenDuong, MaKV, TongPhiSP, PhiVanChuyen, TinhTrangDH) VALUES (N'1', N'8', N'8', N'WebMoney', N'Thạch Thị Thanh', N'8', 1640.64, 3446.45, N'"Đang giao hàng"')
+INSERT dbo.DON_HANG(MaDH, MaDT, MaKH, HinhThuc_ThanhToan, TenDuong, MaKV, TongPhiSP, PhiVanChuyen, TinhTrangDH) VALUES (N'9', N'7', N'8', N'Check', N'Nguyễn Hữu Cầu	', N'8', 6695.69, 10630, N'Đang nhận hàng')
+INSERT dbo.DON_HANG(MaDH, MaDT, MaKH, HinhThuc_ThanhToan, TenDuong, MaKV, TongPhiSP, PhiVanChuyen, TinhTrangDH) VALUES (N'4', N'8', N'8', N'WebMoney', N'Nguyễn Cửu Vân	', N'8', 1340.34, 4234.23, N'Đang giao hàng')
+INSERT dbo.DON_HANG(MaDH, MaDT, MaKH, HinhThuc_ThanhToan, TenDuong, MaKV, TongPhiSP, PhiVanChuyen, TinhTrangDH) VALUES (N'2', N'6', N'8', N'Credit Card', N'Phan Kế Bính', N'2', 2794.79, 5140.14, N'Đang xử lý hàng')
+INSERT dbo.DON_HANG(MaDH, MaDT, MaKH, HinhThuc_ThanhToan, TenDuong, MaKV, TongPhiSP, PhiVanChuyen, TinhTrangDH) VALUES (N'6', N'4', N'3', N'WebMoney', N'Nguyễn Siêu	', N'2', 3465.46, 10670, N'Đang nhận hàng')
+INSERT dbo.DON_HANG(MaDH, MaDT, MaKH, HinhThuc_ThanhToan, TenDuong, MaKV, TongPhiSP, PhiVanChuyen, TinhTrangDH) VALUES (N'1', N'8', N'8', N'WebMoney', N'Thạch Thị Thanh', N'8', 1640.64, 3446.45, N'Đang giao hàng')
 GO
 
 --
 -- Inserting data into table dbo.HOP_DONG
 --
-INSERT dbo.HOP_DONG(MaHD, MaDT, SoCNDangKy, TG_HieuLucHD, PhanTramHoaHong) VALUES (N'2', N'7', N'6', '2030-10-25', 22230.23)
 INSERT dbo.HOP_DONG(MaHD, MaDT, SoCNDangKy, TG_HieuLucHD, PhanTramHoaHong) VALUES (N'1', N'7', N'4', '2025-02-10', 10000)
 INSERT dbo.HOP_DONG(MaHD, MaDT, SoCNDangKy, TG_HieuLucHD, PhanTramHoaHong) VALUES (N'4', N'1', N'1', '2025-01-03', 10000)
 INSERT dbo.HOP_DONG(MaHD, MaDT, SoCNDangKy, TG_HieuLucHD, PhanTramHoaHong) VALUES (N'3', N'4', N'6', '2027-05-29', 9781.78)
@@ -91,7 +90,6 @@ GO
 INSERT dbo.CT_HOPDONG(MaHD, MaCN) VALUES (N'1', N'1')
 INSERT dbo.CT_HOPDONG(MaHD, MaCN) VALUES (N'9', N'6')
 INSERT dbo.CT_HOPDONG(MaHD, MaCN) VALUES (N'4', N'5')
-INSERT dbo.CT_HOPDONG(MaHD, MaCN) VALUES (N'2', N'3')
 INSERT dbo.CT_HOPDONG(MaHD, MaCN) VALUES (N'3', N'7')
 GO
 

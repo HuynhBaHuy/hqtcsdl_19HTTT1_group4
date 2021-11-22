@@ -30,7 +30,7 @@ BEGIN TRAN
 					DECLARE @madt varchar(20)
 					DECLARE @doanhsoban float
 
-					SET @madt = (SELECT h.MaDT FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaHD) WHERE d.MaSoThue = @masothue)
+					SET @madt = (SELECT h.MaDT FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue)
 				
 					-- Check if the input effective time is valid
 					IF(@tg_hlhd < (SELECT h.TG_HieuLucHD FROM HOP_DONG h WHERE h.MaDT = @madt))
@@ -51,8 +51,7 @@ BEGIN TRAN
 				END
 		END
 
-
--- them thong tin san pham ==>DONE
+-- them san pham ==>DONE
 GO
 CREATE PROCEDURE spAddProduct @maSP varchar(20), @maCN varchar(20), @tensanpham nvarchar(50), @loai varchar(20), @gia float
 AS
@@ -104,7 +103,7 @@ BEGIN TRAN
 		END
 
 
--- xoa thong tin san pham ==> DONE
+-- xoa san pham ==> DONE
 GO
 CREATE PROCEDURE spDeleteProduct @maSP varchar(20)
 AS
@@ -156,11 +155,9 @@ BEGIN TRAN
 				COMMIT TRAN
 			END
 		END
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON spViewOrderInformation 
-to doi_tac
--- cap nhat tinh trang don hang ==>DONE
+GO
+
+-- cap nhat tinh trang don hang ==> DONE
 GO 
 CREATE PROCEDURE spUpdateOrderStatusForPartner @madt varchar(20),  @madh varchar(20), @ttdh nvarchar(50)
 AS
@@ -178,13 +175,13 @@ BEGIN TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
 				END
 			ELSE
-				IF (SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Hoàn trả hàng'
+				IF (SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = N'Hoàn trả hàng'
 					-- Not allow to update order status when the order is refunded
 					BEGIN
 						ROLLBACK TRAN
 						PRINT('TRANSACTION IS ROLLBACKED')
 					END
-				ELSE IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Đã giao hàng' AND @ttdh != 'Hoàn trả hàng')
+				ELSE IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = N'Đã giao hàng' AND @ttdh != N'Hoàn trả hàng')
 					-- Not allow to update order status when the order is marked at delivered, except refund
 					BEGIN
 						ROLLBACK TRAN
@@ -313,6 +310,7 @@ BEGIN TRAN
 				END
 			
 		END
+
 -- cap nhap don hang ==>DONE
 GO
 CREATE PROCEDURE spUpdateOrder @madh varchar(20), @madt varchar(20), @makh varchar(20), @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv varchar(20), @masp varchar(20), @soluong int
