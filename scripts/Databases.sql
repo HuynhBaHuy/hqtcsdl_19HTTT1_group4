@@ -42,10 +42,10 @@ CREATE TABLE LOAI_HANG(
 )
 
 
-CREATE TABLE HOP_DONG(
+ALTER TABLE HOP_DONG(
 	MaHD varchar(20),
 	MaDT varchar(20),
-	SoCNDangKy varchar(15),
+	SoCNDangKy int,
 	TG_HieuLucHD date,
 	PhanTramHoaHong float
 
