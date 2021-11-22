@@ -6,7 +6,10 @@ USE master
 CREATE USER user_sysadmin FOR LOGIN login_sysadmin
 GRANT EXECUTE to user_sysadmin
 GO
+
 ---------UPDATE INFORMATION OF LOGIN/USER ACCOUNT
+USE master
+GO
 -- Change login name
 CREATE PROCEDURE sp_changeLoginName @oldName nvarchar(30), @newName nvarchar(30)
 AS
@@ -59,7 +62,7 @@ AS
 					END
 				-- Alter login password
 				DECLARE @SQLQuery nvarchar(500)
-				SET @SQLQuery = 'ALTER LOGIN ' + QUOTENAME(@loginName) + ' WITH PASSWORD = ' + QUOTENAME(@newPassword)
+				SET @SQLQuery = 'ALTER LOGIN ' + QUOTENAME(@loginName) + ' WITH PASSWORD = ' + QUOTENAME(@newPassword, '''')
 				EXECUTE sp_executesql @SQLQuery
 				COMMIT TRAN CHANGELOGINPASSWORD
 			END
@@ -71,13 +74,12 @@ GO
 -- Change user name in database
 USE OnlineOrderingSystem
 GO
+
 CREATE PROCEDURE sp_changeUsername @oldUsername nvarchar(30), @newUsername nvarchar(30)
 AS
 	BEGIN TRAN CHANGEUSERNAME
-		-- Check if current user is system admin
-		DECLARE @currentUser AS NVARCHAR(100)
-		SET @currentUser = (SELECT SYSTEM_USER)
-		IF @currentUser != 'login_sysadmin'
+		-- Check if current role is db_owner
+		IF IS_ROLEMEMBER('db_owner') = 0
 			BEGIN
 				PRINT('You do not have permission to do this. Transaction rollback...')
 				ROLLBACK TRAN CHANGEUSERNAME
@@ -98,7 +100,71 @@ AS
 			END
 GO
 
----------ADD/DELETE ACCOUNT OF ADMINS AND EMPLOYEES
+----------------DELETE LOGIN/USER ACCOUNT
+
+-- Delete login account
+USE master
+GO
+
+CREATE PROCEDURE sp_deleteLoginAccount @loginName nvarchar(30)
+AS
+	BEGIN TRAN DELETELOGINACCOUNT
+		-- Check if current user is system admin
+		DECLARE @currentUser AS NVARCHAR(100)
+		SET @currentUser = (SELECT SYSTEM_USER)
+		IF @currentUser != 'login_sysadmin'
+			BEGIN
+				PRINT('You do not have permission to do this. Transaction rollback...')
+				ROLLBACK TRAN DELETELOGINACCOUNT
+			END
+		ELSE
+			BEGIN
+				-- Check invalid parameters
+				IF LEN(@loginName) = 0
+					BEGIN
+						ROLLBACK TRAN DELETELOGINACCOUNT
+						PRINT('Invalid parameter(s). Transaction rollback...')
+					END
+				-- Delete user account
+				DECLARE @SQLQuery nvarchar(500)
+				SET @SQLQuery = 'DROP LOGIN ' + @loginName
+				EXECUTE sp_executesql @SQLQuery
+				COMMIT TRAN DELETELOGINACCOUNT
+			END
+GO
+EXEC sp_ms_marksystemobject 'sp_deleteLoginAccount'
+GO
+
+-- Delete user account of database
+USE OnlineOrderingSystem
+GO
+
+CREATE PROCEDURE sp_deleteUserAccount @userName nvarchar(30)
+AS
+	BEGIN TRAN DELETEUSERACCOUNT
+		-- Check if current role is db_owner
+		IF IS_ROLEMEMBER('db_owner') = 0
+			BEGIN
+				PRINT('You do not have permission to do this. Transaction rollback...')
+				ROLLBACK TRAN DELETEUSERACCOUNT
+			END
+		ELSE
+			BEGIN
+				-- Check invalid parameters
+				IF LEN(@userName) = 0
+					BEGIN
+						ROLLBACK TRAN DELETEUSERACCOUNT
+						PRINT('Invalid parameter(s). Transaction rollback...')
+					END
+				-- Delete user account
+				DECLARE @SQLQuery nvarchar(500)
+				SET @SQLQuery = 'USE OnlineOrderingSystem DROP USER ' + @userName
+				EXECUTE sp_executesql @SQLQuery
+				COMMIT TRAN DELETEUSERACCOUNT
+			END
+GO
+
+---------ADD LOGIN/USER ACCOUNT OF ADMINS AND EMPLOYEES
 -- Add login account for admin/employee
 USE master
 GO
@@ -132,13 +198,14 @@ EXEC sp_ms_marksystemobject 'sp_addLoginAccount'
 GO
 
 -- Add user account for admin
+USE OnlineOrderingSystem
+GO
+
 CREATE PROCEDURE sp_addUserForAdmin @userName nvarchar(30), @loginName nvarchar(30)
 AS
 	BEGIN TRAN ADDUSERFORADMIN
-		-- Check if current user is system admin
-		DECLARE @currentUser AS NVARCHAR(100)
-		SET @currentUser = (SELECT SYSTEM_USER)
-		IF @currentUser != 'login_sysadmin'
+		-- Check if current role is db_owner
+		IF IS_ROLEMEMBER('db_owner') = 0
 			BEGIN
 				PRINT('You do not have permission to do this. Transaction rollback...')
 				ROLLBACK TRAN ADDLOGINFORADMIN
@@ -167,10 +234,8 @@ GO
 CREATE PROCEDURE sp_addUserForEmployee @userName nvarchar(30), @loginName nvarchar(30)
 AS
 	BEGIN TRAN ADDUSERFOREMPLOYEE
-		-- Check if current user is system admin
-		DECLARE @currentUser AS NVARCHAR(100)
-		SET @currentUser = (SELECT SYSTEM_USER)
-		IF @currentUser != 'login_sysadmin'
+		-- Check if current role is db_owner
+		IF IS_ROLEMEMBER('db_owner') = 0
 			BEGIN
 				PRINT('You do not have permission to do this. Transaction rollback...')
 				ROLLBACK TRAN ADDUSERFOREMPLOYEE
@@ -195,35 +260,11 @@ AS
 			END
 GO
 
--- Delete user account of admin/employee
-CREATE PROCEDURE sp_deleteUserAccount @userName nvarchar(30)
-AS
-	BEGIN TRAN DELETEUSERACCOUNT
-		-- Check if current user is system admin
-		DECLARE @currentUser AS NVARCHAR(100)
-		SET @currentUser = (SELECT SYSTEM_USER)
-		IF @currentUser != 'login_sysadmin'
-			BEGIN
-				PRINT('You do not have permission to do this. Transaction rollback...')
-				ROLLBACK TRAN DELETEUSERACCOUNT
-			END
-		ELSE
-			BEGIN
-				-- Check invalid parameters
-				IF LEN(@userName) = 0
-					BEGIN
-						ROLLBACK TRAN DELETEUSERACCOUNT
-						PRINT('Invalid parameter(s). Transaction rollback...')
-					END
-				-- Delete user account
-				DECLARE @SQLQuery nvarchar(500)
-				SET @SQLQuery = 'DROP USER ' + @userName
-				EXECUTE sp_executesql @SQLQuery
-				COMMIT TRAN DELETEUSERACCOUNT
-			END
-GO
 
 -- Lock login account of admin/employee
+USE master
+GO
+
 CREATE PROCEDURE sp_lockLoginAccount @loginName nvarchar(30)
 AS
 	BEGIN TRAN LOCKLOGINACCOUNT
@@ -280,13 +321,14 @@ AS
 GO
 
 -- Lock user account of admin/employee
+USE OnlineOrderingSystem
+GO
+
 CREATE PROCEDURE sp_lockUserAccount @userName nvarchar(30)
 AS
 	BEGIN TRAN LOCKUSERACCOUNT
-		-- Check if current user is system admin
-		DECLARE @currentUser AS NVARCHAR(100)
-		SET @currentUser = (SELECT SYSTEM_USER)
-		IF @currentUser != 'login_sysadmin'
+		-- Check if current role is db_owner
+		IF IS_ROLEMEMBER('db_owner') = 0
 			BEGIN
 				PRINT('You do not have permission to do this. Transaction rollback...')
 				ROLLBACK TRAN LOCKUSERACCOUNT
@@ -311,10 +353,8 @@ GO
 CREATE PROCEDURE sp_unlockUserAccount @userName nvarchar(30)
 AS
 	BEGIN TRAN UNLOCKUSERACCOUNT
-		-- Check if current user is system admin
-		DECLARE @currentUser AS NVARCHAR(100)
-		SET @currentUser = (SELECT SYSTEM_USER)
-		IF @currentUser != 'login_sysadmin'
+		-- Check if current role is db_owner
+		IF IS_ROLEMEMBER('db_owner') = 0
 			BEGIN
 				PRINT('You do not have permission to do this. Transaction rollback...')
 				ROLLBACK TRAN UNLOCKUSERACCOUNT
@@ -376,10 +416,10 @@ AS
 					END
 				-- Insert partner
 				INSERT INTO DOI_TAC VALUES(@maDT, @tenDT, @nguoiDaiDien, @maKV, @soChiNhanh, @soLuongDH, @maLoai, @diaChiKD, @soDT, @email, @maSoThue)
-				
+				PRINT('AFTER INSERT DOI_TAC')
 				-- Insert list of branches
 				INSERT INTO CHI_NHANH SELECT * FROM @danhSachChiNhanh
-				
+				PRINT('AFTER INSERT CHI_NHANH')
 				COMMIT TRAN INSERTPARTNER
 			END
 GO
