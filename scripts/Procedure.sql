@@ -1,10 +1,5 @@
 ﻿USE OnlineOrderingSystem
 
--- NOTE: e t doi thoi gian hieu luc cua hop dongf sang kieu du lieu date, 
---       va so chi nhanh sang kieu du lieu small int vay thi phai sua file database lai
--- search may tu khoa DONE, ERROR: 
--- DONE la t kiem tra r 
--- ERROR la con thieu hoac t thac mac do 
 
 GO 
 -- STORE PROCEDURE FOR DOI_TAC
@@ -83,7 +78,9 @@ AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 OR IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
-			IF NOT EXISTS(SELECT * FROM SAN_PHAM WHERE MaSP = @maSP) OR NOT EXISTS (SELECT * FROM CHI_NHANH WHERE MaCN = @maCN) OR NOT EXISTS(SELECT * FROM LOAI_HANG WHERE MaLoai = @loai) 
+			IF NOT EXISTS(SELECT * FROM SAN_PHAM WHERE MaSP = @maSP) 
+			OR NOT EXISTS (SELECT * FROM CHI_NHANH WHERE MaCN = @maCN) 
+			OR NOT EXISTS(SELECT * FROM LOAI_HANG WHERE MaLoai = @loai) 
 				BEGIN
 					ROLLBACK TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
@@ -128,9 +125,6 @@ BEGIN TRAN
 				END
 			
 		END
-
-
--- ==> ERROR: Thao thieu them xoa sua chi nhanh cung cap san pham nay? ma neu cho nay mot san pham co the co 2 chi nhanh cung cap thi hoi vo ly ?
 
 -- xem thong tin don hang ==>DONE
 GO 
@@ -249,33 +243,6 @@ BEGIN TRAN
 			COMMIT TRAN
 		END 
 	END
-
---==>ERROR: co that su can sp chon san pham so luong tuong ung ko??, cai nay tren UI ma t
-GO
--- chon san pham, so luong tuong ung, hinh thuc thanh toan va dia chi giao hang
-CREATE PROCEDURE spSelectOrderInformation @masp varchar(20), @soluong int, @ht_tt nvarchar(50), @tenduong nvarchar(50), @makv varchar(20)
-AS
-BEGIN TRAN 
-	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
-		BEGIN
-			ROLLBACK TRAN
-			PRINT('TRANSACTION IS ROLLBACKED')
-		END 
-	ELSE
-		IF NOT EXISTS (SELECT * FROM SAN_PHAM WHERE MaSP = @masp)
-			BEGIN
-			ROLLBACK TRAN
-			PRINT('TRANSACTION IS ROLLBACKED')
-		END
-		ELSE
-			BEGIN
-				SELECT @masp AS MaSP, @soluong AS SoLuong, @ht_tt AS HinhThucThanhToan, @tenduong AS TenDuong, @makv AS MaKhuVuc
-				FROM SAN_PHAM
-				COMMIT TRAN
-			END
---EXEC spSelectOrderInformation '000', 5, N'PayPal', N'Nguyễn Chí Thanh', '586'
-
-
 
 
 -- xac nhan dong y, don hang se duoc chuyen den doi tac va tai xe (tao don hang) ==>DONE
@@ -411,7 +378,7 @@ BEGIN TRAN
 	END
 
 -- chon don hang phuc vu ==>DONE
---==>ERROR: cho hoi la vi du 1 don hang co the duoc 2 tai xe giao k ta?
+
 GO
 CREATE PROCEDURE spSelectOrder @maTX varchar(20), @madh varchar(20)
 AS
@@ -879,7 +846,8 @@ AS
 				COMMIT TRAN LOCKLOGINACCOUNT
 			END
 GO
-
+EXEC sp_ms_marksystemobject 'sp_lockLoginAccount'
+GO
 -- Unlock login account of admin/employee
 CREATE PROCEDURE sp_unlockLoginAccount @loginName nvarchar(30)
 AS
@@ -906,6 +874,8 @@ AS
 				EXECUTE sp_executesql @SQLQuery
 				COMMIT TRAN UNLOCKLOGINACCOUNT
 			END
+GO
+EXEC sp_ms_marksystemobject 'sp_unlockLoginAccount'
 GO
 
 -- Lock user account of admin/employee
@@ -1004,10 +974,8 @@ AS
 					END
 				-- Insert partner
 				INSERT INTO DOI_TAC VALUES(@maDT, @tenDT, @nguoiDaiDien, @maKV, @soChiNhanh, @soLuongDH, @maLoai, @diaChiKD, @soDT, @email, @maSoThue)
-				PRINT('AFTER INSERT DOI_TAC')
 				-- Insert list of branches
 				INSERT INTO CHI_NHANH SELECT * FROM @danhSachChiNhanh
-				PRINT('AFTER INSERT CHI_NHANH')
 				COMMIT TRAN INSERTPARTNER
 			END
 GO
