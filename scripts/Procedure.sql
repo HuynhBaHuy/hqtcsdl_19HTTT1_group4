@@ -159,25 +159,27 @@ BEGIN TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
 				END
 			ELSE
-				IF (SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = N'Hoàn trả hàng'
-					-- Not allow to update order status when the order is refunded
-					BEGIN
-						ROLLBACK TRAN
-						PRINT('TRANSACTION IS ROLLBACKED')
-					END
-				ELSE IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = N'Đã giao hàng' AND @ttdh != N'Hoàn trả hàng')
-					-- Not allow to update order status when the order is marked at delivered, except refund
-					BEGIN
-						ROLLBACK TRAN
-						PRINT('TRANSACTION IS ROLLBACKED')
-					END
-				ELSE
-					BEGIN
-						UPDATE DON_HANG
-						SET TinhTrangDH = @ttdh
-						WHERE MaDH = @madh
-						COMMIT TRAN
-					END
+				BEGIN
+					IF (SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = N'Hoàn trả hàng'
+						-- Not allow to update order status when the order is refunded
+						BEGIN
+							ROLLBACK TRAN
+							PRINT('TRANSACTION IS ROLLBACKED')
+						END
+					ELSE IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = N'Đã giao hàng' AND @ttdh != N'Hoàn trả hàng')
+						-- Not allow to update order status when the order is marked at delivered, except refund
+						BEGIN
+							ROLLBACK TRAN
+							PRINT('TRANSACTION IS ROLLBACKED')
+						END
+					ELSE
+						BEGIN
+							UPDATE DON_HANG
+							SET TinhTrangDH = @ttdh
+							WHERE MaDH = @madh
+							COMMIT TRAN
+						END
+				END
 		END
 
 
