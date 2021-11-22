@@ -1,9 +1,9 @@
 USE OnlineOrderingSystem
 GO 
-CREATE PROCEDURE spUpdateTimeContractTerm @masothue varchar(20), @tg_hlhd date, @pthh float
+CREATE PROCEDURE spUpdateContract_T1_error @masothue varchar(20), @tg_hlhd date, @pthh float
 AS
 BEGIN TRAN
-	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN 
 			ROLLBACK TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
@@ -20,6 +20,7 @@ BEGIN TRAN
 					DECLARE @doanhsoban float
 
 					-- Check if the input effective time is valid
+					Waitfor Delay '00:00:10'
 					IF(@tg_hlhd < (SELECT h.TG_HieuLucHD FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaHD) WHERE d.MaSoThue = @masothue))
 						BEGIN
 							ROLLBACK TRAN
@@ -37,5 +38,3 @@ BEGIN TRAN
 						END
 				END
 		END
-
-exec spUpdateTimeContractTerm

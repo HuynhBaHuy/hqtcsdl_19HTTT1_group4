@@ -1,9 +1,9 @@
 USE OnlineOrderingSystem
 GO 
-CREATE PROCEDURE spUpdateTimeContractTerm @masothue varchar(20), @tg_hlhd date, @pthh float
+CREATE PROCEDURE spUpdateContract_T2_error @masothue varchar(20), @tg_hlhd date, @pthh float
 AS
 BEGIN TRAN
-	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN 
 			ROLLBACK TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
@@ -37,5 +37,3 @@ BEGIN TRAN
 						END
 				END
 		END
-
-exec spUpdateTimeContractTerm

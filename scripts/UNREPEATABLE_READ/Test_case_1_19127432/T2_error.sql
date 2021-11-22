@@ -1,6 +1,6 @@
 ﻿USE OnlineOrderingSystem
 GO
-CREATE PROCEDURE spUpdateOrderStatusForPartner_error @madt varchar(20),  @madh varchar(20), @ttdh nvarchar(50)
+CREATE PROCEDURE spUpdateOrderStatusForPartner_T1_error @madt varchar(20),  @madh varchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
