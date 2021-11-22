@@ -26,10 +26,6 @@ BEGIN TRAN
 				END
 		END
 
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_lostupdate_tc1_T1
-TO doi_tac
 
 
 

@@ -26,12 +26,3 @@ BEGIN TRAN
 			WHERE MaDH = @madh
 			COMMIT TRAN
 		END
-
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_deadlock_tc2_T1
-TO tai_xe
-
-GO 
-USE OnlineOrderingSystem
-EXEC sp_deadlock_tc2_T1 '004','005'

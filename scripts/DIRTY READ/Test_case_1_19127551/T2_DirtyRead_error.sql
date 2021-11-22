@@ -23,12 +23,3 @@ BEGIN TRAN
 					ROLLBACK TRAN
 				END
 		END
-
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_dirtyread_tc1_T2
-TO khach_hang
-
---GO 
---USE OnlineOrderingSystem
---EXEC sp_dirtyread_tc1_T2 N'100'

@@ -244,6 +244,14 @@ USE master
 exec sp_addLogin 'login_sysadmin','login_sysadmin'
 GRANT ALTER ANY LOGIN TO login_sysadmin
 GO
+
+---- Create a user account for System Admin in master database
+---- to execute server-level stored procedure
+USE master
+CREATE USER user_sysadmin FOR LOGIN login_sysadmin
+GRANT EXECUTE to user_sysadmin
+GO
+
 ---- Create a user account for System Admin in database, this account will have a db owner permission
 USE OnlineOrderingSystem
 CREATE USER user_sysadmin FOR LOGIN login_sysadmin
@@ -389,3 +397,131 @@ GO
 use OnlineOrderingSystem
 GRANT EXEC ON spUpdateContract 
 TO nhan_vien
+
+-- cho phep nhan vien xoa hop dong
+GO 
+use OnlineOrderingSystem
+GRANT EXEC ON spDeleteContract
+TO nhan_vien
+
+
+
+-------------GRANT EXEC FOR ERROR-DEMO PROCEDURE------------
+
+-- DIRTY READ
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_dirtyread_tc1_T1
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_dirtyread_tc1_T2
+TO khach_hang
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_dirtyread_tc2_T1
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_dirtyread_tc2_T2
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_dirtyread_tc3_T1
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_dirtyread_tc3_T2
+TO khach_hang
+
+
+--- LOST UPDATE
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_lostupdate_tc1_T1
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_lostupdate_tc1_T2
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_lostupdate_tc2_T1
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_lostupdate_tc2_T2
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_lostupdate_tc3_T1
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_lostupdate_tc3_T2
+TO doi_tac
+
+
+--- UNREPEATABLE READ
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spUpdateOrderStatusForDriver_T1_error
+TO tai_xe
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spUpdateOrderStatusForPartner_T2_error
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spUpdateContract_T1_error
+TO nhan_vien
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON spUpdateContract_T2_error
+TO nhan_vien
+
+--- PHANTOM READ
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_DeleteContract_T1_error
+TO nhan_vien
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_DeleteContract_T2_error
+TO nhan_vien
+
+
+--- DEADLOCK
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_deadlock_tc1_T1
+TO doi_tac
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_deadlock_tc1_T2
+TO tai_xe
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_deadlock_tc2_T1
+TO tai_xe
+
+GO 
+USE OnlineOrderingSystem
+GRANT EXEC ON sp_deadlock_tc2_T2
+TO tai_xe

@@ -25,12 +25,3 @@ BEGIN TRAN
 					ROLLBACK TRAN
 				END
 		END
-
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_deadlock_tc1_T1
-TO doi_tac
-
-GO 
-USE OnlineOrderingSystem
-EXEC sp_deadlock_tc1_T1 '001','007'

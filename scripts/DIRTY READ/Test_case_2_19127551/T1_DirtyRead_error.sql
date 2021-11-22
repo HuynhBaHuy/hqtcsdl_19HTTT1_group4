@@ -25,12 +25,4 @@ BEGIN TRAN
 				END
 		END
 
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_dirtyread_tc2_T1
-TO doi_tac
-
---GO 
---USE OnlineOrderingSystem
---EXEC sp_dirtyread_tc2_T1 N'057'
 

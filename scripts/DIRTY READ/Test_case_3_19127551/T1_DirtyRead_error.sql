@@ -20,12 +20,3 @@ BEGIN TRAN
 			END
 		-- Cancel update due to lost network. Rollback transaction
 		ROLLBACK TRANSACTION
-
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_dirtyread_tc3_T1
-TO doi_tac
-
---GO 
---USE OnlineOrderingSystem
---EXEC sp_dirtyread_tc3_T1 N'007', N'026', 30000

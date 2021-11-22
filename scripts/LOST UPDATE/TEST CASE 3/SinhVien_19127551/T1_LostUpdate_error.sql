@@ -29,11 +29,3 @@ BEGIN TRAN
 				END
 		END
 
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_lostupdate_tc3_T1
-TO doi_tac
-
---GO 
---USE OnlineOrderingSystem
---EXEC sp_lostupdate_tc3_T1 N'100', N'Da giao hang'

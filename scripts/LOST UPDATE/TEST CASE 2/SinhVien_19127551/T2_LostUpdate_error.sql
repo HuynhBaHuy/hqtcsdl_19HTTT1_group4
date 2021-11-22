@@ -25,11 +25,3 @@ BEGIN TRAN
 				END
 		END
 
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_lostupdate_tc2_T2
-TO doi_tac
-
---GO 
---USE OnlineOrderingSystem
---EXEC sp_lostupdate_tc2_T2 N'146', 20000

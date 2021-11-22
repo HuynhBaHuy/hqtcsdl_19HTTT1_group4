@@ -24,11 +24,3 @@ BEGIN TRAN
 				END
 		END
 
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_dirtyread_tc3_T2
-TO khach_hang
-
---GO 
---USE OnlineOrderingSystem
---EXEC sp_dirtyread_tc3_T2 N'007'

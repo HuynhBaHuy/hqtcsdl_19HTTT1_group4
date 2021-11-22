@@ -1,7 +1,7 @@
 ﻿USE OnlineOrderingSystem
 GO
 
-CREATE PROCEDURE spUpdateOrderStatusForDriver_T2_error @matx varchar(20), @madh varchar(20), @ttdh nvarchar(50)
+CREATE PROCEDURE spUpdateOrderStatusForDriver_T1_error @matx varchar(20), @madh varchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('tai_xe') = 0 AND IS_ROLEMEMBER('db_owner') = 0
