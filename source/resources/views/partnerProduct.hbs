@@ -1,6 +1,22 @@
 
+    <!--**********************************
+        MENU START
+    ***********************************-->
+    <div class="quixnav">
+        <div class="quixnav-scroll">
+            <ul class="metismenu" id="menu">
+                <li class="nav-label first">Main Menu</li>
 
-
+                <li><a href="/partner/order" class="menu-item"><i class="far fa-list-alt"></i></i><span
+                class="nav-text">Đơn hàng</span></a></li>
+                <li><a href="/partner/product" class="menu-item"><i class="far fa-cube"></i></i><span class="nav-text">Sản phẩm</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <!--**********************************
+        MENU END
+    ***********************************-->
+    
     <!--**********************************
         Content body start
     ***********************************-->
@@ -9,7 +25,7 @@
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Hi, {{admin.fullname}}! Welcome back with Sweet Home</h4>
+                        <h4>Hi! Welcome back</h4>
                     </div>
                 </div>
             </div>
@@ -19,34 +35,46 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">Properties</h4>
-                            <div class="success-btn-wrapper">
-                                <a id="addNewPropertyBtn" class="btn btn-success"><i class="fa fa-plus"></i> <span>Add New Property</span></a>						
-                            </div>
+                            <h4 class="card-title title-custom">Danh sách sản phẩm</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered verticle-middle table-responsive-sm">
                                     <thead>
                                         <tr>
-                                            <th class="name-col" scope="col">Name</th>
-                                            <th class="category-col" scope="col">Category</th>
-                                            <th class="address-col" scope="col">Address</th>
-                                            <th class="seller-col" scope="col">Seller</th>
-                                            <th class="price-col" scope="col">Price</th>
-                                            <th class="status-col" scope="col">Status</th>
-                                            <th class="action-col" scope="col">Action</th>
+                                            <th class="id-col" scope="col">Mã sản phẩm</th>
+                                            <th class="name-col" scope="col">Tên sản phẩm</th>
+                                            <th class="category-col" scope="col">Loại</th>
+                                            <th class="price-col" scope="col">Giá sản phẩm</th>
+                                            <th class="action-col" scope="col"></th>
                                         </tr>
                                     </thead>
                                     <tbody class="table-body">
-                                        {{!-- Jquery will insert properties here --}}
+                                        {{#each product}}
+                                        <tr>
+                                            <td>
+                                                <div class="id-col">{{id}}</div>
+                                            </td>
+                                            <td>
+                                                <div class="name-col">{{name}}</div>
+                                            </td>
+                                            <td>
+                                                <div class="category-col">{{category}}</div>
+                                            </td>
+                                            <td>
+                                                <div class="price-col">{{price}}</div>
+                                            </td>
+                                            <td>
+                                                <div class="action-col">
+                                                    <button type="button" id="editProduct" class="mr-4 btn btn-primary"
+                                                        title="Edit">Sửa</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {{/each}}
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-
-                        <div class="paging-wrapper">
-                            {{!-- JQuery will generate pagination UI here --}}
                         </div>
                     </div>
                 </div>

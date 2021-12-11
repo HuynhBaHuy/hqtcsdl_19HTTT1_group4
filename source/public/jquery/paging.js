@@ -1,49 +1,37 @@
 // --------------DEFAULT VALUE OF PAGINATION-----------------
-const propertiesPerPage = 5;
+const orderPerPage = 5;
 const defaultTotalPages = 10;
 const origin   = window.location.origin;
-const url = origin + '/property/page/';
-function loadPropertiesPerPage(currentPage) {
+const url = origin + '/order/page/';
+function loadOrderPerPage(currentPage) {
     const fulUrl = url + currentPage.toString();
     $.get(fulUrl, function (data) {
-        // parameter: data = {
-        //     properties: array of properties
-        //     count: total properties in db
-        // }
-
         // Table body temporary container
         const tableBody = $("<tbody></tbody>");
         tableBody.addClass("table-body");
 
         // Load data to temporary table body
-        data.properties.forEach((property, index, arr) => {
+        data.orders.forEach((order, index) => {
             const template = `<tr>
                 <td>
-                    <div class="name-col">${property.name}</div>
+                    <div class="name-col">${order.id}</div>
                 </td>
                 <td>
-                    <div class="category-col">${property.category.name}</div>
+                    <div class="customer-name-col">${order.customerName}</div>
                 </td>
                 <td>
-                    <div class="address-col">${property.address}</div>
+                    <div class="address-col">${order.address}</div>
                 </td>
                 <td>
-                    <div class="seller-col">${property.seller.name}</div>
+                    <div class="price-col">${order.totalPrice.toLocaleString()}</div>
                 </td>
                 <td>
-                    <div class="price-col">${property.price.toLocaleString()}</div>
+                    <div class="status-col">${order.status}</div>
                 </td>
                 <td>
-                    <div class="status-col">${property.status}</div>
-                </td>
-                <td>
-                    <div id="${property._id}" class="action-col">
-                        <button type="button" id="editPropertyBtn" class="mr-4"
-                            title="Edit"><i
-                                class="fa fa-pencil color-muted"></i> </button>
-                        <button type="button" id="deletePropertyBtn" class="close"
-                            title="Close"><i
-                                class="fa fa-close color-danger"></i></button>
+                    <div id="${order.id}" class="action-col">
+                        <button type="button" id="editOrderStatus" class="mr-4"
+                            title="Edit">Cập nhật tình trạng đơn hàng</button>
                     </div>
                 </td>
             </tr>`;
@@ -64,11 +52,11 @@ function loadPropertiesPerPage(currentPage) {
 function initPagination() {
     $('.paging-wrapper').pagination({
         items: defaultTotalPages,
-        itemsOnPage: propertiesPerPage,
-        onInit: loadPropertiesPerPage(1), // Load 1st page when Home page is loaded 
+        itemsOnPage: orderPerPage,
+        onInit: loadOrderPerPage(1), // Load 1st page when Home page is loaded 
         onPageClick: function (currentPage) {
             $(this).removeAttr("href");
-            loadPropertiesPerPage(currentPage);
+            loadOrderPerPage(currentPage);
         }
     });
 }

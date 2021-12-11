@@ -125,35 +125,28 @@
   opacity: 1;
 }
 
+.quixnav .metismenu > li:hover > a, .quixnav .metismenu > li:focus > a, .quixnav .metismenu > li.mm-active > a {
+  background-color: transparent;
+}
+
 /* TABLE */
+.title-custom {
+  margin: 0 auto;
+  font-size: 2rem;
+}
+
 .table {
   color: #000000;
 }
 
-.table-body tr td div {
+.table tr {
   overflow: auto;
-  min-width: 4.5rem;
-  max-height: 3.5rem;
-  text-overflow: ellipsis;
-  margin: 0 auto;
-}
-
-.table-body .category-col, .seller-col, .price-col, .status-col, .action-col {
   text-align: center;
 }
 
 .address-col {
+  text-align: none;
   text-overflow: ellipsis;
-}
-
-.paging-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.paging-wrapper ul {
-  margin-right: 1.25rem;
 }
 
 #addNewPropertyBtn {

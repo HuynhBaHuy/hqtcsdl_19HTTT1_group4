@@ -1,11 +1,9 @@
-const homeRouter = require('./home');
-const propertyRouter = require('./property');
+const partnerRouter = require('./partner');
 const authRouter = require('./auth');
 
 function route(app){
   app.use('/', authRouter);
-  app.use('/property', propertyRouter);
-  app.use('/',homeRouter);
+  app.use('/partner',partnerRouter);
 }
 
 module.exports = route;

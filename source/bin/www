@@ -16,21 +16,7 @@ var config = {
     }
 };
 
-// // create Request object
-// const request = new sql.Request();
 
-// // query to the database and get the records
-// request.query('select * from SINHVIEN', function (err, recordset) {
-
-//     if (err) {
-//         res.send("asd failed");
-//         sql.close();
-//     }
-//     else
-//         // send records as a response
-//         res.send(recordset);
-
-// });
 //connect to db
 sql.connect(config)
 .then(() => {
