@@ -18,17 +18,17 @@ BEGIN TRAN
 				END
 			ELSE
 				BEGIN
-					IF (SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Hoàn trả hàng'
+					Waitfor Delay '0:0:05'
+					IF (SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Đã hoàn trả hàng'
 						-- Not allow to update order status when the order is refunded
 						BEGIN
 							ROLLBACK TRAN
 							PRINT('TRANSACTION IS ROLLBACKED')
 						END
 					ELSE
-						-- Not allow to update order status when the order is marked at delivered, except refund
 						BEGIN
-							Waitfor Delay '0:0:10'
 							IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Đã giao hàng' AND @ttdh != 'Đã hoàn trả hàng')
+								-- Not allow to update order status when the order is marked at delivered, except refund
 								BEGIN
 									ROLLBACK TRAN
 									PRINT('TRANSACTION IS ROLLBACKED')

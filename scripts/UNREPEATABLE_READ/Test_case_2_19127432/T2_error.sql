@@ -10,7 +10,7 @@ BEGIN TRAN
 		END
 	ELSE 
 		BEGIN
-			IF NOT EXISTS(SELECT h.TG_HieuLucHD FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaHD) WHERE d.MaSoThue = @masothue)
+			IF NOT EXISTS(SELECT h.TG_HieuLucHD FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue)
 				BEGIN
 					ROLLBACK TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
@@ -20,7 +20,7 @@ BEGIN TRAN
 					DECLARE @doanhsoban float
 
 					-- Check if the input effective time is valid
-					IF(@tg_hlhd < (SELECT h.TG_HieuLucHD FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaHD) WHERE d.MaSoThue = @masothue))
+					IF(@tg_hlhd < (SELECT h.TG_HieuLucHD FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue))
 						BEGIN
 							ROLLBACK TRAN
 							PRINT('TRANSACTION IS ROLLBACKED')

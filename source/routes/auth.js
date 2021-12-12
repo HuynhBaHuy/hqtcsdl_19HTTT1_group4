@@ -15,6 +15,7 @@ router.get('/logout', function(req, res){
 //   failureRedirect: '/?wrong-password',
 //   failureFlash: true
 // }));
+
 router.post('/',
 passport.authenticate('local'),
 function(req, res) {
