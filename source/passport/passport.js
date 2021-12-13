@@ -8,6 +8,7 @@ passport.use(new LocalStrategy({
 },
   async function(req, username, password, done) {
     const user = {
+      id: '001',
       username: username,
       password: password
     }
@@ -23,11 +24,11 @@ passport.use(new LocalStrategy({
 ));
 
 passport.serializeUser(function(user, done) {
-  done(null, user.username);
+  done(null, {username: user.username, id: user.id});
 });
 
-passport.deserializeUser(function(username, done) {
-  done(null, username);
+passport.deserializeUser(function(user, done) {
+  done(null, {username: user.username, id: user.id});
 });
 
 module.exports = passport;

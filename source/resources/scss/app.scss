@@ -133,6 +133,16 @@ visibility: visible;
 
 // END MENU
 
+// START NAVBAR
+.checkbox-custom {
+	max-height: 20px;
+	margin-top: 2rem;
+}
+
+.checkbox-custom input{
+	margin-right: 0.5rem;
+}
+// END NAVBAR
 
 /* TABLE */
 .title-custom {
@@ -161,23 +171,18 @@ visibility: visible;
 	color: black;
 }
 
-// ADD NEW PROPERTY MODAL
-#addPropertyModal {
+// EDIT ORDER MODAL
+label {
     color: #000000;
 }
 
-.feature-section, .seller-section{
-    margin-top: 2rem;
+#editOrderModal .modal-content {
+	max-height: 330px;
 }
-
 
 #delete-feature-btn {
     margin-left: 0.2rem;
     margin-top: 0.3rem;
-}
-
-.add-new-feature-btn-wrapper {
-    margin-top: 0;
 }
 
 .confirm-btn {
