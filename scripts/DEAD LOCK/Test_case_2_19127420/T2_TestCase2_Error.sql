@@ -15,12 +15,16 @@ BEGIN TRAN
 			BEGIN
 				ROLLBACK TRAN
 			END
-			UPDATE DON_HANG WITH (XLOCK)
-			SET TinhTrangDH = 'Da xuat hang'
-			WHERE MaDH = @madh
+			ELSE
+			BEGIN
+				UPDATE DON_HANG WITH (XLOCK)
+				SET TinhTrangDH = 'Da xuat hang'
+				WHERE MaDH = @madh
 
-			SELECT MaTX
-			FROM GIAO_HANG
-			WHERE MaDH = @madh
-			COMMIT TRAN
+				SELECT MaTX  
+				FROM GIAO_HANG WITH (HOLDLOCK)
+				WHERE MaDH = @madh
+				COMMIT TRAN
+			END
 		END
+EXEC sp_deadlock_tc2_T2 '1','8'
