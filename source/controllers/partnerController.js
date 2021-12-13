@@ -27,8 +27,26 @@ class partnerController {
     }
 
     async loadProducts(req, res) {
-        const product = await productService.loadProducts();
+        const product = await productService.loadProducts(req.user.id);
         res.render('partnerProduct', {product});
+    }
+
+    async loadProductById(req, res) {
+        const product = await productService.loadProductById(req.params.id);
+        res.send(product);
+    }
+
+    async editProductStatus(req, res) {
+        const formData = {
+            partnerId: req.user.id,
+            productId: req.params.id,
+            productName: req.body.productName,
+            productCategory: req.body.productCategory,
+            productPrice: req.body.productPrice,
+            spFixed: req.body.spFixed
+        }
+        const ack = await productService.editProductStatus(formData);
+        res.send(ack);
     }
 }
 

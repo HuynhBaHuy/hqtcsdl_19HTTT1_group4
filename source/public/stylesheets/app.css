@@ -1,3 +1,7 @@
+label {
+  color: #000000;
+}
+
 /* CUSTOM SCROLL BAR */
 /* width */
 ::-webkit-scrollbar {
@@ -158,25 +162,16 @@
   text-overflow: ellipsis;
 }
 
-#addNewPropertyBtn {
-  color: black;
-}
-
-label {
-  color: #000000;
+#editOrderModal .modal-content {
+  max-height: 330px;
 }
 
 #editOrderModal .modal-content {
   max-height: 330px;
 }
 
-#delete-feature-btn {
-  margin-left: 0.2rem;
-  margin-top: 0.3rem;
-}
-
-.confirm-btn {
-  font-weight: bold;
+#editProductModal .modal-content {
+  max-height: 410px;
 }
 
 .modal-confirm {

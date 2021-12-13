@@ -1,4 +1,7 @@
 
+label {
+    color: #000000;
+}
 /* CUSTOM SCROLL BAR */
 /* width */
 ::-webkit-scrollbar {
@@ -167,26 +170,20 @@ visibility: visible;
     text-overflow: ellipsis;
 }
 
-#addNewPropertyBtn {
-	color: black;
-}
 
 // EDIT ORDER MODAL
-label {
-    color: #000000;
-}
-
 #editOrderModal .modal-content {
 	max-height: 330px;
 }
 
-#delete-feature-btn {
-    margin-left: 0.2rem;
-    margin-top: 0.3rem;
+// EDIT ORDER MODAL
+#editOrderModal .modal-content {
+	max-height: 330px;
 }
 
-.confirm-btn {
-    font-weight: bold;
+// EDIT PRODUCT MODAL
+#editProductModal .modal-content {
+	max-height: 410px;
 }
 
 // SUCCESS MODAL
