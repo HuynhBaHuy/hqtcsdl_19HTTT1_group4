@@ -6,12 +6,20 @@ const route = require('./routes');
 const session = require("express-session");
 const passport = require('passport');
 const bodyParser = require('body-parser');
+const hbs = require('hbs');
 const flash = require('connect-flash');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-
-
 app.set('view engine', 'hbs');
+// handlebar register helper 
+hbs.registerHelper('convertDate',function (str){
+  var date = new Date(str),
+  mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+  day = ("0" + date.getDate()).slice(-2);
+return [date.getFullYear(), mnth, day].join("-");
+})
+
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
@@ -22,6 +30,7 @@ app.use(bodyParser.json());
 app.use(session({ secret: "cat", resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 
 // setup flash msg

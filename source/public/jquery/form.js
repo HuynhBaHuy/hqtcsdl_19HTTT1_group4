@@ -25,9 +25,6 @@ $(window).on('load', () => {
             if(errMsg) {
                 container.addClass('invalid');
                 container.children().last().text(errMsg);
-                if(!submitBtn.hasClass('disabled')){
-                    submitBtn.addClass('disabled');
-                }
             }
             
         })
@@ -38,14 +35,10 @@ $(window).on('load', () => {
             if(errMsg) {
                 container.addClass('invalid');
                 container.children().last().text(errMsg);
-                if(!submitBtn.hasClass('disabled')){
-                    submitBtn.addClass('disabled');
-                }
             }
             else{
                 container.removeClass('invalid');
                 container.children().last().text('');
-                enableBtn(formId);
             }
         })
         
@@ -53,18 +46,14 @@ $(window).on('load', () => {
         $(formId).find('.min').on('input',(event)=>{
             const container = $(formId+" .form-group[of="+event.target.name+"]");
             const submitBtn = $(formId + " button[type=submit]");
-            const errMsg = isMinLength(event.target.value,5);
+            const errMsg = isMinLength(event.target.value,3);
             if(errMsg) {
                 container.addClass('invalid');
                 container.children().last().text(errMsg);
-                if(!submitBtn.hasClass('disabled')){
-                    submitBtn.addClass('disabled');
-                }
             }
             else{
                 container.removeClass('invalid');
                 container.children().last().text('');
-                enableBtn(formId);
             }
         })
     }
@@ -78,14 +67,10 @@ $(window).on('load', () => {
             if(errMsg) {
                 container.addClass('invalid');
                 container.children().last().text(errMsg);
-                if(!submitBtn.hasClass('disabled')){
-                    submitBtn.addClass('disabled');
-                }
             }
             else{
                 container.removeClass('invalid');
                 container.children().last().text('');
-                enableBtn(formId);
             }
             
         })

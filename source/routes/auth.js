@@ -20,6 +20,12 @@ passport.authenticate('local'),
 function(req, res) {
   if(req.user.username == "partner")
     res.redirect('/partner/order')
+  else if(req.user.username == "driver"){
+    res.redirect('/driver/list/order');
+  }
+  else if (req.user.username == "employee"){
+    res.redirect('/employee/list/contract')
+  }
 });
 
 module.exports = router;
