@@ -3,7 +3,7 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc1_T2 @madh nvarchar(20)
+CREATE PROCEDURE sp_dirtyread_T2_fixed @madh nvarchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -23,6 +23,3 @@ BEGIN TRAN
 					ROLLBACK TRAN
 				END
 		END
-go
---drop proc sp_dirtyread_tc1_T2 
-exec sp_dirtyread_tc1_T2 '005'
