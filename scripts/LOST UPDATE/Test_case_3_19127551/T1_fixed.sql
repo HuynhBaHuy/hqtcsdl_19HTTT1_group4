@@ -5,7 +5,7 @@ go
 use OnlineOrderingSystem
 
 GO
-CREATE PROCEDURE sp_lostupdate_tc3_T1 @madh nvarchar(20), @ttdh nvarchar(50)
+CREATE PROCEDURE sp_lostupdate_tc3_T1_fixed @madh nvarchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -29,7 +29,3 @@ BEGIN TRAN
 				END
 		END
 
-
---drop proc sp_lostupdate_tc3_T1
---go
---exec sp_lostupdate_tc3_T1 '005', N'Dang xu li hang'
