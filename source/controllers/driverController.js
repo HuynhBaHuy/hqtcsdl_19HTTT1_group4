@@ -10,7 +10,7 @@ class driverController {
     }
 
     async listDeliveringOrder(req, res) {
-        if(!req.user.id){
+        if(!req.user){
             res.redirect('/');
         }
         const order = await orderService.listDeliveringOrder(req.user.id);
@@ -18,9 +18,22 @@ class driverController {
     }
     //[POST] /driver/accept-order
     async acceptOrder(req, res) {
+        if(!req.user){
+            res.redirect('/');
+        }
         const formData = req.body;
         formData.driverId = req.user.id;
         const ack = await orderService.acceptOrder(formData)
+        res.send(ack);
+    }
+    //[POST] /driver/update-order-status
+    async updateStatus(req, res) {
+        if(!req.user){
+            res.redirect('/');
+        }
+        const formData = req.body;
+        formData.driverId = req.user.id;
+        const ack = await orderService.updateOrderStatus(formData)
         res.send(ack);
     }
 }
