@@ -1,11 +1,10 @@
 --T1 doi tac xem danh sach hop dong
 --T2 nhan vien cap nhat hop dong 
--- DROP PROC sp_dirtyread_tc2_T2
--- DROP PROC sp_dirtyread_tc2_T1
+
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc2_T2 @masothue varchar(20), @mahd nvarchar(20), @madt nvarchar(20), @tghlhd date, @pthh float
+CREATE PROCEDURE sp_dirtyread_tc2_T2_fixed @masothue varchar(20), @mahd nvarchar(20), @madt nvarchar(20), @tghlhd date, @pthh float
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -40,6 +39,3 @@ BEGIN TRAN
 						-- Cancel update due to lost network. Rollback transaction
 						ROLLBACK TRANSACTION
 				END
-
---go
---drop proc sp_dirtyread_tc2_T2 
