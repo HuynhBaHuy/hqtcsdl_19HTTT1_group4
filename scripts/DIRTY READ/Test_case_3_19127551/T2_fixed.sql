@@ -15,7 +15,7 @@ BEGIN TRAN
 			--SET TRANSACTION ISOLATION LEVEL READ COMMITTED
 			IF EXISTS (SELECT * FROM SAN_PHAM sp JOIN CHI_NHANH cn on sp.MaCN = cn.MaCN and cn.MaDT = @madt)
 				BEGIN
-					SELECT * FROM SAN_PHAM sp JOIN CHI_NHANH cn on sp.MaCN = cn.MaCN and cn.MaDT = @madt
+					SELECT sp.MaSP, sp.TenSanPham, sp.Loai, lh.TenLoai, sp.Gia FROM SAN_PHAM sp JOIN CHI_NHANH cn on sp.MaCN = cn.MaCN and cn.MaDT = @madt JOIN LOAI_HANG lh ON sp.Loai = lh.MaLoai
 					COMMIT TRAN;
 				END
 			ELSE
