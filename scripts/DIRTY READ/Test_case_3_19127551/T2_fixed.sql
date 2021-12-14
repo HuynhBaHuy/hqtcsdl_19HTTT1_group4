@@ -3,7 +3,7 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc3_T2 @madt nvarchar(20)
+CREATE PROCEDURE sp_dirtyread_tc3_T2_fixed @madt nvarchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('dbowner') = 0
