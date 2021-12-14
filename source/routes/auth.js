@@ -23,7 +23,10 @@ function(req, res) {
   else if(req.user.username == "driver"){
     res.redirect('/driver/list/order');
   }
-  else if (req.user.username == "employee"){
+  else if (req.user.username == "employee1"){
+    res.redirect('/employee/list/contract')
+  }
+  else if (req.user.username == "employee2"){
     res.redirect('/employee/list/contract')
   }
 });

@@ -14,9 +14,9 @@ app.set('view engine', 'hbs');
 // handlebar register helper 
 hbs.registerHelper('convertDate',function (str){
   var date = new Date(str),
-  mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+  month = ("0" + (date.getMonth() + 1)).slice(-2),
   day = ("0" + date.getDate()).slice(-2);
-return [date.getFullYear(), mnth, day].join("-");
+return [date.getFullYear(), month, day].join("-");
 })
 
 

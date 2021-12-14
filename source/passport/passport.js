@@ -7,13 +7,24 @@ passport.use(new LocalStrategy({
   passReqToCallback: true
 },
   async function(req, username, password, done) {
-    const user = {
-      id: '001',
-      username: username,
-      password: password
+    let user;
+    if(username!== 'employee2') {
+      user = {
+        id: '001',
+        username: username,
+        password: password
+      }
     }
+    else{
+      user = {
+        id: '002',
+        username: username,
+        password: password
+      }
+    }
+    
 
-    if(username != "partner" && username != "driver" && username != "employee" && username != "customer") {
+    if(username != "partner" && username != "driver" && username != "employee1" && username != "employee2"  && username != "customer") {
         return done(null, false, { messages: req.flash('errorMsg', 'Incorrect username') });
     }
     if (password != "123") {

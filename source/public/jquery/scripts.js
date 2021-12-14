@@ -77,3 +77,106 @@ $('#update-order-status-for-driver-modal input[type="submit"]').on('click',funct
     $('.spanner').addClass('show');
     $('.overlay-spinner').addClass('show');
 });
+
+$('#expired-contract-table button[name="extend-contract-time"]').on('click', function(e){
+    e.preventDefault();
+    const id = $(this).attr('data-id');
+    const expiredTime = $(`#expired-contract-table .expired-time-col[of=${id}]`).text();
+    const fee = $(`#expired-contract-table .fee-col[of=${id}]`).text();
+    $('#extend-contract-time-modal').modal('show');
+    $('#extend-contract-time-modal').attr('data-id',id);
+    $('#extend-contract-time-modal .fee').val(fee);
+    $('#extend-contract-time-modal .expired-time').val(expiredTime)
+})
+
+$('#extend-contract-time-modal input[type=submit]').click(event=>{
+    event.preventDefault();
+    $('#extend-contract-time-modal').modal('hide');
+    const contractId = $('#extend-contract-time-modal').attr('data-id');
+    const fee = $('#extend-contract-time-modal .fee').val();
+    const tax=$(`#expired-contract-table .tax-code-col[of=${contractId}]`).text();
+    const partnerId=$(`#expired-contract-table .id-partner-col[of=${contractId}]`).text();
+    const expiredTime = $('#extend-contract-time-modal .expired-time').val();
+    const formData = {
+        contractId: contractId,
+        fee: fee,
+        expiredTime: expiredTime,
+        tax:tax,
+        partnerId: partnerId,
+    }
+    
+    $.ajax({
+        type: "POST",
+        url: '/employee/extend-contract-time',
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        success: function(res){
+             // Show success modal
+              $('#successful-for-employee-modal').modal('show');
+              // Hide loading spinner
+              $('.spanner').removeClass('show');
+              $('.overlay-spinner').removeClass('show');
+              $('#successful-for-employee-modal .title').text('Thành công');
+              $('#successful-for-employee-modal .message').text('Cập nhật hợp đồng thành công!');
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+           if(errorThrown) {
+               console.log(errorThrown);
+               // Show error modal
+                $('#error-for-employee-modal').modal('show');
+                // Hide loading spinner
+                $('.spanner').removeClass('show');
+                $('.overlay-spinner').removeClass('show');
+                $('#error-for-employee-modal .title').text('Error');
+                $('#error-for-employee-modal .message').text('Error: ' + errorThrown);
+           }
+        }
+    })
+    // Hide loading spinner
+    $('.spanner').addClass('show');
+    $('.overlay-spinner').addClass('show');
+
+})
+
+$('#expired-contract-table button.del-contract-btn').click(function (event) {
+    event.preventDefault();
+    const partnerId = $(this).attr('data-id');
+    $('#confirm-remove-contract-modal').modal('show');
+    $('#confirm-remove-contract-modal').attr('data-id',partnerId);
+})
+$('#confirm-remove-contract-modal button.confirm-btn').on('click', function(event) {
+    event.preventDefault();
+    const formData ={
+        partnerId: $('#confirm-remove-contract-modal').attr('data-id')
+    }
+    $.ajax({
+        type: "POST",
+        url: '/employee/delete-contract',
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        success: function(res){
+             // Show success modal
+              $('#successful-for-employee-modal').modal('show');
+              // Hide loading spinner
+              $('.spanner').removeClass('show');
+              $('.overlay-spinner').removeClass('show');
+              $('#successful-for-employee-modal .title').text('Thành công');
+              $('#successful-for-employee-modal .message').text('Xóa hợp đồng thành công');
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+           if(errorThrown) {
+               console.log(errorThrown);
+               // Show error modal
+                $('#error-for-employee-modal').modal('show');
+                // Hide loading spinner
+                $('.spanner').removeClass('show');
+                $('.overlay-spinner').removeClass('show');
+                $('#error-for-employee-modal .title').text('Error');
+                $('#error-for-employee-modal .message').text('Error: ' + errorThrown);
+           }
+        }
+    })
+    // Hide loading spinner
+    $('.spanner').addClass('show');
+    $('.overlay-spinner').addClass('show');
+})

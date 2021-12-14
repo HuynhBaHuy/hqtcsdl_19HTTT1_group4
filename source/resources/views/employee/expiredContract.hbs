@@ -44,32 +44,38 @@
                                     <tr>
                                         <th class="id-contract-col" scope="col">Mã hợp đồng</th>
                                         <th class="id-partner-col" scope="col">Mã đối tác</th>
-                                        <th class="name-partner-col" scope="col">tên đối tác</th>
+                                        <th class="tax-code-col" scope="col">Mã số thuế</th>
+                                        <th class="name-partner-col" scope="col">Tên đối tác</th>
                                         <th class="expired-time-col" scope="col">Thời gian hiệu lực</th>
+                                        <th class="fee-col" scope="col">Phần trăm hoa hồng</th>
                                         <th class="action-col" scope="col"></th>
                                     </tr>
                                 </thead>
-                                <tbody class="table-body">
+                                <tbody class="table-body" id="expired-contract-table">
                                     {{#each contract}}
                                     <tr>
                                         <td>
                                             <div class="id-contract-col">{{contractId}}</div>
                                         </td>
                                         <td>
-                                            <div class="id-partner-col">{{partnerId}}</div>
+                                            <div class="id-partner-col" of={{contractId}}>{{partnerId}}</div>
+                                        </td>
+                                        <td>
+                                            <div class="tax-code-col" of={{contractId}}>{{tax}}</div>
                                         </td>
                                         <td>
                                             <div class="name-partner-col">{{namePartner}}</div>
                                         </td>
                                         <td>
-                                            <div class="expired-time-col">{{convertDate expiredTime}}</div>
+                                            <div class="expired-time-col" of={{contractId}}>{{convertDate expiredTime}}</div>
+                                        </td>
+                                        <td>
+                                            <div class="fee-col" of={{contractId}}>{{fee}}</div>
                                         </td>
                                         <td>
                                             <div class="action-col">
-                                                <button type="button" id=""
-                                                    class="mr-4 btn btn-primary" title="extend-contract">Gia
-                                                    hạn</button>
-                                                <button type="button" class="mr-4 btn btn-danger" data-toggle="modal" data-target=".confirm-remove-contract-modal">Xóa</button>
+                                                <button type="button" class="mr-4 btn btn-primary" data-id={{contractId}} name="extend-contract-time">Gia hạn</button>
+                                                <button type="button" class="mr-4 btn btn-danger del-contract-btn" data-id={{partnerId}}>Xóa</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -85,8 +91,8 @@
 
 
     <!-- Extend Contract Time Modal HTML -->
-    <div id="extendContract" class="modal fade">
-        <div class="modal-dialog modal-dialog-scrollable">
+    <div id="extend-contract-time-modal" class="modal fade">
+        <div class="modal-dialog  modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Cập nhật thời gian hiệu lực và phần trăm hoa hồng </h4>
@@ -96,11 +102,11 @@
                     <form id="extendContractForm">
                         <div class="col-sm-8 form-group">
                             <label class="form-label">Thời gian hiệu lực hợp đồng</label>
-                            <input type="date" class="form-control" name="expired-time-contract" value="">
+                            <input type="date" class="form-control expired-time" value="">
                         </div>
                         <div class="col-sm-8 form-group">
                             <label class="form-label">Phần trăm hoa hồng</label>
-                            <input type="number" class="form-control" name="commission-percentage" value="" required>
+                            <input type="number" class="form-control fee" value="" required>
                         </div>
                         <div class="modal-footer">
                             <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
@@ -111,49 +117,48 @@
             </div>
         </div>
     </div>
-
     <!-- Success Modal HTML -->
-    <div id="successModal" class="modal fade">
-        <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="icon-box">
-                        <i class="fa fa-check"></i>
+        <div id="successful-for-employee-modal" class="modal fade">
+            <div class="modal-dialog modal-confirm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="icon-box">
+                            <i class="fa fa-check"></i>
+                        </div>				
+                        <h4  class="modal-title w-100 title"></h4>	
                     </div>
-                    <h4 id="successTitle" class="modal-title w-100">Success</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="successMsg" class="text-center">Property has added to database.</div>
-                </div>
-                <div class="modal-footer">
-                    <button id="success-modal-btn" class="btn btn-success btn-block">OK</button>
+                    <div class="modal-body">
+                        <div class="text-center message"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="success-modal-btn" class="btn btn-success btn-block" >OK</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    {{!-- Error modal HTML --}}
-    <div id="errorModal" class="modal fade">
-        <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="icon-box">
-                        <i class="material-icons">&#xE5CD;</i>
+        {{!-- Error modal HTML --}}
+        <div id="error-for-employee-modal" class="modal fade">
+            <div class="modal-dialog modal-confirm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="icon-box">
+                            <i class="material-icons">&#xE5CD;</i>
+                        </div>				
+                        <h4 class="modal-title w-100 .title"></h4>	
                     </div>
-                    <h4 id="errorTitle" class="modal-title w-100">Sorry!</h4>
-                </div>
-                <div class="modal-body">
-                    <p id="errorMsg" class="text-center">Your transaction has failed. Please go back and try again.</p>
-                </div>
-                <div class="modal-footer">
-                    <button id="error-modal-btn" class="btn btn-danger btn-block">OK</button>
+                    <div class="modal-body">
+                        <p class="text-center .message"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="error-modal-btn" class="btn btn-danger btn-block">OK</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
     {{!-- confirm delete modal HTML --}}
-    <div class="modal fade confirm-remove-contract-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="confirm-remove-contract-modal" class="modal fade " tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
@@ -164,7 +169,7 @@
                 <div class="modal-body">Bạn có chắc chắn xóa hợp đồng này? </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Quay lại</button>
-                    <button type="button" class="btn btn-primary">Đồng ý</button>
+                    <button type="button"  class="btn btn-primary confirm-btn">Đồng ý</button>
                 </div>
             </div>
         </div>
