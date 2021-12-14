@@ -3,7 +3,7 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_lostupdate_tc1_T1 @mahd nvarchar(20), @tg_hlhd date
+CREATE PROCEDURE sp_lostupdate_tc1_T1_error @mahd nvarchar(20), @tg_hlhd date
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
