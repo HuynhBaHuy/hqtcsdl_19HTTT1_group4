@@ -40,7 +40,6 @@ module.exports.editProductStatus = (formData) => {
     return new Promise(async (resolve, reject) => {
         try {
             var spName = 'sp_dirtyread_tc3_T1';
-            const demoCase = formData.demoCase;
 
             if(formData.spFixed)
                 spName += '_fixed'
@@ -49,8 +48,8 @@ module.exports.editProductStatus = (formData) => {
             
             let results = await new sql.Request()
                 .input('madt', sql.VarChar(20), formData.partnerId)
-                .input('madh', sql.VarChar(20), formData.orderId)
-                .input('ttdh', sql.NVarChar(50), formData.newOrderStatus)
+                .input('masp', sql.VarChar(20), formData.productId)
+                .input('gia', sql.NVarChar(50), formData.productPrice)
                 .execute(spName)
 
             resolve('success');
