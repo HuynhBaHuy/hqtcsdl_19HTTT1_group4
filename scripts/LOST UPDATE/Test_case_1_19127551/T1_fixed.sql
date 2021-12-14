@@ -39,8 +39,6 @@ BEGIN TRAN
 						END
 					END
 				END
---drop proc sp_lostupdate_tc1_T1
---go
---exec sp_lostupdate_tc1_T1 '116', '241', '007', '2027-09-05', 22.5
+
 
  
