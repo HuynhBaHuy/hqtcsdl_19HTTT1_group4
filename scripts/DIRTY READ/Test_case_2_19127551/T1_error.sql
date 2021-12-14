@@ -4,7 +4,7 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc2_T1 @madt nvarchar(20)
+CREATE PROCEDURE sp_dirtyread_T1_error @madt nvarchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -24,13 +24,4 @@ BEGIN TRAN
 					ROLLBACK TRAN
 				END
 		END
-
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_dirtyread_tc2_T1
-TO nhan_vien
-
---GO 
---USE OnlineOrderingSystem
---EXEC sp_dirtyread_tc2_T1 N'057'
 
