@@ -1,5 +1,5 @@
---T1 nhan vien 1 cua doi tac cap nhat thoi gian hieu luc va phan tram hoa hong hop dong 
---T2 nhan vien 2 cua doi tac cap nhat thoi gian hieu luc va phan tram hoa hong hop dong 
+--T1 nhan vien cap nhat thoi gian hieu luc hop dong va pham tram hoa hong cua doi tac
+--T2 nhan vien cap nhat thoi gian hieu luc hop dong va phan tram hoa hong cua doi tac
 go
 use OnlineOrderingSystem
 GO
