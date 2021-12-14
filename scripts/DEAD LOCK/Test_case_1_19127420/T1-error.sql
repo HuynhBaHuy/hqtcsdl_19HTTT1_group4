@@ -2,7 +2,7 @@
 --Test case 1
 -- T1 - doi tac
 GO
-CREATE PROCEDURE sp_deadlock_tc1_T1 @madt varchar(20), @madh varchar(20)
+CREATE PROCEDURE sp_deadlock_tc1_T1_error @madt varchar(20), @madh varchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
