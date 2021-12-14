@@ -6,7 +6,7 @@ class partnerController {
 
     async loadOrders(req, res) {
         const order = await orderService.loadOrders(req.user.id);
-        res.render('partnerOrder', {order});
+        res.render('partner/order', {order});
     }
 
     async loadOrderStatus(req, res) {
@@ -28,7 +28,7 @@ class partnerController {
 
     async loadProducts(req, res) {
         const product = await productService.loadProducts(req.user.id);
-        res.render('partnerProduct', {product});
+        res.render('partner/product', {product});
     }
 
     async loadProductById(req, res) {

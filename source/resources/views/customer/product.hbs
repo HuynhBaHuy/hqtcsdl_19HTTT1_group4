@@ -1,0 +1,88 @@
+
+    <!--**********************************
+        MENU START
+    ***********************************-->
+    <div class="quixnav">
+        <div class="quixnav-scroll">
+            <ul class="metismenu" id="menu">
+                <li class="nav-label first">Main Menu</li>
+                <li><a href="/customer/partner-list" class="menu-item"><i class="far fa-cube"></i></i><span class="nav-text">Danh sách đối tác</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <!--**********************************
+        MENU END
+    ***********************************-->
+    
+    <!--**********************************
+        Content body start
+    ***********************************-->
+    <div class="content-body">
+        <div class="container-fluid">
+            <div class="row page-titles mx-0">
+                <div class="col-sm-6 p-md-0">
+                    <div class="welcome-text">
+                        <h4>Hi! Welcome back</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- row -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title title-custom">Danh sách sản phẩm</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered verticle-middle table-responsive-sm">
+                                    <thead>
+                                        <tr>
+                                            <th class="id-col" scope="col">Mã sản phẩm</th>
+                                            <th class="name-col" scope="col">Tên sản phẩm</th>
+                                            <th class="category-col" scope="col">Loại</th>
+                                            <th class="price-col" scope="col">Giá sản phẩm</th>
+                                            <th class="action-col" scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-body">
+                                        {{#each product}}
+                                        <tr>
+                                            <td>
+                                                <div class="id-col">{{id}}</div>
+                                            </td>
+                                            <td>
+                                                <div class="name-col">{{name}}</div>
+                                            </td>
+                                            <td>
+                                                <div class="category-col">{{category}}</div>
+                                            </td>
+                                            <td>
+                                                <div class="price-col">{{price}}</div>
+                                            </td>
+                                            <td>
+                                                <div id={{id}} class="action-col">
+                                                    <button type="button" id="addToCartBtn" class="mr-4 btn btn-primary">Thêm vào giỏ hàng</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--**********************************
+        Content body end
+    ***********************************-->
+
+
+   
+</div>

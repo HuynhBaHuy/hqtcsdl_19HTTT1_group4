@@ -21,6 +21,8 @@ passport.authenticate('local'),
 function(req, res) {
   if(req.user.username == "partner")
     res.redirect('/partner/order')
+  else if(req.user.username == "customer")
+    res.redirect('/customer/partner-list')
 });
 
 module.exports = router;
