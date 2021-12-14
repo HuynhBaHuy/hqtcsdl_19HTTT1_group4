@@ -4,7 +4,7 @@ go
 use OnlineOrderingSystem
 
 GO
-CREATE PROCEDURE sp_lostupdate_tc3_T2 @madh nvarchar(20), @ttdh nvarchar(50)
+CREATE PROCEDURE sp_lostupdate_tc3_T2_error @madh nvarchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('tai_xe') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -26,12 +26,3 @@ BEGIN TRAN
 					ROLLBACK TRAN
 				END
 		END
-
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_lostupdate_tc3_T2
-TO doi_tac
-
-GO 
-USE OnlineOrderingSystem
-EXEC sp_lostupdate_tc3_T2 N'100', N'Da nhan hang'
