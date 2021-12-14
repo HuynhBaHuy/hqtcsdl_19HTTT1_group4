@@ -3,7 +3,7 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc3_T2 @madt nvarchar(20)
+CREATE PROCEDURE sp_dirtyread_tc3_T2_error @madt nvarchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -24,11 +24,3 @@ BEGIN TRAN
 				END
 		END
 
-GO 
-USE OnlineOrderingSystem
-GRANT EXEC ON sp_dirtyread_tc3_T2
-TO khach_hang
-
---GO 
---USE OnlineOrderingSystem
---EXEC sp_dirtyread_tc3_T2 N'007'
