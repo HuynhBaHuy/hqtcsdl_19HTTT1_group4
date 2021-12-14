@@ -2,7 +2,7 @@
 --Test case 2
 -- T1 - Tai Xe
 GO
-CREATE PROCEDURE sp_deadlock_tc2_T1_error @madh varchar(20), @matx varchar(20)
+CREATE PROCEDURE sp_deadlock_tc2_T1_error @madh varchar(20), @matx varchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('tai_xe') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -23,7 +23,7 @@ BEGIN TRAN
 				VALUES(@matx,@madh,NULL)
 				Waitfor Delay '0:0:10'
 				UPDATE DON_HANG WITH (XLOCK)
-				SET TinhTrangDH = 'Tai xe da nhan hang'
+				SET TinhTrangDH = @ttdh
 				WHERE MaDH = @madh
 				COMMIT TRAN
 			END

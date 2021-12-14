@@ -2,7 +2,7 @@
 --Test case 1 => Fix
 -- T1 - doi tac
 GO
-CREATE PROCEDURE sp_deadlock_tc1_T1_fixed @madt varchar(20), @madh varchar(20)
+CREATE PROCEDURE sp_deadlock_tc1_T1_fixed @madt varchar(20), @madh varchar(20),@ttdh nvarchar(50)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -16,7 +16,7 @@ BEGIN TRAN
 				BEGIN
 					Waitfor Delay '0:0:10';
 					UPDATE DON_HANG WITH (XLOCK)
-					SET TinhTrangDH = 'Da xuat hang khoi kho'
+					SET TinhTrangDH = @ttdh
 					WHERE MaDH = @madh
 					COMMIT TRAN;
 				END
