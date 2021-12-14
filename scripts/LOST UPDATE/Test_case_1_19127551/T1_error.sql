@@ -19,6 +19,14 @@ BEGIN TRAN
 				END 
 			ELSE
 				BEGIN
+					-- Check if the input effective time is valid
+					IF(@tghlhd < (SELECT h.TG_HieuLucHD FROM HOP_DONG h WHERE  h.MaDT = @madt))
+						BEGIN
+							ROLLBACK TRAN
+							PRINT('TRANSACTION IS ROLLBACKED')
+						END
+					ELSE
+						BEGIN
 							DECLARE @doanhsoban float
 							SET @doanhsoban = (SELECT SUM(d.TongPhiSP) FROM DON_HANG d WHERE d.MaDT = @madt)	
 							SELECT TG_HieuLucHD, PhanTramHoaHong FROM HOP_DONG WHERE MaDT = @madt and MaHD = @mahd
@@ -29,6 +37,7 @@ BEGIN TRAN
 							COMMIT TRAN;
 						END
 					END
+				END
 
 
  
