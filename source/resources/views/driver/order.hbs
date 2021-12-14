@@ -70,7 +70,7 @@
                                             </td>
                                             <td>
                                                 <div class="action-col">
-                                                    <button type="button" id="accept-order-btn" class="mr-4 btn btn-primary"
+                                                    <button type="button" id="accept-order-btn" class="mr-4 btn btn-primary" data-id={{id}}
                                                         title="accept-order">Chấp nhận đơn hàng</button>
                                                 </div>
                                             </td>
@@ -85,17 +85,17 @@
             </div>
         </div>
         <!-- Success Modal HTML -->
-        <div id="" class="modal fade">
+        <div id="accept-order-success-modal" class="modal fade">
             <div class="modal-dialog modal-confirm">
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="icon-box">
                             <i class="fa fa-check"></i>
                         </div>				
-                        <h4 id="successTitle" class="modal-title w-100">Success</h4>	
+                        <h4  class="modal-title w-100 title"></h4>	
                     </div>
                     <div class="modal-body">
-                        <div id="successMsg" class="text-center">Thêm đơn hàng thành công</div>
+                        <div class="text-center message"></div>
                     </div>
                     <div class="modal-footer">
                         <button id="success-modal-btn" class="btn btn-success btn-block" >OK</button>
@@ -105,17 +105,17 @@
         </div>
 
         {{!-- Error modal HTML --}}
-        <div id="" class="modal fade">
+        <div id="accept-order-error-modal" class="modal fade">
             <div class="modal-dialog modal-confirm">
                 <div class="modal-content">
                     <div class="modal-header">
                         <div class="icon-box">
                             <i class="material-icons">&#xE5CD;</i>
                         </div>				
-                        <h4 id="errorTitle" class="modal-title w-100">Sorry!</h4>	
+                        <h4 class="modal-title w-100 .title"></h4>	
                     </div>
                     <div class="modal-body">
-                        <p id="errorMsg" class="text-center">Thêm đơn hàng thất bại. Vui lòng thử lại sau</p>
+                        <p class="text-center .message"></p>
                     </div>
                     <div class="modal-footer">
                         <button id="error-modal-btn" class="btn btn-danger btn-block">OK</button>
