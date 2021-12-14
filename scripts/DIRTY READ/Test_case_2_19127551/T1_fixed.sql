@@ -4,7 +4,7 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc2_T1 @madt nvarchar(20)
+CREATE PROCEDURE sp_dirtyread_T1_fixed @madt nvarchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -24,7 +24,3 @@ BEGIN TRAN
 					ROLLBACK TRAN
 				END
 		END
-
---go
---drop proc sp_dirtyread_tc2_T1 
---exec sp_dirtyread_tc2_T1 '007'
