@@ -4,7 +4,7 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_T2_error @mahd nvarchar(20), @madt nvarchar(20), @tghlhd date
+CREATE PROCEDURE sp_dirtyread_tc2_T2_error @mahd nvarchar(20), @madt nvarchar(20), @tghlhd date
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
