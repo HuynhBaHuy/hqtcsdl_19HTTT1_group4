@@ -1,11 +1,9 @@
 --T1 doi tac cap nhat tinh trang don hang 
 --T2 khach hang xem tinh trang don hang
---DROP PROC sp_dirtyread_tc1_T1
---DROP PROC sp_dirtyread_tc1_T2
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc1_T1 @madh nvarchar(20), @ttdh nvarchar(50)
+CREATE PROCEDURE sp_dirtyread_T1_fixed @madh nvarchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -23,6 +21,6 @@ BEGIN TRAN
 		-- Cancel update due to lost network. Rollback transaction
 		ROLLBACK TRANSACTION
 
-go
---drop proc sp_dirtyread_tc1_T1 
-exec sp_dirtyread_tc1_T1 '005', N'Da nhan hang'
+--go
+--drop proc sp_dirtyread_T1_fixed 
+--exec sp_dirtyread_tc1_T1 '005', N'Da nhan hang'
