@@ -4,7 +4,7 @@ go
 use OnlineOrderingSystem
 
 GO
-CREATE PROCEDURE sp_lostupdate_tc1_T2_fixed @masothue varchar(20), @mahd varchar(20), @madt varchar(20), @tghlhd date, @pthh float
+CREATE PROCEDURE sp_lostupdate_tc1_T2_fixed @masothue varchar(20), @tg_hlhd date, @pthh float
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('dbowner') = 0
