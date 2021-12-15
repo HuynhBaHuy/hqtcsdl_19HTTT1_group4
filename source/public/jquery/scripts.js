@@ -4,6 +4,10 @@ $('#accept-order-btn').on('click', function(e) {
         orderId: $(this).attr('data-id'),
         orderStatus: 'Đang giao hàng'
     }
+    if($('#spFixed').is(":checked"))
+            formData.spFixed = true
+        else
+            formData.spFixed = false
     $.ajax({
         type: "POST",
         url: '/driver/accept-order',
@@ -41,11 +45,15 @@ $('#update-order-status-for-driver-modal input[type="submit"]').on('click',funct
     $('#update-order-status-for-driver-modal').modal('hide');
     const newOrderStatus = $('#update-order-status-for-driver-modal select[name="new-order-status"] option:selected').val();
     const orderId = $('#update-order-status-for-driver-modal .order-id').val();
+    
     const formData = {
         orderId:orderId,
         newOrderStatus: newOrderStatus
     }
-    
+    if($('#spFixed').is(":checked"))
+            formData.spFixed = true
+        else
+            formData.spFixed = false
     $.ajax({
         type: "POST",
         url: '/driver/update-order-status',
@@ -104,7 +112,10 @@ $('#extend-contract-time-modal input[type=submit]').click(event=>{
         tax:tax,
         partnerId: partnerId,
     }
-    
+    if($('#spFixed').is(":checked"))
+            formData.spFixed = true
+        else
+            formData.spFixed = false
     $.ajax({
         type: "POST",
         url: '/employee/extend-contract-time',
@@ -146,9 +157,14 @@ $('#expired-contract-table button.del-contract-btn').click(function (event) {
 })
 $('#confirm-remove-contract-modal button.confirm-btn').on('click', function(event) {
     event.preventDefault();
+    $('#confirm-remove-contract-modal').modal('hide');
     const formData ={
         partnerId: $('#confirm-remove-contract-modal').attr('data-id')
     }
+    if($('#spFixed').is(":checked"))
+            formData.spFixed = true
+        else
+            formData.spFixed = false
     $.ajax({
         type: "POST",
         url: '/employee/delete-contract',

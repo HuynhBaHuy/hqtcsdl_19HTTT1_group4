@@ -632,3 +632,107 @@ visibility: visible;
 }
 
 //--------END PROFILE----------
+
+
+$fixed-toggle-indicator-size: 24px; // changing this number will resize the whole fixed-toggle
+$track-height: $fixed-toggle-indicator-size + 6;
+$track-width: $fixed-toggle-indicator-size * 2.5;
+$highContrastModeSupport: solid 2px transparent;
+/* 
+
+The following vars come from my theme. 
+You'll need to replace with your own color values. 
+
+- "$light"
+- "$mid"
+- "$dark"
+
+*/
+$speed:0.5s;
+$dark: #52504D;
+$track-border: #121943;
+$track-background: #e5efe9;
+$focus-ring: 0px 0px 0px 2px $dark;
+// Toggle specific styles
+.fixed-toggle {
+	align-items: center;
+	border-radius: 100px;
+	display: flex;
+	font-weight: 700;
+	margin-bottom: 16px;
+	font-size:1.25rem;
+	color:$dark;
+	&:last-of-type {
+		margin: 0;
+	}
+}
+
+// Since we can't style the checkbox directly, we "hide" it so we can draw the fixed-toggle.
+.fixed-toggle__input {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
+
+	// This style sets the focus ring. The ":not([disabled])" prevents the focus ring from creating a flash when the element is clicked.
+	&:not([disabled]):active + .fixed-toggle-track,
+	&:not([disabled]):focus + .fixed-toggle-track {
+		border: 1px solid transparent;
+		box-shadow: $focus-ring;
+	}
+
+	&:disabled + .fixed-toggle-track {
+		cursor: not-allowed;
+		opacity: 0.7;
+	}
+}
+
+.fixed-toggle-track {
+	background: $track-background;
+	border: 1px solid $track-border;
+	border-radius: 100px;
+	cursor: pointer;
+	display: flex;
+	height: $track-height;
+	margin-right: 12px;
+	position: relative;
+	width: $track-width;
+}
+
+.fixed-toggle-indicator {
+	align-items: center;
+	background: $dark;
+	border-radius: $fixed-toggle-indicator-size;
+	bottom: 2px;
+	display: flex;
+	height: $fixed-toggle-indicator-size;
+	justify-content: center;
+	left: 2px;
+	outline: $highContrastModeSupport;
+	position: absolute;
+	transition: $speed;
+	width: $fixed-toggle-indicator-size;
+}
+
+// The check mark is optional
+.checkMark {
+	display:flex;
+	fill: #ffff;
+	height: $fixed-toggle-indicator-size - 4;
+	width: $fixed-toggle-indicator-size - 4;
+	opacity: 0;
+	transition: opacity $speed ease-in-out;
+}
+
+.fixed-toggle__input:checked + .fixed-toggle-track .fixed-toggle-indicator {
+	background: $dark;
+	transform: translateX($track-width - $track-height);
+
+	.checkMark {
+		opacity: 1;
+		transition: opacity $speed ease-in-out;
+	}
+}

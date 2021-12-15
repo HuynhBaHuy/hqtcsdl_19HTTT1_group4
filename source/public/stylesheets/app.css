@@ -620,4 +620,90 @@
   background: transparent;
 }
 
+/* 
+
+The following vars come from my theme. 
+You'll need to replace with your own color values. 
+
+- "$light"
+- "$mid"
+- "$dark"
+
+*/
+.fixed-toggle {
+  align-items: center;
+  border-radius: 100px;
+  display: flex;
+  font-weight: 700;
+  margin-bottom: 16px;
+  font-size: 1.25rem;
+  color: #52504D;
+}
+.fixed-toggle:last-of-type {
+  margin: 0;
+}
+
+.fixed-toggle__input {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+.fixed-toggle__input:not([disabled]):active + .fixed-toggle-track, .fixed-toggle__input:not([disabled]):focus + .fixed-toggle-track {
+  border: 1px solid transparent;
+  box-shadow: 0px 0px 0px 2px #52504D;
+}
+.fixed-toggle__input:disabled + .fixed-toggle-track {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.fixed-toggle-track {
+  background: #e5efe9;
+  border: 1px solid #121943;
+  border-radius: 100px;
+  cursor: pointer;
+  display: flex;
+  height: 30px;
+  margin-right: 12px;
+  position: relative;
+  width: 60px;
+}
+
+.fixed-toggle-indicator {
+  align-items: center;
+  background: #52504D;
+  border-radius: 24px;
+  bottom: 2px;
+  display: flex;
+  height: 24px;
+  justify-content: center;
+  left: 2px;
+  outline: solid 2px transparent;
+  position: absolute;
+  transition: 0.5s;
+  width: 24px;
+}
+
+.checkMark {
+  display: flex;
+  fill: #ffff;
+  height: 20px;
+  width: 20px;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fixed-toggle__input:checked + .fixed-toggle-track .fixed-toggle-indicator {
+  background: #52504D;
+  transform: translateX(30px);
+}
+.fixed-toggle__input:checked + .fixed-toggle-track .fixed-toggle-indicator .checkMark {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
 /*# sourceMappingURL=app.css.map */
