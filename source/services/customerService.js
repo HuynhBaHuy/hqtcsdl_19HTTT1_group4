@@ -1,6 +1,6 @@
 const sql = require("mssql");
 
-module.exports.loadProducts = (partnerId) => {
+module.exports.loadProducts = (partnerId, spFixed) => {
     return new Promise(async (resolve, reject) => {
         // // create Request object
         // const request = new sql.Request();
@@ -18,7 +18,7 @@ module.exports.loadProducts = (partnerId) => {
         try {
             var spName = 'sp_dirtyread_tc3_T2';
 
-            if(formData.spFixed)
+            if(spFixed)
                 spName += '_fixed'
             else
                 spName += '_error'
@@ -26,7 +26,7 @@ module.exports.loadProducts = (partnerId) => {
             let results = await new sql.Request()
                 .input('madt', sql.VarChar(20), partnerId)
                 .execute(spName)
-            const productList = await results.recordset.map((product) => {
+            const productList = results.recordset.map((product) => {
                 return {
                     id: product.MaSP,
                     name: product.TenSanPham,

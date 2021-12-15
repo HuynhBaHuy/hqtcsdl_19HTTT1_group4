@@ -56,11 +56,31 @@
             <nav class="navbar navbar-expand">
                 <div class="collapse navbar-collapse justify-content-end">
                     <ul class="navbar-nav header-right">
-                        <div class="checkbox-custom">
+                        {{!-- <div class="checkbox-custom">
                           <input type="checkbox" value="" id="spFixed" name="spFixed">
                           <label for="spFixed">
                             Fixed
                           </label>
+                        </div> --}}
+                        <div class="checkbox-custom d-flex">
+
+                            <label class="fixed-toggle" for="spFixed">
+                                <input type="checkbox" class="fixed-toggle__input" id="spFixed" />
+                                <span class="fixed-toggle-track">
+                                    <span class="fixed-toggle-indicator">
+                                        <!-- 	This check mark is optional	 -->
+                                        <span class="checkMark">
+                                            <svg viewBox="0 0 24 24" id="ghq-svg-check" role="presentation"
+                                                aria-hidden="true">
+                                                <path
+                                                    d="M9.86 18a1 1 0 01-.73-.32l-4.86-5.17a1.001 1.001 0 011.46-1.37l4.12 4.39 8.41-9.2a1 1 0 111.48 1.34l-9.14 10a1 1 0 01-.73.33h-.01z">
+                                                </path>
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </span>
+                                Fixed
+                            </label>
                         </div>
                     </ul>
                 </div>

@@ -6,8 +6,7 @@ class customerController {
 
 
     async loadProducts(req, res) {
-        console.log(req.params.partnerId);
-        const product = await customerService.loadProducts(req.params.partnerId);
+        const product = await customerService.loadProducts(req.params.partnerId, req.query.spFixed);
         console.log(product);
         res.render('customer/product', {product});
     }
