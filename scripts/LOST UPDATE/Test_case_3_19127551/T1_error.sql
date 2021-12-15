@@ -5,7 +5,7 @@ go
 use OnlineOrderingSystem
 
 GO
-CREATE PROCEDURE sp_lostupdate_tc3_T1_error @madh nvarchar(20), @ttdh nvarchar(50)
+CREATE PROCEDURE sp_lostupdate_tc3_T1_error @madh varchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
