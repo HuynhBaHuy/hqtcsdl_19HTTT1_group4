@@ -193,3 +193,18 @@ $('#confirm-remove-contract-modal button.confirm-btn').on('click', function(even
     $('.spanner').addClass('show');
     $('.overlay-spinner').addClass('show');
 })
+
+
+// close on modal
+$('#update-order-status-for-driver-modal .close').on('click', function(e){
+    e.preventDefault();
+    $('#update-order-status-for-driver-modal').modal('hide');
+})
+$('#extend-contract-time-modal .close').on('click', function(e){
+    e.preventDefault();
+    $('#extend-contract-time-modal').modal('hide');
+})
+$('#confirm-remove-contract-modal .close').on('click', function(e){
+    e.preventDefault();
+    $('#confirm-remove-contract-modal').modal('hide');
+})
