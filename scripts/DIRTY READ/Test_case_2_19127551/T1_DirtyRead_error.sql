@@ -4,7 +4,7 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc2_T1 @madt nvarchar(20)
+CREATE PROCEDURE sp_dirtyread_tc2_T1 @madt varchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
