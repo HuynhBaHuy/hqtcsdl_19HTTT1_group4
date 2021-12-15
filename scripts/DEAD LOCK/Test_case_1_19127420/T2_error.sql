@@ -2,6 +2,7 @@
 --Conversion deadlock
 --Test case 1
 -- T2 - Tai Xe
+USE OnlineOrderingSystem
 GO
 CREATE PROCEDURE sp_deadlock_tc1_T2_error @madh varchar(20), @ttdh nvarchar(50), @matx varchar(20)
 AS

@@ -1,6 +1,6 @@
 USE OnlineOrderingSystem
 GO 
-CREATE PROCEDURE spUpdateContract_T2_fixed @masothue varchar(20), @tg_hlhd date, @pthh float
+CREATE PROCEDURE sp_unrepeatableread_tc2_T2_fixed @masothue varchar(20), @tg_hlhd date, @pthh float
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('db_owner') = 0

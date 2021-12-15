@@ -1,7 +1,7 @@
 USE OnlineOrderingSystem
 GO
 
-CREATE PROCEDURE sp_DeleteContract_T1_error @madt varchar(20)
+CREATE PROCEDURE sp_phantom_tc1_T1_error @madt varchar(20)
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('db_owner') = 0

@@ -2,6 +2,7 @@
 -- Fix conversion deadlock
 --Test case 1 => Fix
 -- T2 - Tai Xe
+USE OnlineOrderingSystem
 GO
 CREATE PROCEDURE sp_deadlock_tc1_T2_fixed @madh varchar(20),@ttdh nvarchar(50)
 AS

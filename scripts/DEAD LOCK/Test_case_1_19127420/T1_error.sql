@@ -1,6 +1,7 @@
 --Conversion deadlock
 --Test case 1
 -- T1 - doi tac
+USE OnlineOrderingSystem
 GO
 CREATE PROCEDURE sp_deadlock_tc1_T1_error @madt varchar(20), @madh varchar(20),@ttdh nvarchar(50)
 AS

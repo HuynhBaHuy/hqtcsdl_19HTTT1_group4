@@ -1,6 +1,7 @@
 --Cycle deadlock
 --Test case 2
 -- T1 - Tai Xe
+USE OnlineOrderingSystem
 GO
 CREATE PROCEDURE sp_deadlock_tc2_T1_error @madh varchar(20), @matx varchar(20), @ttdh nvarchar(50)
 AS

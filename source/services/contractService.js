@@ -63,7 +63,7 @@ exports.extendContractTime = function(formData){
 exports.deleteContract = function(formData){
     return new Promise(async function (resolve, reject) {
         try {
-            let spName = 'sp_DeleteContract'
+            let spName = 'sp_phantom_tc1'
             spName += '_' + formData.trans;
             if(formData.spFixed)
                 spName += '_fixed'

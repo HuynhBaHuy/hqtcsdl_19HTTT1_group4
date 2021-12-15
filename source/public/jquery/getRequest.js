@@ -2,7 +2,7 @@ $(window).on('load', function () {
     
     
 
-    // Open edit product modal
+    // Get product list of a specific partner
     $(document).on( 'click', '#showProductList', function (e) { 
         e.preventDefault();
         $(this).removeAttr("href");
@@ -17,7 +17,7 @@ $(window).on('load', function () {
         const origin   = window.location.origin;
         const url = origin + '/customer/product/' + $(this).parent().attr('id') + '/?spFixed=' + formData.spFixed;
         // url formart: http://localhost:3000/customer/product/<current partner ID>/?spFixed=<true/false>
-        $.get(url);
+        window.location.replace(url);
     });
 
 });
