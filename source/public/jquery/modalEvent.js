@@ -94,87 +94,80 @@ $(window).on('load', () => {
         $('#deleteModal').modal('hide');
     });
 
-    // ------- EDIT A PROPERTY MODAL EVENT --------
-
-    // add new feature button click event
-    $("#editPropertyModal #edit-add-new-feature-btn").click(function (e) { 
+    // ------- EDIT ORDER MODAL EVENT --------
+    // Open edit order modal
+    $(document).on( 'click', '#editOrderStatusBtn', function (e) { 
         e.preventDefault();
         $(this).removeAttr("href");
-        const template = `
-            <div class="feature-input">
-                <div class="d-flex align-item-center">
-                    <input type="text" class="form-control" name="propertyFeature" style="width: 70%;" required>
-                    <div id="delete-feature-btn">
-                        <a href="#" onclick="parentElement.parentElement.parentElement.remove();" title="Close">
-                            <i class="fa fa-close color-danger"></i>
-                        </a>
-                    </div>
-                </div>
-                <br>
-            </div>`;
+        $('#editOrderModal').modal('show');
 
-        const container = $("#editFeatureList");
-        container.append(template);
-    });
-
-    // Open edit property modal
-    $(document).on( 'click', '#editPropertyBtn', function (e) { 
-        e.preventDefault();
-        $(this).removeAttr("href");
-        $('#editPropertyModal').modal('show');
+        // Get current order ID
         $('#editForm').addClass($(this).parent().attr('id'));
-        const origin   = window.location.origin;
-        const url = origin + '/property/'+ $('#editForm').attr('class').split(' ')[2];
-        $.get(url, function (property) {
-           $('#editForm #editPropertyName').val(property.name);
-           $('#editForm #editCategory').val(property.category.name);
-           $('#editForm #editAddress').val(property.address);
-           $('#editForm #editDescription').val(property.description);
-           $('#editForm #editPrice').val(property.price);
-           $('#editForm #editRate').val(property.rate);
-           $('#editForm #editStatus').val(property.status);
 
-           $('#editForm #feature-1').val(property.feature[0]);
-           for(let i = 1; i < property.feature.length; i++) {
-               const featureId = 'feature-' + i.toString();
-               const template = `
-                   <div class="feature-input">
-                       <div class="d-flex align-item-center">
-                           <input id="${featureId}" type="text" class="form-control" name="propertyFeature" style="width: 70%;" required>
-                           <div id="delete-feature-btn">
-                               <a href="#" onclick="parentElement.parentElement.parentElement.remove();" title="Close">
-                                   <i class="fa fa-close color-danger"></i>
-                               </a>
-                           </div>
-                       </div>
-                       <br>
-                   </div>`;
-
-               const container = $("#editForm #editFeatureList");
-               container.append(template);
-               const selector = '#editForm' + ' #' + featureId
-               $(selector).val(property.feature[i]);
-           }
-           $('#editForm #editSellerName').val(property.seller.name);
-           $('#editForm #editSellerEmail').val(property.seller.email);
-           if(property.seller.phoneNumber)
-               $('#editForm #editSellerPhoneNumber').val(property.seller.phoneNumber); 
+        const origin   = window.location.href;
+        // url formart: http://localhost:3000/partner/order/<current order ID>
+        const url = origin + '/' + $('#editForm').attr('class');
+        $.get(url, function (orderStatus) {
+            // Get current order status
+           $('#editForm #oldOrderStatus').val(orderStatus);
         });
     });
 
-    // Clear form input and close add new property modal when click cancel button
-    $("#editPropertyModal #cancelEditFormBtn").click(function (e) { 
+    // Clear form input and close edit order modal when click cancel button
+    $("#editOrderModal #cancelEditFormBtn").click(function (e) { 
         e.preventDefault();
         $(this).removeAttr("href");
-        $('#editForm').removeClass($('#editForm')[0].classList[2]);
-        $('#editPropertyModal').modal('hide');
+        $('#editForm').removeClass($('#editForm')[0].classList[0]);
+        $('#editOrderModal').modal('hide');
+        $("#editForm")[0].reset();
     });
 
-    // Clear form input and close add new property modal when click cancel button
-    $("#editPropertyModal #editCancelFormBtn").click(function (e) { 
+    // Clear form input and close edit order modal when click cancel button
+    $("#editOrderModal #editCancelFormBtn").click(function (e) { 
         e.preventDefault();
         $(this).removeAttr("href");
-        $('#editForm').removeClass($('#editForm')[0].classList[2]);
-        $('#editPropertyModal').modal('hide');
+        $('#editForm').removeClass($('#editForm')[0].classList[0]);
+        $('#editOrderModal').modal('hide');
+        $("#editForm")[0].reset();
+    });
+
+
+    // ------- EDIT PRODUCT MODAL EVENT --------
+    // Open edit product modal
+    $(document).on( 'click', '#editProductBtn', function (e) { 
+        e.preventDefault();
+        $(this).removeAttr("href");
+        $('#editProductModal').modal('show');
+
+        // Get current order ID
+        $('#editProductForm').addClass($(this).parent().attr('id'));
+
+        const origin   = window.location.href;
+        // url formart: http://localhost:3000/partner/product/<current product ID>
+        const url = origin + '/' + $('#editProductForm').attr('class');
+        $.get(url, function (product) {
+            // Get current product info
+            $("#productName").val(product.name);
+            $("#productCategory").val(product.category);
+            $("#productPrice").val(product.price);
+        });
+    });
+
+    // Clear form input and close edit product modal when click cancel button
+    $("#editProductModal #cancelEditFormBtn").click(function (e) { 
+        e.preventDefault();
+        $(this).removeAttr("href");
+        $('#editProductForm').removeClass($('#editProductForm')[0].classList[0]);
+        $('#editProductModal').modal('hide');
+        $("#editProductForm")[0].reset();
+    });
+
+    // Clear form input and close edit product modal when click cancel button
+    $("#editProductModal #editCancelFormBtn").click(function (e) { 
+        e.preventDefault();
+        $(this).removeAttr("href");
+        $('#editProductForm').removeClass($('#editProductForm')[0].classList[0]);
+        $('#editProductModal').modal('hide');
+        $("#editProductForm")[0].reset();
     });
 })

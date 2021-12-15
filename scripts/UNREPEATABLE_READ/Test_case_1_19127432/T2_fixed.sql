@@ -1,25 +1,23 @@
 ﻿USE OnlineOrderingSystem
 GO
-
-CREATE PROCEDURE spUpdateOrderStatusForDriver_T1_error @matx varchar(20), @madh varchar(20), @ttdh nvarchar(50)
+CREATE PROCEDURE spUpdateOrderStatusForPartner_T2_fixed @madt varchar(20),  @madh varchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN
-	IF IS_ROLEMEMBER('tai_xe') = 0 AND IS_ROLEMEMBER('db_owner') = 0
+	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
 			ROLLBACK TRAN
 			PRINT('TRANSACTION IS ROLLBACKED')
 		END
 	ELSE
 		BEGIN
-			IF NOT EXISTS (SELECT * FROM GIAO_HANG WHERE MaTX = @matx AND MaDH = @madh)
+			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh and MaDT = @madt)
 				BEGIN
 					ROLLBACK TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
 				END
 			ELSE
 				BEGIN
-					Waitfor Delay '0:0:10'
-					IF (SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Đã hoàn trả hàng'
+					IF (SELECT TinhTrangDH FROM DON_HANG WITH(XLOCK) WHERE MaDH = @madh) = N'Đã hoàn trả hàng'
 						-- Not allow to update order status when the order is refunded
 						BEGIN
 							ROLLBACK TRAN
@@ -27,7 +25,7 @@ BEGIN TRAN
 						END
 					ELSE
 						BEGIN
-							IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = 'Đã giao hàng' AND @ttdh != 'Đã hoàn trả hàng')
+							IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = N'Đã giao hàng' AND @ttdh != N'Đã hoàn trả hàng')
 								-- Not allow to update order status when the order is marked at delivered, except refund
 								BEGIN
 									ROLLBACK TRAN
@@ -41,5 +39,6 @@ BEGIN TRAN
 									COMMIT TRAN
 								END
 						END
+				
 				END
 		END

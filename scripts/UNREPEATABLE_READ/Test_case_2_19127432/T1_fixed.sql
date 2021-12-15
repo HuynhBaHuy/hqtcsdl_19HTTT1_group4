@@ -1,6 +1,6 @@
 USE OnlineOrderingSystem
 GO 
-CREATE PROCEDURE spUpdateContract_T1_error @masothue varchar(20), @tg_hlhd date, @pthh float
+CREATE PROCEDURE spUpdateContract_T1_fixed @masothue varchar(20), @tg_hlhd date, @pthh float
 AS
 BEGIN TRAN
 	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('db_owner') = 0
@@ -10,7 +10,7 @@ BEGIN TRAN
 		END
 	ELSE 
 		BEGIN
-			IF NOT EXISTS(SELECT h.TG_HieuLucHD FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue)
+			IF NOT EXISTS(SELECT h.TG_HieuLucHD FROM DOI_TAC d JOIN HOP_DONG h WITH(XLOCK) ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue)
 				BEGIN
 					ROLLBACK TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')

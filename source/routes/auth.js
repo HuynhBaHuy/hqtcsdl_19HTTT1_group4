@@ -15,6 +15,7 @@ router.get('/logout', function(req, res){
 //   failureRedirect: '/?wrong-password',
 //   failureFlash: true
 // }));
+
 router.post('/',
 passport.authenticate('local'),
 function(req, res) {
@@ -29,6 +30,8 @@ function(req, res) {
   else if (req.user.username == "employee2"){
     res.redirect('/employee/list/contract')
   }
+  else if(req.user.username == "customer")
+    res.redirect('/customer/partner-list')
 });
 
 module.exports = router;

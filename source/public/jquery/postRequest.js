@@ -1,24 +1,26 @@
 $(window).on('load', () => {
-    const origin   = window.location.origin;
-    const url = origin + '/property';
-    // Add property on submitted
-    $( "#addForm" ).submit(function( event ) {
-        event.preventDefault();
-        
+    const origin   = window.location.href;
 
-        const formData = new FormData($("#addForm")[0]);
+    // Update order status
+    $( "#editForm" ).submit(function( event ) {
+        event.preventDefault();
+        const formData = $('#editForm').serializeArray().reduce(function(obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
+
+        // check what store procedure to use (error or fixed)
+        if($('#spFixed').is(":checked"))
+            formData['spFixed'] = true
+        else
+            formData['spFixed'] = false
+        // url formart: http://localhost:3000/partner/order/edit/<current order ID>
+        const url = origin + '/edit/' + $('#editForm').attr('class');
         $.ajax({
             type: "POST",
-            url: url +"/add",
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend: function(){
-                 // Show loading spinner
-                  $('.spanner').addClass('show');
-                  $('.overlay-spinner').addClass('show');
-                  $('#addPropertyModal').modal('hide');
-            },
+            url: url,
+            contentType: "application/json",
+            data: JSON.stringify(formData),
             success: function(res){
                  // Show success modal
                   $('#successModal').modal('show');
@@ -26,14 +28,14 @@ $(window).on('load', () => {
                   $('.spanner').removeClass('show');
                   $('.overlay-spinner').removeClass('show');
                   $('#successTitle').text('Success');
-                  $('#successMsg').text('Property has added to database');
+                  $('#successMsg').text('Tình trạng đơn hàng đã cập nhật');
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                if(errorThrown) {
                    console.log(errorThrown);
                    // Show error modal
                     $('#errorModal').modal('show');
-                    $('#addPropertyModal').modal('hide');
+                    $('#editPropertyModal').modal('hide');
                     $('#errorTitle').text('Error');
                     $('#errorMsg').text('Error: ' + errorThrown);
                }
@@ -42,24 +44,26 @@ $(window).on('load', () => {
 
     });
 
-
-    // Update a property on submitted
-    $( "#editForm" ).submit(function( event ) {
+    // Update product
+    $( "#editProductForm" ).submit(function( event ) {
         event.preventDefault();
-        const propertyId = $('#editForm').attr('class').split(' ')[2];
-        const formData = new FormData($("#editForm")[0]);
+        const formData = $('#editProductForm').serializeArray().reduce(function(obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
+
+        // check what store procedure to use (error or fixed)
+        if($('#spFixed').is(":checked"))
+            formData['spFixed'] = true
+        else
+            formData['spFixed'] = false
+        // url formart: http://localhost:3000/partner/product/edit/<current product ID>
+        const url = origin + '/edit/' + $('#editProductForm').attr('class');
         $.ajax({
             type: "POST",
-            url: url+"/edit/" + propertyId,
-            data: formData,
-            processData: false,
-            contentType: false,
-            beforeSend: function(){
-                 // Show loading spinner
-                  $('.spanner').addClass('show');
-                  $('.overlay-spinner').addClass('show');
-                  $('#editPropertyModal').modal('hide');
-            },
+            url: url,
+            contentType: "application/json",
+            data: JSON.stringify(formData),
             success: function(res){
                  // Show success modal
                   $('#successModal').modal('show');
@@ -67,7 +71,7 @@ $(window).on('load', () => {
                   $('.spanner').removeClass('show');
                   $('.overlay-spinner').removeClass('show');
                   $('#successTitle').text('Success');
-                  $('#successMsg').text('Property has updated in the database');
+                  $('#successMsg').text('Thông tin sản phẩm đã cập nhật');
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                if(errorThrown) {

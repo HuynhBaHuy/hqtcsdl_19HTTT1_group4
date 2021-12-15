@@ -1,3 +1,7 @@
+label {
+  color: #000000;
+}
+
 /* CUSTOM SCROLL BAR */
 /* width */
 ::-webkit-scrollbar {
@@ -129,6 +133,15 @@
   background-color: transparent;
 }
 
+.checkbox-custom {
+  max-height: 20px;
+  margin-top: 2rem;
+}
+
+.checkbox-custom input {
+  margin-right: 0.5rem;
+}
+
 /* TABLE */
 .title-custom {
   margin: 0 auto;
@@ -137,6 +150,10 @@
 
 .table {
   color: #000000;
+}
+
+.partner-table th {
+  min-width: 8.5rem;
 }
 
 .table tr {
@@ -149,29 +166,16 @@
   text-overflow: ellipsis;
 }
 
-#addNewPropertyBtn {
-  color: black;
+#editOrderModal .modal-content {
+  max-height: 330px;
 }
 
-#addPropertyModal {
-  color: #000000;
+#editOrderModal .modal-content {
+  max-height: 330px;
 }
 
-.feature-section, .seller-section {
-  margin-top: 2rem;
-}
-
-#delete-feature-btn {
-  margin-left: 0.2rem;
-  margin-top: 0.3rem;
-}
-
-.add-new-feature-btn-wrapper {
-  margin-top: 0;
-}
-
-.confirm-btn {
-  font-weight: bold;
+#editProductModal .modal-content {
+  max-height: 410px;
 }
 
 .modal-confirm {
