@@ -29,7 +29,7 @@ BEGIN TRAN
 						END
 					ELSE
 						BEGIN
-							SELECT h.TG_HieuLucHD, h.PhanTramHoaHong FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue)
+							SELECT h.TG_HieuLucHD, h.PhanTramHoaHong FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue
 							UPDATE HOP_DONG
 							SET TG_HieuLucHD = @tg_hlhd, PhanTramHoaHong = @pthh
 							where MaDT IN (SELECT MaDT FROM DOI_TAC WHERE MaSoThue = @masothue)
