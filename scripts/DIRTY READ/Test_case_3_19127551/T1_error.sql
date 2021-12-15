@@ -8,18 +8,19 @@ AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
-			ROLLBACK TRAN
 			PRINT('ROLLBACK TRAN')
+			ROLLBACK TRAN
 		END
 	ELSE
 		BEGIN
 			IF EXISTS (SELECT * FROM SAN_PHAM sp JOIN CHI_NHANH cn on sp.MaCN = cn.MaCN and cn.MaDT = @madt)
 				BEGIN
-						SELECT * FROM SAN_PHAM WHERE MaSP = @masp    
-						UPDATE SAN_PHAM SET GIA = @gia WHERE MaSP = @masp 
+					SELECT * FROM SAN_PHAM WHERE MaSP = @masp    
+					UPDATE SAN_PHAM SET GIA = @gia WHERE MaSP = @masp 
 					-- Waiting for updating
 					Waitfor Delay '00:00:10'
 					-- Cancel update due to lost network. Rollback transaction
+					PRINT('ROLLBACK TRAN')
 					ROLLBACK TRAN
 				END
 		END
