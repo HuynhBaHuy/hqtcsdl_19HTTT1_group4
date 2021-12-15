@@ -6,12 +6,12 @@ const http = require('http');
 const sql = require("mssql");
 // config for your database
 var config = {
-    user: "sa",
-    password: "123456",
-    server: 'DESKTOP-NPFGFTH\\SQLEXPRESS', 
-    database: 'OnlineOrderingSystem',
+    user: process.env.DB_USER,
+    password: process.env.DB_PWD,
+    server: process.env.DB_SERVER, 
+    database: process.env.DB_NAME,
     options: {
-        encrypt: true,
+        encrypt: false,
         trustServerCertificate: true
     }
 };

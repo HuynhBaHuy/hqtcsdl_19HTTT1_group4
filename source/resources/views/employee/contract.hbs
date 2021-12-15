@@ -1,0 +1,88 @@
+
+    <!--**********************************
+        MENU START
+    ***********************************-->
+    <div class="quixnav">
+        <div class="quixnav-scroll">
+            <ul class="metismenu" id="menu">
+                <li class="nav-label first">Main Menu</li>
+
+                <li><a href="/employee/list/contract" class="menu-item"><i class="fas fa-file-contract"></i><span
+                class="nav-text">Hợp đồng</span></a></li>
+                <li><a href="/employee/list/expired-contract" class="menu-item"><i class="fas fa-calendar-times"></i><span class="nav-text">Hợp đồng hết hạn</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <!--**********************************
+        MENU END
+    ***********************************-->
+    
+    <!--**********************************
+        Content body start
+    ***********************************-->
+    <div class="content-body">
+        <div class="container-fluid">
+            <div class="row page-titles mx-0">
+                <div class="col-sm-6 p-md-0">
+                    <div class="welcome-text">
+                        <h4>Hi! Welcome back</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- row -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title title-custom">Danh sách hợp đồng</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered verticle-middle table-responsive-sm">
+                                    <thead>
+                                        <tr>
+                                            <th class="id-contract-col" scope="col">Mã hợp đồng</th>
+                                            <th class="id-partner-col" scope="col">Mã đối tác</th>
+                                            <th class="name-partner-col" scope="col">tên đối tác</th>
+                                            <th class="expired-time-col" scope="col">Thời gian hiệu lực</th>
+                                            <th class="action-col" scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-body">
+                                        {{#each contract}}
+                                        <tr>
+                                            <td>
+                                                <div class="id-contract-col">{{contractId}}</div>
+                                            </td>
+                                            <td>
+                                                <div class="id-partner-col">{{partnerId}}</div>
+                                            </td>
+                                            <td>
+                                                <div class="name-partner-col">{{namePartner}}</div>
+                                            </td>
+                                            <td>
+                                                <div class="expired-time-col">{{convertDate expiredTime}}</div>
+                                            </td>
+                                            <td>
+                                                <div class="action-col">
+                                                    <button type="button" id="edit-contract-btn" class="mr-4 btn btn-primary"
+                                                        title="edit-contract">Sửa</button>
+                                                    <button type="button" id="remove-contract-btn" class="mr-4 btn btn-danger"
+                                                        title="remove-contract">Xóa</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!--**********************************
+        Content body end
+    ***********************************-->
+</div>
