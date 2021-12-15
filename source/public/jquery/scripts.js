@@ -103,14 +103,11 @@ $('#extend-contract-time-modal input[type=submit]').click(event=>{
     const contractId = $('#extend-contract-time-modal').attr('data-id');
     const fee = $('#extend-contract-time-modal .fee').val();
     const tax=$(`#expired-contract-table .tax-code-col[of=${contractId}]`).text();
-    const partnerId=$(`#expired-contract-table .id-partner-col[of=${contractId}]`).text();
     const expiredTime = $('#extend-contract-time-modal .expired-time').val();
     const formData = {
-        contractId: contractId,
         fee: fee,
         expiredTime: expiredTime,
-        tax:tax,
-        partnerId: partnerId,
+        tax:tax
     }
     if($('#spFixed').is(":checked"))
             formData.spFixed = true

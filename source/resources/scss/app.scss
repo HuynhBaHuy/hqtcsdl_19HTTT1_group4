@@ -633,7 +633,7 @@ visibility: visible;
 
 //--------END PROFILE----------
 
-
+//-------START FIXED BUTTON-----
 $fixed-toggle-indicator-size: 24px; // changing this number will resize the whole fixed-toggle
 $track-height: $fixed-toggle-indicator-size + 6;
 $track-width: $fixed-toggle-indicator-size * 2.5;
@@ -736,3 +736,5 @@ $focus-ring: 0px 0px 0px 2px $dark;
 		transition: opacity $speed ease-in-out;
 	}
 }
+
+//-------END FIXED BUTTON-----

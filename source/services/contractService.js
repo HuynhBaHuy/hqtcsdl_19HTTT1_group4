@@ -49,9 +49,7 @@ exports.extendContractTime = function(formData){
                 spName += '_error'
             let results =  new sql.Request();
             results.input('masothue', sql.VarChar(20), formData.tax)
-            results.input('mahd', sql.VarChar(20), formData.contractId)
-            results.input('madt',sql.VarChar(20),formData.partnerId)
-            results.input('tghlhd',sql.Date,formData.expiredTime)
+            results.input('tg_hlhd',sql.Date,formData.expiredTime)
             results.input('pthh',sql.Float,formData.fee)
             await results.execute(spName)
             resolve('success');
