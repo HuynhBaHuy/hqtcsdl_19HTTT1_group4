@@ -45,7 +45,7 @@ module.exports.editOrderStatus = (formData) => {
 
             // Choose which stored procedure to run based on demo cases
             if(demoCase == 'Unrepeatable Read')
-                spName = 'spUpdateOrderStatusForPartner_T2';
+                spName = 'sp_unrepeatableread_tc1_T2';
             else if(demoCase == 'Deadlock')
                 spName = 'sp_deadlock_tc1_T1';
 
@@ -135,7 +135,7 @@ exports.acceptOrder = function (formData){
 exports.updateOrderStatus = function(formData){
     return new Promise(async (resolve, reject) => {
         try {
-            let spName = 'spUpdateOrderStatusForDriver_T1';
+            let spName = 'sp_unrepeatableread_tc1_T1';
 
             if(formData.spFixed)
                 spName += '_fixed'

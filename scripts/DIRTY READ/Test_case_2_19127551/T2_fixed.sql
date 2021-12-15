@@ -7,7 +7,7 @@ GO
 CREATE PROCEDURE sp_dirtyread_tc2_T2_fixed @masothue varchar(20), @mahd varchar(20), @madt varchar(20), @tghlhd date, @pthh float
 AS
 BEGIN TRAN 
-	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('dbowner') = 0
+	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
 			ROLLBACK TRAN
 		END

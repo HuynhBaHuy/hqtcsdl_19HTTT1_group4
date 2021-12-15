@@ -6,7 +6,7 @@ GO
 CREATE PROCEDURE sp_dirtyread_tc1_T1_fixed @madh varchar(20), @ttdh nvarchar(50)
 AS
 BEGIN TRAN 
-	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
+	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
 			ROLLBACK TRAN
 		END

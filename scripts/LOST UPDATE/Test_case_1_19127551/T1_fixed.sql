@@ -7,7 +7,7 @@ GO
 CREATE PROCEDURE sp_lostupdate_tc1_T1_fixed @masothue varchar(20), @tg_hlhd date, @pthh float
 AS
 BEGIN TRAN 
-	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('dbowner') = 0
+	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
 			ROLLBACK TRAN
 		END
