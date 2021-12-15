@@ -3,7 +3,7 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc3_T1 @madt nvarchar(20), @masp nvarchar(20), @gia float
+CREATE PROCEDURE sp_dirtyread_tc3_T1 @madt varchar(20), @masp varchar(20), @gia float
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
