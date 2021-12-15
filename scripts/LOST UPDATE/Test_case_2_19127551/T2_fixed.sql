@@ -2,7 +2,7 @@
 --T2 nhan vien 2 cua doi tac cap nhat gia san pham
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_lostupdate_tc2_T2_fixed @masp nvarchar(20), @giasp float
+CREATE PROCEDURE sp_lostupdate_tc2_T2_fixed @masp varchar(20), @giasp float
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
