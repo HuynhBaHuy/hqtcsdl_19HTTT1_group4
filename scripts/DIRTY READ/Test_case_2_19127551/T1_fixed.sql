@@ -4,7 +4,7 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc2_T1 @madt varchar(20)
+CREATE PROCEDURE sp_dirtyread_tc2_T1_fixed @madt varchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('doi_tac') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -13,7 +13,7 @@ BEGIN TRAN
 		END
 	ELSE
 		BEGIN
-			SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+			--SET TRANSACTION ISOLATION LEVEL READ COMMITTED
 			IF EXISTS (SELECT * FROM HOP_DONG WHERE MaDT = @madt)
 				BEGIN
 					SELECT * FROM HOP_DONG WHERE MaDT = @madt
@@ -24,5 +24,3 @@ BEGIN TRAN
 					ROLLBACK TRAN
 				END
 		END
-
-

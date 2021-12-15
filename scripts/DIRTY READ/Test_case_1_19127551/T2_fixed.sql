@@ -3,7 +3,7 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc1_T2 @madh varchar(20)
+CREATE PROCEDURE sp_dirtyread_tc1_T2_fixed @madh varchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('dbowner') = 0
@@ -12,7 +12,7 @@ BEGIN TRAN
 		END
 	ELSE
 		BEGIN
-			SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+			--SET TRANSACTION ISOLATION LEVEL READ COMMITTED
 			IF EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh)
 				BEGIN
 					SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh
