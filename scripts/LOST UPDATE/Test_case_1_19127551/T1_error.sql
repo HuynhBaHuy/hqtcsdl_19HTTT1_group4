@@ -20,7 +20,6 @@ BEGIN TRAN
 			ELSE
 				BEGIN
 					-- Check if the input effective time is valid
-					Waitfor Delay '00:00:10'
 					IF(@tg_hlhd < (SELECT h.TG_HieuLucHD FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue))
 						BEGIN
 							ROLLBACK TRAN
@@ -29,6 +28,7 @@ BEGIN TRAN
 					ELSE
 						BEGIN
 							SELECT h.TG_HieuLucHD, h.PhanTramHoaHong FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue)
+							Waitfor Delay '00:00:10'
 							UPDATE HOP_DONG
 							SET TG_HieuLucHD = @tg_hlhd, PhanTramHoaHong = @pthh
 							where MaDT IN (SELECT MaDT FROM DOI_TAC WHERE MaSoThue = @masothue)
