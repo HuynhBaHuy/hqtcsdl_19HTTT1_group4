@@ -65,22 +65,22 @@ $(window).on('load', () => {
             contentType: "application/json",
             data: JSON.stringify(formData),
             success: function(res){
-                 // Show success modal
-                  $('#successModal').modal('show');
+                  // Show error modal
+                  $('#errorModal').modal('show');
                   // Hide loading spinner
                   $('.spanner').removeClass('show');
                   $('.overlay-spinner').removeClass('show');
-                  $('#successTitle').text('Success');
-                  $('#successMsg').text('Thông tin sản phẩm đã cập nhật');
+                  $('#errorTitle').text('Error');
+                  $('#errorMsg').text('Cập nhật sản phẩm thất bại');
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                if(errorThrown) {
                    console.log(errorThrown);
-                   // Show error modal
-                    $('#errorModal').modal('show');
-                    $('#editPropertyModal').modal('hide');
-                    $('#errorTitle').text('Error');
-                    $('#errorMsg').text('Error: ' + errorThrown);
+                //    // Show error modal
+                //     $('#errorModal').modal('show');
+                //     $('#editPropertyModal').modal('hide');
+                //     $('#errorTitle').text('Error');
+                //     $('#errorMsg').text('Error: ' + errorThrown);
                }
             }
         });
