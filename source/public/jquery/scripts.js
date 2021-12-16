@@ -223,3 +223,11 @@ $('#confirm-remove-contract-modal .close').on('click', function(e){
     e.preventDefault();
     $('#confirm-remove-contract-modal').modal('hide');
 })
+
+
+// close error accept order
+$('#accept-order-error-modal .btn').on('click', function(e){
+    e.preventDefault();
+    $('#accept-order-error-modal').hide();
+    window.location.reload();
+})
