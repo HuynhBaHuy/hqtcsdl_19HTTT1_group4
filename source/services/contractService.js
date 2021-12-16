@@ -73,8 +73,23 @@ exports.deleteContract = function(formData){
             let results =  await new sql.Request()
                 .input('madt', sql.VarChar(20), formData.partnerId)
                 .execute(spName)
-
-            resolve('success');
+            if(formData.spFixed){
+                if(formData.trans==='T1'){
+                    resolve('success');
+                }
+                else{
+                    resolve('not exist');
+                }
+            }
+            else{
+                if(results.rowsAffected[1]==0 && results.rowsAffected[2] ==0){
+                    resolve('rollback');
+                }
+                else{
+                    resolve('success');
+                }
+            }
+            
         } catch (err) {
             console.log(err);
             reject(err);

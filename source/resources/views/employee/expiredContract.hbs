@@ -136,21 +136,41 @@
             </div>
         </div>
 
+        <!-- rollback Modal HTML -->
+        <div id="rollback-for-employee-modal" class="modal fade">
+            <div class="modal-dialog modal-confirm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="icon-box" style="background-color:yellow">
+                            <i class="fas fa-exclamation"></i>
+                        </div>				
+                        <h4  class="modal-title w-100 title"></h4>	
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center message"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-warning btn-block" style="background-color:yellow" >OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {{!-- Error modal HTML --}}
         <div id="error-for-employee-modal" class="modal fade">
             <div class="modal-dialog modal-confirm">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <div class="icon-box">
+                        <div class="icon-box" style="background-color: red;">
                             <i class="material-icons">&#xE5CD;</i>
                         </div>				
-                        <h4 class="modal-title w-100 .title"></h4>	
+                        <h4 class="modal-title w-100 title"></h4>	
                     </div>
                     <div class="modal-body">
-                        <p class="text-center .message"></p>
+                        <p class="text-center message" style="color: red;"></p>
                     </div>
                     <div class="modal-footer">
-                        <button id="error-modal-btn" class="btn btn-danger btn-block">OK</button>
+                        <button class="btn btn-danger btn-block" style="background-color: red;">OK</button>
                     </div>
                 </div>
             </div>

@@ -183,13 +183,26 @@ $('#confirm-remove-contract-modal button.confirm-btn').on('click', function(even
         contentType: "application/json",
         data: JSON.stringify(formData),
         success: function(res){
-             // Show success modal
-              $('#successful-for-employee-modal').modal('show');
-              // Hide loading spinner
-              $('.spanner').removeClass('show');
-              $('.overlay-spinner').removeClass('show');
+            // Hide loading spinner
+            $('.spanner').removeClass('show');
+            $('.overlay-spinner').removeClass('show');
+            if(res==='success'){
+                // Show success modal
+              $('#successful-for-employee-modal').modal('show');       
               $('#successful-for-employee-modal .title').text('Thành công');
               $('#successful-for-employee-modal .message').text('Xóa hợp đồng thành công');
+            }
+            else if(res==='rollback'){
+                $('#rollback-for-employee-modal').modal('show');       
+                $('#rollback-for-employee-modal .title').text('Rollback');
+                $('#rollback-for-employee-modal .message').text('ERROR: 0 row effected');
+            }
+            else{
+                $('#error-for-employee-modal').modal('show');       
+                $('#error-for-employee-modal .title').text('Thất bại');
+                $('#error-for-employee-modal .message').text('Không tồn tại hợp đồng này');
+            }
+             
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
            if(errorThrown) {
@@ -225,9 +238,23 @@ $('#confirm-remove-contract-modal .close').on('click', function(e){
 })
 
 
-// close error accept order
+// close error modal for accept order
 $('#accept-order-error-modal .btn').on('click', function(e){
     e.preventDefault();
     $('#accept-order-error-modal').hide();
+    window.location.reload();
+})
+
+// close error modal for delete contract 
+$('#error-for-employee-modal .btn').on('click', function(e){
+    e.preventDefault();
+    $('#error-for-employee-modal').hide();
+    window.location.reload();
+})
+
+// close rollback modal for delete contract 
+$('#rollback-for-employee-modal .btn').on('click', function(e){
+    e.preventDefault();
+    $('#rollback-for-employee-modal').hide();
     window.location.reload();
 })
