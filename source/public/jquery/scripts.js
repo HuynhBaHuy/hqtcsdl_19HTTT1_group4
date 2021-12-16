@@ -14,10 +14,22 @@ $('#accept-order-btn').on('click', function(e) {
         contentType: "application/json",
         data: JSON.stringify(formData),
         success: function(res){
-             // Show success modal
-              $('#accept-order-success-modal').modal('show');
-              $('#accept-order-success-modal .title').text('Success');
-              $('#accept-order-success-modal .message').text('Chấp nhận đơn hàng thành công');
+            // Hide loading spinner
+            $('.spanner').removeClass('show');
+            $('.overlay-spinner').removeClass('show');
+            console.log(res);
+            if(res == 'failed') {
+                // Show error modal
+                $('#accept-order-error-modal').modal('show');
+                $('#accept-order-error-modal .title').text('Error');
+                $('#accept-order-error-modal .message').text('Transaction (Process ID 54) was deadlocked on lock resources with another process and has been chosen as the deadlock victim. Rerun the transaction. ');
+            }
+            else {
+                // Show success modal
+                $('#accept-order-success-modal').modal('show');
+                $('#accept-order-success-modal .title').text('Success');
+                $('#accept-order-success-modal .message').text('Chấp nhận đơn hàng thành công');
+            }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
            if(errorThrown) {
@@ -29,6 +41,9 @@ $('#accept-order-btn').on('click', function(e) {
            }
         }
     });
+    // Hide loading spinner
+    $('.spanner').addClass('show');
+    $('.overlay-spinner').addClass('show');
 })
 $('#delivering-order-table button[name="update-order-status"]').on('click', function(e){
     e.preventDefault();

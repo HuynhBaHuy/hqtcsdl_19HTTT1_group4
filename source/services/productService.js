@@ -45,6 +45,7 @@ module.exports.editProductStatus = (formData) => {
                 spName += '_fixed'
             else
                 spName += '_error'
+
             let results = await new sql.Request()
                 .input('madt', sql.VarChar(20), formData.partnerId)
                 .input('masp', sql.VarChar(20), formData.productId)

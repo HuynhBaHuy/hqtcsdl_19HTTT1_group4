@@ -53,7 +53,7 @@ module.exports.editOrderStatus = (formData) => {
                 spName += '_fixed'
             else
                 spName += '_error'
-            
+            console.log('doitac' + spName);
             let results = await new sql.Request()
                 .input('madt', sql.VarChar(20), formData.partnerId)
                 .input('madh', sql.VarChar(20), formData.orderId)
@@ -126,7 +126,7 @@ exports.acceptOrder = function (formData){
             resolve('success');
         } catch (err) {
             console.log(err);
-            reject(err);
+            resolve('failed');
         }
     })
 }
@@ -142,6 +142,7 @@ exports.updateOrderStatus = function(formData){
             else
                 spName += '_error'
             
+            console.log('taixe:' + spName);
             let results =  new sql.Request();
             results.input('madh', sql.VarChar(20), formData.orderId)
             results.input('ttdh', sql.NVarChar(50), formData.newOrderStatus)

@@ -47,6 +47,7 @@ exports.extendContractTime = function(formData){
                 spName += '_fixed'
             else
                 spName += '_error'
+
             let results =  new sql.Request();
             results.input('masothue', sql.VarChar(20), formData.tax)
             results.input('tg_hlhd',sql.Date,formData.expiredTime)
@@ -69,10 +70,11 @@ exports.deleteContract = function(formData){
                 spName += '_fixed'
             else
                 spName += '_error'
-                let results =  new sql.Request();
-                results.input('madt', sql.VarChar(20), formData.partnerId)
-                await results.execute(spName)
-                resolve('success');
+            let results =  await new sql.Request()
+                .input('madt', sql.VarChar(20), formData.partnerId)
+                .execute(spName)
+
+            resolve('success');
         } catch (err) {
             console.log(err);
             reject(err);

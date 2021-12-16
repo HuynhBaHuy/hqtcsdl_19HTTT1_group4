@@ -17,12 +17,12 @@ module.exports.loadProducts = (partnerId, spFixed) => {
         // });
         try {
             var spName = 'sp_dirtyread_tc3_T2';
-
-            if(spFixed)
+            if(spFixed === 'true')
                 spName += '_fixed'
             else
                 spName += '_error'
-
+            
+            console.log(spName);
             let results = await new sql.Request()
                 .input('madt', sql.VarChar(20), partnerId)
                 .execute(spName)

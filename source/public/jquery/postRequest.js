@@ -41,7 +41,10 @@ $(window).on('load', () => {
                }
             }
         });
-
+        
+        // Hide loading spinner
+        $('.spanner').addClass('show');
+        $('.overlay-spinner').addClass('show');
     });
 
     // Update product
@@ -85,5 +88,8 @@ $(window).on('load', () => {
             }
         });
 
+        // Hide loading spinner
+        $('.spanner').addClass('show');
+        $('.overlay-spinner').addClass('show');
     });
 });
