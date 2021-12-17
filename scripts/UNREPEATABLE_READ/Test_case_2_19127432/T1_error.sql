@@ -22,7 +22,7 @@ BEGIN TRAN
 					IF(@tg_hlhd < (SELECT h.TG_HieuLucHD FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue))
 						BEGIN
 							ROLLBACK TRAN
-							PRINT('TRANSACTION IS ROLLBACKEsssD')
+							PRINT('TRANSACTION IS ROLLBACKED')
 						END
 					ELSE
 						BEGIN

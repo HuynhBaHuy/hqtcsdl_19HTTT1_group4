@@ -10,14 +10,14 @@ BEGIN TRAN
 		END
 	ELSE
 		BEGIN
-			IF NOT EXISTS (SELECT * FROM DON_HANG WHERE MaDH = @madh and MaDT = @madt)
+			IF NOT EXISTS (SELECT * FROM DON_HANG WITH(UPDLOCK) WHERE MaDH = @madh and MaDT = @madt)
 				BEGIN
 					ROLLBACK TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
 				END
 			ELSE
 				BEGIN
-					IF ((SELECT TinhTrangDH FROM DON_HANG WITH(XLOCK) WHERE MaDH = @madh) = N'Đã giao hàng' AND @ttdh != N'Đã hoàn trả hàng')
+					IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = N'Đã giao hàng' AND @ttdh != N'Đã hoàn trả hàng')
 					-- Not allow to update order status when the order is marked at delivered, except refund
 						BEGIN
 							ROLLBACK TRAN

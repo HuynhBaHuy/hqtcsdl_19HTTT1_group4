@@ -18,7 +18,7 @@ BEGIN TRAN
 				END
 			ELSE
 				BEGIN
-					IF ((SELECT TinhTrangDH FROM DON_HANG WITH(XLOCK) WHERE MaDH = @madh) = N'Đã giao hàng' AND @ttdh != N'Đã hoàn trả hàng')
+					IF ((SELECT TinhTrangDH FROM DON_HANG WITH(UPDLOCK) WHERE MaDH = @madh) = N'Đã giao hàng' AND @ttdh != N'Đã hoàn trả hàng')
 						-- Not allow to update order status when the order is marked at delivered, except refund
 						BEGIN
 							ROLLBACK TRAN
@@ -39,7 +39,7 @@ BEGIN TRAN
 									SET TinhTrangDH = @ttdh
 									WHERE MaDH = @madh
 									
-									-- select để chứng minh khi demo rằng đã cập nhật thành công
+									-- select để hiển thị lên giao diện khi demo rằng đã cập nhật thành công
 									SELECT TinhTrangDH as ttdh
 									FROM DON_HANG
 									WHERE MaDH = @madh
