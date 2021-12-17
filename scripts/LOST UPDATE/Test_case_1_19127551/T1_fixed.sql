@@ -1,4 +1,4 @@
---T1 nhan vien cap nhat thoi gian hieu luc hop dong va pham tram hoa hong cua doi tac
+﻿--T1 nhan vien cap nhat thoi gian hieu luc hop dong va pham tram hoa hong cua doi tac
 --T2 nhan vien cap nhat thoi gian hieu luc hop dong va phan tram hoa hong cua doi tac
 go
 use OnlineOrderingSystem
@@ -33,6 +33,11 @@ BEGIN TRAN
 							UPDATE HOP_DONG
 							SET TG_HieuLucHD = @tg_hlhd, PhanTramHoaHong = @pthh
 							where MaDT IN (SELECT MaDT FROM DOI_TAC WHERE MaSoThue = @masothue)
+
+							-- select để chứng minh khi demo rằng đã cập nhật thành công
+							SELECT TG_HieuLucHD as time_contract, PhanTramHoaHong as fee
+							FROM HOP_DONG
+							WHERE MaDT IN (SELECT MaDT FROM DOI_TAC WHERE MaSoThue = @masothue)
 							COMMIT TRAN;
 						END
 					END

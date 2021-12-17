@@ -149,13 +149,30 @@ $('#extend-contract-time-modal input[type=submit]').click(event=>{
         contentType: "application/json",
         data: JSON.stringify(formData),
         success: function(res){
-             // Show success modal
-              $('#successful-for-employee-modal').modal('show');
-              // Hide loading spinner
-              $('.spanner').removeClass('show');
-              $('.overlay-spinner').removeClass('show');
-              $('#successful-for-employee-modal .title').text('Thành công');
-              $('#successful-for-employee-modal .message').text('Cập nhật hợp đồng thành công!');
+            // Hide loading spinner
+            $('.spanner').removeClass('show');
+            $('.overlay-spinner').removeClass('show');
+            if(res==='success'){
+                // Show success modal
+                 $('#successful-for-employee-modal').modal('show');
+                 $('#successful-for-employee-modal .title').text('Thành công');
+                 $('#successful-for-employee-modal .message').text('Cập nhật hợp đồng thành công!');
+            }
+            else{
+                // Show success modal
+                $('#overwritten-status-for-employee-modal').modal('show');
+                $('#overwritten-status-for-employee-modal .title').text('Thành công');
+                $('#overwritten-status-for-employee-modal .message').text('Cập nhật hợp đồng thành công!');
+                $(`#expired-contract-table .fee-col[of=${contractId}]`).text(res.fee);
+                const converStringtoDate = function (str){
+                    var date = new Date(str),
+                    month = ("0" + (date.getMonth() + 1)).slice(-2),
+                    day = ("0" + date.getDate()).slice(-2);
+                  return [date.getFullYear(), month, day].join("-");
+                }
+                $(`#expired-contract-table .expired-time-col[of=${contractId}]`).text(converStringtoDate(res.time_contract));
+                
+            }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
            if(errorThrown) {
@@ -287,5 +304,13 @@ $('#overwritten-status-for-driver-modal .btn').on('click', function(e){
     e.preventDefault();
     $(function () {
         $('#overwritten-status-for-driver-modal').modal('toggle');
+     });
+})
+
+// close overwritten modal for update contract time
+$('#overwritten-status-for-employee-modal .btn').on('click', function(e){
+    e.preventDefault();
+    $(function () {
+        $('#overwritten-status-for-employee-modal').modal('toggle');
      });
 })

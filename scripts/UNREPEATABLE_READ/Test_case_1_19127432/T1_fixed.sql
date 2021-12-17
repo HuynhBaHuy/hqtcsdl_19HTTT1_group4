@@ -39,7 +39,7 @@ BEGIN TRAN
 									SET TinhTrangDH = @ttdh
 									WHERE MaDH = @madh
 									
-									-- select để hiển thị ra thông báo thành công
+									-- select để chứng minh khi demo rằng đã cập nhật thành công
 									SELECT TinhTrangDH as ttdh
 									FROM DON_HANG
 									WHERE MaDH = @madh

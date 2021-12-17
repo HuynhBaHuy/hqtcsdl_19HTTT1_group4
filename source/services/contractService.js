@@ -48,12 +48,17 @@ exports.extendContractTime = function(formData){
             else
                 spName += '_error'
 
-            let results =  new sql.Request();
-            results.input('masothue', sql.VarChar(20), formData.tax)
-            results.input('tg_hlhd',sql.Date,formData.expiredTime)
-            results.input('pthh',sql.Float,formData.fee)
-            await results.execute(spName)
-            resolve('success');
+            let results =  await new sql.Request()
+                    .input('masothue', sql.VarChar(20), formData.tax)
+                    .input('tg_hlhd',sql.Date,formData.expiredTime)
+                    .input('pthh',sql.Float,formData.fee)
+                    .execute(spName)
+            if(formData.trans === 'T1' && formData.spFixed){
+                resolve(results.recordsets[1][0]);
+            }
+            else{
+                resolve('success')
+            }
         } catch (err) {
             console.log(err);
             reject(err);
