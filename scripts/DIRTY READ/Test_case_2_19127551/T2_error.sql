@@ -20,7 +20,6 @@ BEGIN TRAN
 				END 
 			ELSE
 				BEGIN
-					DECLARE @doanhsoban float
 					-- Check if the input effective time is valid
 					IF(@tghlhd < (SELECT h.TG_HieuLucHD FROM HOP_DONG h WHERE h.MaDT = @madt))
 						BEGIN
