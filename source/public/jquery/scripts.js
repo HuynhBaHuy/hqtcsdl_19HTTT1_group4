@@ -75,13 +75,21 @@ $('#update-order-status-for-driver-modal input[type="submit"]').on('click',funct
         contentType: "application/json",
         data: JSON.stringify(formData),
         success: function(res){
+            // Hide loading spinner
+            $('.spanner').removeClass('show');
+            $('.overlay-spinner').removeClass('show');
              // Show success modal
-              $('#update-successful-status-for-driver-modal').modal('show');
-              // Hide loading spinner
-              $('.spanner').removeClass('show');
-              $('.overlay-spinner').removeClass('show');
-              $('#update-successful-status-for-driver-modal .title').text('Thành công');
-              $('#update-successful-status-for-driver-modal .message').text('Cập nhật đơn hàng thành công!');
+             if(res==='success'){
+                $('#update-successful-status-for-driver-modal').modal('show');
+                $('#update-successful-status-for-driver-modal .title').text('Thành công');
+                $('#update-successful-status-for-driver-modal .message').text('Cập nhật đơn hàng thành công!');
+             }
+             else{
+                $('#rollback-for-driver-modal').modal('show');
+                $('#rollback-for-driver-modal .title').text('Rollback');
+                $('#rollback-for-driver-modal .message').text('Cập nhật không thành công!');
+             }
+              
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
            if(errorThrown) {
@@ -256,5 +264,12 @@ $('#error-for-employee-modal .btn').on('click', function(e){
 $('#rollback-for-employee-modal .btn').on('click', function(e){
     e.preventDefault();
     $('#rollback-for-employee-modal').hide();
+    window.location.reload();
+})
+
+// close rollback modal for update order
+$('#rollback-for-driver-modal .btn').on('click', function(e){
+    e.preventDefault();
+    $('#rollback-for-driver-modal').hide();
     window.location.reload();
 })

@@ -143,12 +143,38 @@ exports.updateOrderStatus = function(formData){
                 spName += '_error'
             
             console.log('taixe:' + spName);
-            let results =  new sql.Request();
-            results.input('madh', sql.VarChar(20), formData.orderId)
-            results.input('ttdh', sql.NVarChar(50), formData.newOrderStatus)
-            results.input('matx',sql.VarChar(20),formData.driverId)
-            await results.execute(spName)
-            resolve('success');
+            let results = await new sql.Request()
+                .input('madh', sql.VarChar(20), formData.orderId)
+                .input('ttdh', sql.NVarChar(50), formData.newOrderStatus)
+                .input('matx',sql.VarChar(20),formData.driverId)
+                .execute(spName)
+            if(!formData.spFixed)
+            { 
+                // select lại để thể hiện lên UI là tài xế cập nhật thành công hay rollback 
+                const request = new sql.Request();
+                const query = `SELECT dh.TinhTrangDH as ttdh FROM DON_HANG dh WHERE MaDH = ${formData.orderId}`
+                // query to the database and get the records
+                request.query(query, function (err, recordset) {
+                    if (err) {
+                        reject(err)
+                        sql.close();
+                    }
+                    else {
+                        // send records as a response
+                        if(recordset.recordset.ttdh === formData.newOrderStatus)
+                        { 
+                            resolve('success');
+                        }
+                        else{
+                            resolve('rollback')
+                        }
+                    }
+                });
+                
+            }
+            else{
+                resolve('success');
+            }
         } catch (err) {
             console.log(err);
             reject(err);
