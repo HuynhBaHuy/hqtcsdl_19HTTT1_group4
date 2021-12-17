@@ -7,6 +7,7 @@ GO
 CREATE PROCEDURE sp_dirtyread_tc2_T2_error @masothue varchar(20), @tg_hlhd date, @pthh float
 AS
 BEGIN TRAN 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
 			ROLLBACK TRAN

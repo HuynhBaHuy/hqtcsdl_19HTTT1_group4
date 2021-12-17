@@ -6,13 +6,13 @@ GO
 CREATE PROCEDURE sp_dirtyread_tc3_T2_error @madt varchar(20)
 AS
 BEGIN TRAN 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 	IF IS_ROLEMEMBER('khach_hang') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
 			ROLLBACK TRAN
 		END
 	ELSE
 		BEGIN
-			SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 			IF EXISTS (SELECT * FROM SAN_PHAM sp JOIN CHI_NHANH cn on sp.MaCN = cn.MaCN and cn.MaDT = @madt)
 				BEGIN
 					SELECT sp.MaSP, sp.TenSanPham, sp.Loai, lh.TenLoai, sp.Gia FROM SAN_PHAM sp JOIN CHI_NHANH cn on sp.MaCN = cn.MaCN and cn.MaDT = @madt JOIN LOAI_HANG lh ON sp.Loai = lh.MaLoai
