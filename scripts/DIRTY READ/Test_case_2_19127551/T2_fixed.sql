@@ -4,10 +4,10 @@
 go
 use OnlineOrderingSystem
 GO
-CREATE PROCEDURE sp_dirtyread_tc2_T2_fixed @masothue varchar(20), @mahd varchar(20), @madt varchar(20), @tghlhd date, @pthh float
+CREATE PROCEDURE sp_dirtyread_tc2_T2_fixed @masothue varchar(20), @tg_hlhd date, @pthh float
 AS
 BEGIN TRAN 
-	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('dbowner') = 0
+	IF IS_ROLEMEMBER('nhan_vien') = 0 AND IS_ROLEMEMBER('db_owner') = 0
 		BEGIN
 			ROLLBACK TRAN
 		END
@@ -28,11 +28,10 @@ BEGIN TRAN
 						END
 					ELSE
 						BEGIN	
-							SELECT TG_HieuLucHD, PhanTramHoaHong FROM HOP_DONG WHERE MaDT = @madt and MaHD = @mahd
-							SET @doanhsoban = (SELECT SUM(d.TongPhiSP) FROM DON_HANG d WHERE d.MaDT = @madt)
+							SELECT h.TG_HieuLucHD, h.PhanTramHoaHong FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue
 							UPDATE HOP_DONG
-							SET TG_HieuLucHD = @tghlhd, PhanTramHoaHong = (@pthh * @doanhsoban) / 100
-							where MaDT = @madt
+							SET TG_HieuLucHD = @tg_hlhd, PhanTramHoaHong = @pthh
+							where MaDT IN (SELECT MaDT FROM DOI_TAC WHERE MaSoThue = @masothue)
 							-- Waiting for updating
 							Waitfor Delay '00:00:10'
 						END
