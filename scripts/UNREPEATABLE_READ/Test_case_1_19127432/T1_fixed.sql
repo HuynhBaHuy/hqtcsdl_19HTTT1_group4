@@ -38,6 +38,11 @@ BEGIN TRAN
 									UPDATE DON_HANG
 									SET TinhTrangDH = @ttdh
 									WHERE MaDH = @madh
+									
+									-- select để hiển thị ra thông báo thành công
+									SELECT TinhTrangDH as ttdh
+									FROM DON_HANG
+									WHERE MaDH = @madh
 									COMMIT TRAN
 								END
 						END

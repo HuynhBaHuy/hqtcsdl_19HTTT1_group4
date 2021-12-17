@@ -84,10 +84,17 @@ $('#update-order-status-for-driver-modal input[type="submit"]').on('click',funct
                 $('#update-successful-status-for-driver-modal .title').text('Thành công');
                 $('#update-successful-status-for-driver-modal .message').text('Cập nhật đơn hàng thành công!');
              }
-             else{
+             else if(res==='rollback'){
                 $('#rollback-for-driver-modal').modal('show');
                 $('#rollback-for-driver-modal .title').text('Rollback');
                 $('#rollback-for-driver-modal .message').text('Cập nhật không thành công!');
+             }
+             else{
+                console.log(res);
+                 $(`#delivering-order-table .status-col[of=${orderId}]`).text(res);
+                 $('#overwritten-status-for-driver-modal').modal('show');
+                $('#overwritten-status-for-driver-modal .title').text('Thành công');
+                $('#overwritten-status-for-driver-modal .message').text('Cập nhật đơn hàng thành công!');
              }
               
         },
@@ -191,6 +198,7 @@ $('#confirm-remove-contract-modal button.confirm-btn').on('click', function(even
         contentType: "application/json",
         data: JSON.stringify(formData),
         success: function(res){
+
             // Hide loading spinner
             $('.spanner').removeClass('show');
             $('.overlay-spinner').removeClass('show');
@@ -272,4 +280,12 @@ $('#rollback-for-driver-modal .btn').on('click', function(e){
     e.preventDefault();
     $('#rollback-for-driver-modal').hide();
     window.location.reload();
+})
+
+// close overwritten modal for update order
+$('#overwritten-status-for-driver-modal .btn').on('click', function(e){
+    e.preventDefault();
+    $(function () {
+        $('#overwritten-status-for-driver-modal').modal('toggle');
+     });
 })

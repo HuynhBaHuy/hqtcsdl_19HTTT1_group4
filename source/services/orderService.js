@@ -173,7 +173,8 @@ exports.updateOrderStatus = function(formData){
                 
             }
             else{
-                resolve('success');
+                resolve(results.recordset[0].ttdh);
+                
             }
         } catch (err) {
             console.log(err);
