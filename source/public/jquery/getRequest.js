@@ -1,6 +1,4 @@
 $(window).on('load', function () {
-    
-    
 
     // Get product list of a specific partner
     $(document).on( 'click', '#showProductList', function (e) { 

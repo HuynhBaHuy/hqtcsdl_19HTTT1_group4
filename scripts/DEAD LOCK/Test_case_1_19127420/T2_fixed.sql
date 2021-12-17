@@ -4,7 +4,7 @@
 -- T2 - Tai Xe
 USE OnlineOrderingSystem
 GO
-ALTER PROCEDURE sp_deadlock_tc1_T2_fixed @madh varchar(20),@ttdh nvarchar(50), @matx varchar(20)
+CREATE PROCEDURE sp_deadlock_tc1_T2_fixed @madh varchar(20),@ttdh nvarchar(50), @matx varchar(20)
 AS
 BEGIN TRAN 
 	IF IS_ROLEMEMBER('tai_xe') = 0 AND IS_ROLEMEMBER('dbowner') = 0
