@@ -17,16 +17,16 @@ BEGIN TRAN
 				END
 			ELSE
 				BEGIN
-					IF (SELECT TinhTrangDH FROM DON_HANG WITH(XLOCK) WHERE MaDH = @madh) = N'Đã hoàn trả hàng'
-						-- Not allow to update order status when the order is refunded
+					IF ((SELECT TinhTrangDH FROM DON_HANG WITH(XLOCK) WHERE MaDH = @madh) = N'Đã giao hàng' AND @ttdh != N'Đã hoàn trả hàng')
+					-- Not allow to update order status when the order is marked at delivered, except refund
 						BEGIN
 							ROLLBACK TRAN
 							PRINT('TRANSACTION IS ROLLBACKED')
 						END
 					ELSE
 						BEGIN
-							IF ((SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = N'Đã giao hàng' AND @ttdh != N'Đã hoàn trả hàng')
-								-- Not allow to update order status when the order is marked at delivered, except refund
+							IF (SELECT TinhTrangDH FROM DON_HANG WHERE MaDH = @madh) = N'Đã hoàn trả hàng'
+							-- Not allow to update order status when the order is refunded
 								BEGIN
 									ROLLBACK TRAN
 									PRINT('TRANSACTION IS ROLLBACKED')
