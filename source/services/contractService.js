@@ -79,7 +79,8 @@ exports.deleteContract = function(formData){
                 .input('madt', sql.VarChar(20), formData.partnerId)
                 .execute(spName)
             if(formData.spFixed){
-                if(results.rowsAffected[1]==0 && results.rowsAffected[2] ==0){
+                console.log(results.rowsAffected);
+                if(results.rowsAffected.length==0){
                     resolve('rollback');
                 }
                 else{
