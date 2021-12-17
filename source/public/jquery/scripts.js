@@ -228,12 +228,12 @@ $('#confirm-remove-contract-modal button.confirm-btn').on('click', function(even
             else if(res==='rollback'){
                 $('#rollback-for-employee-modal').modal('show');       
                 $('#rollback-for-employee-modal .title').text('Rollback');
-                $('#rollback-for-employee-modal .message').text('ERROR: 0 row effected');
+                $('#rollback-for-employee-modal .message').text('Xóa hợp đồng không thành công');
             }
             else{
                 $('#error-for-employee-modal').modal('show');       
                 $('#error-for-employee-modal .title').text('Thất bại');
-                $('#error-for-employee-modal .message').text('Không tồn tại hợp đồng này');
+                $('#error-for-employee-modal .message').text('ERROR: 0 row effected');
             }
              
         },

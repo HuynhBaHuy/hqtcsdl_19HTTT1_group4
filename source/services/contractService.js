@@ -79,19 +79,19 @@ exports.deleteContract = function(formData){
                 .input('madt', sql.VarChar(20), formData.partnerId)
                 .execute(spName)
             if(formData.spFixed){
-                if(formData.trans==='T1'){
-                    resolve('success');
-                }
-                else{
-                    resolve('not exist');
-                }
-            }
-            else{
                 if(results.rowsAffected[1]==0 && results.rowsAffected[2] ==0){
                     resolve('rollback');
                 }
                 else{
                     resolve('success');
+                }
+            }
+            else{
+                if(formData.trans==='T2'){
+                    resolve('success');
+                }
+                else{
+                    resolve('not exist');
                 }
             }
             
