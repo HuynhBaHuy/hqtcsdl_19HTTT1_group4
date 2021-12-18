@@ -162,7 +162,7 @@ $('#extend-contract-time-modal input[type=submit]').click(event=>{
                 // Show rollback modal
                 $('#rollback-for-employee-modal').modal('show');       
                 $('#rollback-for-employee-modal .title').text('Rollback');
-                $('#rollback-for-employee-modal .message').text('Gia hạn hợp đồng không thành công');
+                $('#rollback-for-employee-modal .message').text('Gia hạn hợp đồng không thành công do thời gian không hợp lệ');
             }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -219,11 +219,11 @@ $('#confirm-remove-contract-modal button.confirm-btn').on('click', function(even
             else if(res==='rollback'){
                 $('#rollback-for-employee-modal').modal('show');       
                 $('#rollback-for-employee-modal .title').text('Rollback');
-                $('#rollback-for-employee-modal .message').text('Xóa hợp đồng không thành công');
+                $('#rollback-for-employee-modal .message').text('Hợp đồng không tồn tại');
             }
             else{
                 $('#error-for-employee-modal').modal('show');       
-                $('#error-for-employee-modal .title').text('Thất bại');
+                $('#error-for-employee-modal .title').text('Error');
                 $('#error-for-employee-modal .message').text('ERROR: 0 row effected');
             }
              

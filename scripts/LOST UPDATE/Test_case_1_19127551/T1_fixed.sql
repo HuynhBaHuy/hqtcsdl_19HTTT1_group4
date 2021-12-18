@@ -32,6 +32,7 @@ BEGIN TRAN
 							UPDATE HOP_DONG
 							SET TG_HieuLucHD = @tg_hlhd, PhanTramHoaHong = @pthh
 							where MaDT IN (SELECT MaDT FROM DOI_TAC WHERE MaSoThue = @masothue)
+							Waitfor Delay '00:00:05'
 							COMMIT TRAN
 						END
 					END
