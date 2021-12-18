@@ -159,19 +159,10 @@ $('#extend-contract-time-modal input[type=submit]').click(event=>{
                  $('#successful-for-employee-modal .message').text('Cập nhật hợp đồng thành công!');
             }
             else{
-                // Show success modal
-                $('#overwritten-status-for-employee-modal').modal('show');
-                $('#overwritten-status-for-employee-modal .title').text('Thành công');
-                $('#overwritten-status-for-employee-modal .message').text('Cập nhật hợp đồng thành công!');
-                $(`#expired-contract-table .fee-col[of=${contractId}]`).text(res.fee);
-                const converStringtoDate = function (str){
-                    var date = new Date(str),
-                    month = ("0" + (date.getMonth() + 1)).slice(-2),
-                    day = ("0" + date.getDate()).slice(-2);
-                  return [date.getFullYear(), month, day].join("-");
-                }
-                $(`#expired-contract-table .expired-time-col[of=${contractId}]`).text(converStringtoDate(res.time_contract));
-                
+                // Show rollback modal
+                $('#rollback-for-employee-modal').modal('show');       
+                $('#rollback-for-employee-modal .title').text('Rollback');
+                $('#rollback-for-employee-modal .message').text('Gia hạn hợp đồng không thành công');
             }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {

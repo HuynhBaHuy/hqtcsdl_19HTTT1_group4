@@ -53,8 +53,8 @@ exports.extendContractTime = function(formData){
                     .input('tg_hlhd',sql.Date,formData.expiredTime)
                     .input('pthh',sql.Float,formData.fee)
                     .execute(spName)
-            if(formData.trans === 'T1' && formData.spFixed){
-                resolve(results.recordsets[1][0]);
+            if(formData.trans === 'T2' && formData.spFixed){
+                resolve('rollback');
             }
             else{
                 resolve('success')
