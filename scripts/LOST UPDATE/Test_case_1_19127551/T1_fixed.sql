@@ -13,7 +13,7 @@ BEGIN TRAN
 		END
 	ELSE
 		BEGIN
-			IF NOT EXISTS(SELECT h.TG_HieuLucHD FROM DOI_TAC d JOIN HOP_DONG h ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue)
+			IF NOT EXISTS(SELECT h.TG_HieuLucHD FROM DOI_TAC d JOIN HOP_DONG h with(updlock) ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue)
 				BEGIN
 					ROLLBACK TRAN
 					PRINT('TRANSACTION IS ROLLBACKED')
@@ -28,17 +28,11 @@ BEGIN TRAN
 						END
 					ELSE
 						BEGIN
-							SELECT h.TG_HieuLucHD, h.PhanTramHoaHong FROM DOI_TAC d JOIN HOP_DONG h with(updlock) ON (d.MaDT = h.MaDT) WHERE d.MaSoThue = @masothue
-							Waitfor Delay '00:00:10'
+							Waitfor Delay '00:00:05'
 							UPDATE HOP_DONG
 							SET TG_HieuLucHD = @tg_hlhd, PhanTramHoaHong = @pthh
 							where MaDT IN (SELECT MaDT FROM DOI_TAC WHERE MaSoThue = @masothue)
-
-							-- select để chứng minh khi demo rằng đã cập nhật thành công
-							SELECT TG_HieuLucHD as time_contract, PhanTramHoaHong as fee
-							FROM HOP_DONG
-							WHERE MaDT IN (SELECT MaDT FROM DOI_TAC WHERE MaSoThue = @masothue)
-							COMMIT TRAN;
+							COMMIT TRAN
 						END
 					END
 				END
